@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Bundle ID -->
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	
+	<!-- Bundle Display Name -->
+	<key>CFBundleDisplayName</key>
+	<string>$(PRODUCT_NAME)</string>
+	
+	<!-- Bundle Name -->
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	
+	<!-- Bundle Version -->
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	
+	<!-- Build Version -->
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	
+	<!-- Executable Name -->
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	
+	<!-- Minimum iOS Version -->
+	<key>MinimumOSVersion</key>
+	<string>18.0</string>
+	
+	<!-- Supported Platforms -->
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>iPhoneOS</string>
+	</array>
+	
+	<!-- Supported Interface Orientations -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	
+	<!-- Supported Interface Orientations (iPad) -->
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	
+	<!-- Requires Full Screen -->
+	<key>UIRequiresFullScreen</key>
+	<false/>
+	
+	<!-- Launch Screen -->
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchScreen</string>
+	</dict>
+	
+	<!-- Scene Configuration - 使用 SwiftUI App 生命周期，不需要 SceneDelegate -->
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
+	
+	<!-- App Transport Security -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	
+	<!-- Photo Library Usage Description -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要相册访问权限来保存奖状图片</string>
+	
+	<!-- Photo Library Add Usage Description -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>需要相册访问权限来保存奖状图片</string>
+	
+	<!-- Localization -->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>zh-Hans</string>
+		<string>zh-Hant</string>
+		<string>en</string>
+		<string>ja</string>
+		<string>ko</string>
+		<string>es</string>
+		<string>pt</string>
+	</array>
+	
+	<!-- Default Localization -->
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh-Hans</string>
+	
+	<!-- Status Bar Style -->
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	
+	<!-- View Controller Based Status Bar Appearance -->
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	
+	<!-- App Category -->
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.education</string>
+	
+	<!-- App Icon -->
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,144 @@
+/*
+  Localizable.strings (中文简体)
+  Mathaxy
+*/
+
+// MARK: - 通用
+"app_name" = "数学银河";
+"ok" = "确定";
+"cancel" = "取消";
+"confirm" = "确认";
+"back" = "返回";
+"next" = "下一步";
+"retry" = "重试";
+"save" = "保存";
+"share" = "分享";
+"settings" = "设置";
+"achievement" = "成就";
+"home" = "首页";
+
+// MARK: - 登录
+"guest_login" = "游客登录";
+"parent_bind" = "家长辅助绑定";
+"enter_nickname" = "请输入昵称";
+"nickname" = "昵称";
+"welcome" = "欢迎，%@！";
+
+// MARK: - 游戏
+"level" = "关卡";
+"question" = "题目";
+"time" = "时间";
+"score" = "得分";
+"start_game" = "开始游戏";
+"continue_game" = "继续游戏";
+"level_select" = "关卡选择";
+"current_level" = "当前关卡";
+"unlocked" = "已解锁";
+"locked" = "未解锁";
+"completed" = "已完成";
+
+// MARK: - 关卡
+"level_description" = "关卡描述";
+"total_time_mode" = "总时长模式";
+"per_question_mode" = "单题倒计时模式";
+"minutes" = "分钟";
+"seconds" = "秒";
+"per_question" = "每题";
+
+// MARK: - 结果
+"congratulations" = "恭喜通关！";
+"try_again" = "差一点哦！";
+"completed_level" = "已完成第 %d 关";
+"failed_level" = "第 %d 关失败";
+"correct_count" = "正确：%d";
+"error_count" = "错误：%d";
+"total_time" = "总用时：%@";
+"accuracy" = "正确率：%.0f%%";
+"earned_badge" = "获得勋章";
+
+// MARK: - 失败机制
+"watch_ad_retry" = "观看30秒广告→重新挑战本关";
+"back_to_home" = "返回首页→下次再试";
+"ad_duration" = "广告时长：30秒";
+"ad_description" = "观看广告后可以重新挑战本关卡";
+
+// MARK: - 跳关
+"skip_level" = "跳关";
+"skip_level_success" = "太棒了！你成功跳过了3关！";
+"skip_to_level" = "跳至第 %d 关";
+
+// MARK: - 勋章
+"badge" = "勋章";
+"badges" = "勋章";
+"earned_badges" = "已获得勋章";
+"total_badges" = "总勋章";
+"level_complete_badge" = "加法小勇士";
+"skip_level_badge" = "神速小能手";
+"perfect_level_badge" = "答题小天才";
+"consecutive_login_badge" = "坚持小达人";
+
+// MARK: - 卡通角色
+"guide_character" = "卡通向导";
+"panda" = "银河小熊猫";
+"rabbit" = "银河小兔子";
+"unlock_character" = "解锁角色";
+"unlock_threshold" = "需要 %d 枚勋章解锁";
+"character_message" = "角色消息";
+
+// MARK: - 连续登录
+"consecutive_login" = "连续登录7天";
+"consecutive_days" = "已连续登录 %d/%d 天";
+"login_streak" = "登录连续天数";
+"keep_going" = "继续加油！";
+
+// MARK: - 奖状
+"certificate" = "奖状";
+"electronic_certificate" = "电子奖状";
+"save_to_album" = "保存到相册";
+"share_to_social" = "分享到社交平台";
+"print_hint" = "可打印成纸质奖状哦！";
+"certificate_title" = "Mathaxy 加法大师";
+"certificate_nickname" = "昵称";
+"certificate_time" = "通关总用时";
+"certificate_badges" = "获得勋章";
+
+// MARK: - 设置
+"language_settings" = "语言设置";
+"sound_settings" = "音效设置";
+"music_settings" = "音乐设置";
+"haptic_settings" = "震动设置";
+"about_app" = "关于应用";
+"version" = "版本";
+"reset_data" = "重置数据";
+"reset_data_warning" = "确定要重置所有数据吗？此操作不可撤销！";
+"reset_data_confirm" = "确定重置";
+
+// MARK: - 音效
+"correct" = "答对";
+"incorrect" = "答错";
+"correct_answer" = "正确答案";
+"timeout" = "超时";
+"badge_earned" = "获得勋章";
+"character_unlocked" = "解锁角色";
+
+// MARK: - 权限
+"photo_library_permission" = "相册访问权限";
+"photo_library_permission_description" = "需要相册访问权限来保存奖状图片";
+"permission_denied" = "权限被拒绝";
+"go_to_settings" = "前往设置";
+
+// MARK: - 其他
+"loading" = "加载中...";
+"please_wait" = "请稍候...";
+"no_data" = "暂无数据";
+"error_occurred" = "发生错误";
+"network_error" = "网络错误";
+"success" = "成功";
+"failed" = "失败";
+"close" = "关闭";
+"done" = "完成";
+
+// MARK: - 游戏建议
+"retry_current_level" = "重试当前关卡以提高分数！";
+"try_next_level" = "干得好！接下来试试第 %d 关。";
+"all_levels_completed" = "恭喜！你已完成所有关卡。";

@@ -1,0 +1,139 @@
+/*
+  Localizable.strings (日本語)
+  Mathaxy
+*/
+
+// MARK: - 共通
+"app_name" = "数学の銀河";
+"ok" = "OK";
+"cancel" = "キャンセル";
+"confirm" = "確認";
+"back" = "戻る";
+"next" = "次へ";
+"retry" = "再試行";
+"save" = "保存";
+"share" = "共有";
+"settings" = "設定";
+"achievement" = "実績";
+"home" = "ホーム";
+
+// MARK: - ログイン
+"guest_login" = "ゲストログイン";
+"parent_bind" = "保護者連携";
+"enter_nickname" = "ニックネームを入力してください";
+"nickname" = "ニックネーム";
+"welcome" = "ようこそ、%@さん！";
+
+// MARK: - ゲーム
+"level" = "レベル";
+"question" = "問題";
+"time" = "時間";
+"score" = "スコア";
+"start_game" = "ゲーム開始";
+"continue_game" = "ゲーム続行";
+"level_select" = "レベル選択";
+"current_level" = "現在のレベル";
+"unlocked" = "アンロック済み";
+"locked" = "ロック中";
+"completed" = "完了";
+
+// MARK: - レベル
+"level_description" = "レベル説明";
+"total_time_mode" = "総時間モード";
+"per_question_mode" = "問題ごとの時間モード";
+"minutes" = "分";
+"seconds" = "秒";
+"per_question" = "問題ごと";
+
+// MARK: - 結果
+"congratulations" = "おめでとうございます！";
+"try_again" = "あと少し！";
+"completed_level" = "レベル %d 完了";
+"failed_level" = "レベル %d 失敗";
+"correct_count" = "正解：%d";
+"error_count" = "不正解：%d";
+"total_time" = "総時間：%@";
+"accuracy" = "正答率：%.0f%%";
+"earned_badge" = "獲得バッジ";
+
+// MARK: - 失敗メカニズム
+"watch_ad_retry" = "30秒広告を見る → レベルを再試行";
+"back_to_home" = "ホームに戻る → 後で再試行";
+"ad_duration" = "広告時間：30秒";
+"ad_description" = "このレベルを再試行するには広告を見てください";
+
+// MARK: - レベルスキップ
+"skip_level" = "レベルスキップ";
+"skip_level_success" = "素晴らしい！3つのレベルをスキップしました！";
+"skip_to_level" = "レベル %d にスキップ";
+
+// MARK: - バッジ
+"badge" = "バッジ";
+"badges" = "バッジ";
+"earned_badges" = "獲得バッジ";
+"total_badges" = "総バッジ";
+"level_complete_badge" = "足し算の戦士";
+"skip_level_badge" = "スピードマスター";
+"perfect_level_badge" = "クイズの天才";
+"consecutive_login_badge" = "継続の達人";
+
+// MARK: - ガイドキャラクター
+"guide_character" = "ガイドキャラクター";
+"panda" = "銀河パンダ";
+"rabbit" = "銀河ウサギ";
+"unlock_character" = "キャラクターをアンロック";
+"unlock_threshold" = "アンロックには%d個のバッジが必要です";
+"character_message" = "キャラクターメッセージ";
+
+// MARK: - 連続ログイン
+"consecutive_login" = "7日連続ログイン";
+"consecutive_days" = "%d/%d日連続でログイン";
+"login_streak" = "ログイン連続日数";
+"keep_going" = "頑張ってください！";
+
+// MARK: - 賞状
+"certificate" = "賞状";
+"electronic_certificate" = "電子賞状";
+"save_to_album" = "アルバムに保存";
+"share_to_social" = "ソーシャルで共有";
+"print_hint" = "紙の賞状として印刷できます！";
+"certificate_title" = "Mathaxy 足し算マスター";
+"certificate_nickname" = "ニックネーム";
+"certificate_time" = "総完了時間";
+"certificate_badges" = "獲得バッジ";
+
+// MARK: - 設定
+"language_settings" = "言語設定";
+"sound_settings" = "音声設定";
+"music_settings" = "音楽設定";
+"haptic_settings" = "触覚設定";
+"about_app" = "アプリについて";
+"version" = "バージョン";
+"reset_data" = "データリセット";
+"reset_data_warning" = "すべてのデータをリセットしてもよろしいですか？この操作は元に戻せません！";
+"reset_data_confirm" = "リセットを確認";
+
+// MARK: - 効果音
+"correct" = "正解";
+"incorrect" = "不正解";
+"correct_answer" = "Correct Answer";
+"timeout" = "タイムアウト";
+"badge_earned" = "バッジ獲得";
+"character_unlocked" = "キャラクターアンロック";
+
+// MARK: - 権限
+"photo_library_permission" = "フォトライブラリ権限";
+"photo_library_permission_description" = "賞状画像を保存するにはフォトライブラリへのアクセスが必要です";
+"permission_denied" = "権限が拒否されました";
+"go_to_settings" = "設定に移動";
+
+// MARK: - その他
+"loading" = "読み込み中...";
+"please_wait" = "お待ちください...";
+"no_data" = "データなし";
+"error_occurred" = "エラーが発生しました";
+"network_error" = "ネットワークエラー";
+"success" = "成功";
+"failed" = "失敗";
+"close" = "閉じる";
+"done" = "完了";

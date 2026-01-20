@@ -1,0 +1,15 @@
+# 占位音频文件
+# 此文件仅用于占位，需要替换为实际音频
+
+## 参考规格
+请查看: MathaxyAI/MathaxyAI-iOS/Mathaxy/Resources/Sounds/character_unlocked.mp3.spec
+
+## 创建方法
+1. 使用 Audacity 打开规格文件
+2. 根据规格说明创建音频
+3. 导出为 MP3 格式
+4. 替换此占位文件
+
+## 在线工具
+- TwistedWave Online: https://twistedwave.com
+- AudioMass: https://audiomass.co

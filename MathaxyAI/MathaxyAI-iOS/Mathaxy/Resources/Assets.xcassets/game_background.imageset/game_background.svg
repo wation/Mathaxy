@@ -1,0 +1,16 @@
+<svg width="375" height="812" viewBox="0 0 375 812" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gameBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2C3E50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34495E;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="375" height="812" fill="url(#gameBgGradient)"/>
+  <!-- 数学符号装饰 -->
+  <text x="50" y="100" font-family="Arial" font-size="24" fill="white" opacity="0.1">+</text>
+  <text x="300" y="200" font-family="Arial" font-size="20" fill="white" opacity="0.1">-</text>
+  <text x="100" y="350" font-family="Arial" font-size="28" fill="white" opacity="0.1">×</text>
+  <text x="250" y="500" font-family="Arial" font-size="22" fill="white" opacity="0.1">÷</text>
+  <text x="75" y="650" font-family="Arial" font-size="18" fill="white" opacity="0.1">=</text>
+  <text x="320" cy="750" font-family="Arial" font-size="20" fill="white" opacity="0.1">π</text>
+</svg>

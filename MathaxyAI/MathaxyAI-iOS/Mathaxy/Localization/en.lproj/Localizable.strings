@@ -1,0 +1,144 @@
+/*
+  Localizable.strings (English)
+  Mathaxy
+*/
+
+// MARK: - Common
+"app_name" = "Mathaxy";
+"ok" = "OK";
+"cancel" = "Cancel";
+"confirm" = "Confirm";
+"back" = "Back";
+"next" = "Next";
+"retry" = "Retry";
+"save" = "Save";
+"share" = "Share";
+"settings" = "Settings";
+"achievement" = "Achievement";
+"home" = "Home";
+
+// MARK: - Login
+"guest_login" = "Guest Login";
+"parent_bind" = "Parent Bind";
+"enter_nickname" = "Please enter nickname";
+"nickname" = "Nickname";
+"welcome" = "Welcome, %@!";
+
+// MARK: - Game
+"level" = "Level";
+"question" = "Question";
+"time" = "Time";
+"score" = "Score";
+"start_game" = "Start Game";
+"continue_game" = "Continue Game";
+"level_select" = "Level Select";
+"current_level" = "Current Level";
+"unlocked" = "Unlocked";
+"locked" = "Locked";
+"completed" = "Completed";
+
+// MARK: - Level
+"level_description" = "Level Description";
+"total_time_mode" = "Total Time Mode";
+"per_question_mode" = "Per Question Mode";
+"minutes" = "minutes";
+"seconds" = "seconds";
+"per_question" = "per question";
+
+// MARK: - Result
+"congratulations" = "Congratulations!";
+"try_again" = "So close!";
+"completed_level" = "Completed Level %d";
+"failed_level" = "Failed Level %d";
+"correct_count" = "Correct: %d";
+"error_count" = "Errors: %d";
+"total_time" = "Total Time: %@";
+"accuracy" = "Accuracy: %.0f%%";
+"earned_badge" = "Earned Badge";
+
+// MARK: - Failure Mechanism
+"watch_ad_retry" = "Watch 30s Ad → Retry Level";
+"back_to_home" = "Back to Home → Try Later";
+"ad_duration" = "Ad Duration: 30s";
+"ad_description" = "Watch an ad to retry this level";
+
+// MARK: - Skip Level
+"skip_level" = "Skip Level";
+"skip_level_success" = "Great job! You skipped 3 levels!";
+"skip_to_level" = "Skip to Level %d";
+
+// MARK: - Badges
+"badge" = "Badge";
+"badges" = "Badges";
+"earned_badges" = "Earned Badges";
+"total_badges" = "Total Badges";
+"level_complete_badge" = "Addition Warrior";
+"skip_level_badge" = "Speed Master";
+"perfect_level_badge" = "Quiz Genius";
+"consecutive_login_badge" = "Persistence Master";
+
+// MARK: - Guide Character
+"guide_character" = "Guide Character";
+"panda" = "Galaxy Panda";
+"rabbit" = "Galaxy Rabbit";
+"unlock_character" = "Unlock Character";
+"unlock_threshold" = "Requires %d badges to unlock";
+"character_message" = "Character Message";
+
+// MARK: - Consecutive Login
+"consecutive_login" = "7-Day Login Streak";
+"consecutive_days" = "Logged in %d/%d days in a row";
+"login_streak" = "Login Streak";
+"keep_going" = "Keep going!";
+
+// MARK: - Certificate
+"certificate" = "Certificate";
+"electronic_certificate" = "Electronic Certificate";
+"save_to_album" = "Save to Album";
+"share_to_social" = "Share to Social";
+"print_hint" = "You can print it as a paper certificate!";
+"certificate_title" = "Mathaxy Addition Master";
+"certificate_nickname" = "Nickname";
+"certificate_time" = "Total Completion Time";
+"certificate_badges" = "Badges Earned";
+
+// MARK: - Settings
+"language_settings" = "Language Settings";
+"sound_settings" = "Sound Settings";
+"music_settings" = "Music Settings";
+"haptic_settings" = "Haptic Settings";
+"about_app" = "About App";
+"version" = "Version";
+"reset_data" = "Reset Data";
+"reset_data_warning" = "Are you sure you want to reset all data? This action cannot be undone!";
+"reset_data_confirm" = "Confirm Reset";
+
+// MARK: - Sound Effects
+"correct" = "Correct";
+"incorrect" = "Incorrect";
+"correct_answer" = "Correct Answer";
+"timeout" = "Timeout";
+"badge_earned" = "Badge Earned";
+"character_unlocked" = "Character Unlocked";
+
+// MARK: - Permissions
+"photo_library_permission" = "Photo Library Permission";
+"photo_library_permission_description" = "Photo library access is needed to save certificate images";
+"permission_denied" = "Permission Denied";
+"go_to_settings" = "Go to Settings";
+
+// MARK: - Others
+"loading" = "Loading...";
+"please_wait" = "Please wait...";
+"no_data" = "No Data";
+"error_occurred" = "An error occurred";
+"network_error" = "Network Error";
+"success" = "Success";
+"failed" = "Failed";
+"close" = "Close";
+"done" = "Done";
+
+// MARK: - Game Suggestions
+"retry_current_level" = "Try this level again to improve your score!";
+"try_next_level" = "Great job! Try Level %d next.";
+"all_levels_completed" = "Congratulations! You have completed all levels.";

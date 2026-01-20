@@ -1,0 +1,24 @@
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- 兔子身体 -->
+  <ellipse cx="75" cy="100" rx="40" ry="35" fill="#F5F5DC"/>
+  <!-- 兔子头部 -->
+  <ellipse cx="75" cy="60" rx="35" ry="30" fill="#F5F5DC"/>
+  <!-- 耳朵 -->
+  <ellipse cx="55" cy="25" rx="12" ry="25" fill="#F5F5DC"/>
+  <ellipse cx="55" cy="25" rx="6" ry="18" fill="#FFB6C1"/>
+  <ellipse cx="95" cy="25" rx="12" ry="25" fill="#F5F5DC"/>
+  <ellipse cx="95" cy="25" rx="6" ry="18" fill="#FFB6C1"/>
+  <!-- 眼睛 -->
+  <circle cx="65" cy="55" r="6" fill="black"/>
+  <circle cx="85" cy="55" r="6" fill="black"/>
+  <!-- 眼睛高光 -->
+  <circle cx="63" cy="53" r="2" fill="white"/>
+  <circle cx="83" cy="53" r="2" fill="white"/>
+  <!-- 鼻子 -->
+  <ellipse cx="75" cy="65" rx="5" ry="3" fill="#FFB6C1"/>
+  <!-- 嘴巴 -->
+  <path d="M72 70 Q75 73 78 70" stroke="#FFB6C1" stroke-width="2" fill="none"/>
+  <!-- 腮红 -->
+  <circle cx="58" cy="62" r="6" fill="#FFB6C1" opacity="0.6"/>
+  <circle cx="92" cy="62" r="6" fill="#FFB6C1" opacity="0.6"/>
+</svg>

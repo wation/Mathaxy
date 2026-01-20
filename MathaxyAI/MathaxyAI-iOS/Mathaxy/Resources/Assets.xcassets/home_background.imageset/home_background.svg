@@ -1,0 +1,18 @@
+<svg width="375" height="812" viewBox="0 0 375 812" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B59B6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="375" height="812" fill="url(#bgGradient)"/>
+  <!-- 星星装饰 -->
+  <circle cx="50" cy="100" r="3" fill="white" opacity="0.6"/>
+  <circle cx="300" cy="150" r="2" fill="white" opacity="0.5"/>
+  <circle cx="100" cy="300" r="4" fill="white" opacity="0.4"/>
+  <circle cx="250" cy="400" r="3" fill="white" opacity="0.5"/>
+  <circle cx="75" cy="500" r="2" fill="white" opacity="0.6"/>
+  <circle cx="320" cy="600" r="4" fill="white" opacity="0.3"/>
+  <!-- 月亮 -->
+  <circle cx="320" cy="80" r="25" fill="white" opacity="0.2"/>
+</svg>

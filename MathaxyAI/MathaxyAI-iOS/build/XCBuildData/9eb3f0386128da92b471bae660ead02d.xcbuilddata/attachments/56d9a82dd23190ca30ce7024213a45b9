@@ -1,0 +1,120 @@
+{
+  "" : {
+    "const-values" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Mathaxy-master.swiftconstvalues",
+    "dependencies" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Mathaxy-master.d",
+    "diagnostics" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Mathaxy-master.dia",
+    "emit-module-dependencies" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Mathaxy-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Mathaxy-master-emit-module.dia",
+    "swift-dependencies" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Mathaxy-master.swiftdeps"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/App/MathaxyApp.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/MathaxyApp.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/MathaxyApp.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/MathaxyApp.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Models/GameConstants.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GameConstants.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GameConstants.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GameConstants.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Models/LevelConfig.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LevelConfig.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LevelConfig.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LevelConfig.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Achievement/Model/GuideCharacter.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GuideCharacter.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GuideCharacter.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GuideCharacter.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Game/Model/GameSession.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GameSession.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GameSession.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/GameSession.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Game/Model/Question.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Question.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Question.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Question.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Home/View/HomeView.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/HomeView.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Home/ViewModel/HomeViewModel.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/HomeViewModel.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/HomeViewModel.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/HomeViewModel.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Login/Model/UserProfile.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/UserProfile.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/UserProfile.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/UserProfile.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Login/View/LoginView.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginView.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginView.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginView.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Login/ViewModel/LoginViewModel.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginViewModel.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginViewModel.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginViewModel.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Modules/Settings/Model/AppSettings.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/AppSettings.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Services/AdService.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/AdService.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/AdService.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/AdService.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Services/LocalizationService.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LocalizationService.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LocalizationService.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LocalizationService.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Services/LoginTrackingService.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginTrackingService.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginTrackingService.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/LoginTrackingService.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Services/QuestionGenerator.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/QuestionGenerator.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/QuestionGenerator.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/QuestionGenerator.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Services/SoundService.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/SoundService.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/SoundService.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/SoundService.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Services/StorageService.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/StorageService.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/StorageService.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/StorageService.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Utils/Extensions/Color+Extensions.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Color+Extensions.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Color+Extensions.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/Color+Extensions.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Utils/Extensions/View+Extensions.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/View+Extensions.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/View+Extensions.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/View+Extensions.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Utils/Helpers/CertificateGenerator.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/CertificateGenerator.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/CertificateGenerator.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/CertificateGenerator.o"
+  },
+  "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Utils/Helpers/DateHelper.swift" : {
+    "index-unit-output-path" : "/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/DateHelper.o",
+    "llvm-bc" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/DateHelper.bc",
+    "object" : "/Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/build/Mathaxy.build/Release-iphoneos/Mathaxy.build/Objects-normal/arm64/DateHelper.o"
+  }
+}

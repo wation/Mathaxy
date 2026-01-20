@@ -1,0 +1,2 @@
+Target dependency graph (1 target)
+Target 'Mathaxy' in project 'Mathaxy' (no dependencies)

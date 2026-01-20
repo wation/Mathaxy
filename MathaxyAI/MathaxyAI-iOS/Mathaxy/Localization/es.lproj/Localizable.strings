@@ -1,0 +1,139 @@
+/*
+  Localizable.strings (Español)
+  Mathaxy
+*/
+
+// MARK: - Común
+"app_name" = "Galaxia Matemática";
+"ok" = "OK";
+"cancel" = "Cancelar";
+"confirm" = "Confirmar";
+"back" = "Atrás";
+"next" = "Siguiente";
+"retry" = "Reintentar";
+"save" = "Guardar";
+"share" = "Compartir";
+"settings" = "Configuración";
+"achievement" = "Logros";
+"home" = "Inicio";
+
+// MARK: - Inicio de sesión
+"guest_login" = "Invitado";
+"parent_bind" = "Vinculación parental";
+"enter_nickname" = "Ingresa tu apodo";
+"nickname" = "Apodo";
+"welcome" = "¡Bienvenido, %@!";
+
+// MARK: - Juego
+"level" = "Nivel";
+"question" = "Pregunta";
+"time" = "Tiempo";
+"score" = "Puntuación";
+"start_game" = "Iniciar juego";
+"continue_game" = "Continuar juego";
+"level_select" = "Seleccionar nivel";
+"current_level" = "Nivel actual";
+"unlocked" = "Desbloqueado";
+"locked" = "Bloqueado";
+"completed" = "Completado";
+
+// MARK: - Nivel
+"level_description" = "Descripción del nivel";
+"total_time_mode" = "Modo de tiempo total";
+"per_question_mode" = "Modo de tiempo por pregunta";
+"minutes" = "minutos";
+"seconds" = "segundos";
+"per_question" = "por pregunta";
+
+// MARK: - Resultado
+"congratulations" = "¡Felicidades!";
+"try_again" = "¡Casi lo logras!";
+"completed_level" = "Completado nivel %d";
+"failed_level" = "Nivel %d fallido";
+"correct_count" = "Correctas: %d";
+"error_count" = "Errores: %d";
+"total_time" = "Tiempo total: %@";
+"accuracy" = "Precisión: %.0f%%";
+"earned_badge" = "Insignia ganada";
+
+// MARK: - Mecanismo de fallo
+"watch_ad_retry" = "Ver anuncio de 30s → Reintentar nivel";
+"back_to_home" = "Volver al inicio → Intentar más tarde";
+"ad_duration" = "Duración del anuncio: 30s";
+"ad_description" = "Ver un anuncio para reintentar este nivel";
+
+// MARK: - Saltar nivel
+"skip_level" = "Saltar nivel";
+"skip_level_success" = "¡Excelente trabajo! ¡Has saltado 3 niveles!";
+"skip_to_level" = "Saltar al nivel %d";
+
+// MARK: - Insignias
+"badge" = "Insignia";
+"badges" = "Insignias";
+"earned_badges" = "Insignias ganadas";
+"total_badges" = "Total de insignias";
+"level_complete_badge" = "Guerrero de la suma";
+"skip_level_badge" = "Maestro de la velocidad";
+"perfect_level_badge" = "Genio del quiz";
+"consecutive_login_badge" = "Maestro de la persistencia";
+
+// MARK: - Personaje guía
+"guide_character" = "Personaje guía";
+"panda" = "Panda galáctico";
+"rabbit" = "Conejo galáctico";
+"unlock_character" = "Desbloquear personaje";
+"unlock_threshold" = "Requiere %d insignias para desbloquear";
+"character_message" = "Mensaje del personaje";
+
+// MARK: - Inicio de sesión consecutivo
+"consecutive_login" = "Racha de 7 días";
+"consecutive_days" = "Has iniciado sesión %d/%d días seguidos";
+"login_streak" = "Racha de inicio de sesión";
+"keep_going" = "¡Continúa así!";
+
+// MARK: - Certificado
+"certificate" = "Certificado";
+"electronic_certificate" = "Certificado electrónico";
+"save_to_album" = "Guardar en álbum";
+"share_to_social" = "Compartir en redes sociales";
+"print_hint" = "¡Puedes imprimirlo como certificado de papel!";
+"certificate_title" = "Maestro de la suma Mathaxy";
+"certificate_nickname" = "Apodo";
+"certificate_time" = "Tiempo total de finalización";
+"certificate_badges" = "Insignias ganadas";
+
+// MARK: - Configuración
+"language_settings" = "Configuración de idioma";
+"sound_settings" = "Configuración de sonido";
+"music_settings" = "Configuración de música";
+"haptic_settings" = "Configuración háptica";
+"about_app" = "Acerca de la aplicación";
+"version" = "Versión";
+"reset_data" = "Restablecer datos";
+"reset_data_warning" = "¿Estás seguro de que quieres restablecer todos los datos? ¡Esta acción no se puede deshacer!";
+"reset_data_confirm" = "Confirmar restablecimiento";
+
+// MARK: - Efectos de sonido
+"correct" = "Correcto";
+"incorrect" = "Incorrecto";
+"correct_answer" = "Respuesta correcta";
+"timeout" = "Tiempo agotado";
+"badge_earned" = "Insignia ganada";
+"character_unlocked" = "Personaje desbloqueado";
+
+// MARK: - Permisos
+"photo_library_permission" = "Permiso de biblioteca de fotos";
+"photo_library_permission_description" = "Se necesita acceso a la biblioteca de fotos para guardar imágenes de certificados";
+"permission_denied" = "Permiso denegado";
+"go_to_settings" = "Ir a configuración";
+
+// MARK: - Otros
+"loading" = "Cargando...";
+"please_wait" = "Por favor espera...";
+"no_data" = "Sin datos";
+"error_occurred" = "Ocurrió un error";
+"network_error" = "Error de red";
+"success" = "Éxito";
+"failed" = "Fallido";
+"close" = "Cerrar";
+"done" = "Hecho";

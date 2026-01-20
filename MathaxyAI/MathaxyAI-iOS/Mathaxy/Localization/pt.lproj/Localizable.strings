@@ -1,0 +1,139 @@
+/*
+  Localizable.strings (Português)
+  Mathaxy
+*/
+
+// MARK: - Comum
+"app_name" = "Galáxia Matemática";
+"ok" = "OK";
+"cancel" = "Cancelar";
+"confirm" = "Confirmar";
+"back" = "Voltar";
+"next" = "Próximo";
+"retry" = "Tentar novamente";
+"save" = "Salvar";
+"share" = "Compartilhar";
+"settings" = "Configurações";
+"achievement" = "Conquistas";
+"home" = "Início";
+
+// MARK: - Login
+"guest_login" = "Convidado";
+"parent_bind" = "Vinculação parental";
+"enter_nickname" = "Digite seu apelido";
+"nickname" = "Apelido";
+"welcome" = "Bem-vindo, %@!";
+
+// MARK: - Jogo
+"level" = "Nível";
+"question" = "Pergunta";
+"time" = "Tempo";
+"score" = "Pontuação";
+"start_game" = "Iniciar jogo";
+"continue_game" = "Continuar jogo";
+"level_select" = "Selecionar nível";
+"current_level" = "Nível atual";
+"unlocked" = "Desbloqueado";
+"locked" = "Bloqueado";
+"completed" = "Concluído";
+
+// MARK: - Nível
+"level_description" = "Descrição do nível";
+"total_time_mode" = "Modo de tempo total";
+"per_question_mode" = "Modo de tempo por pergunta";
+"minutes" = "minutos";
+"seconds" = "segundos";
+"per_question" = "por pergunta";
+
+// MARK: - Resultado
+"congratulations" = "Parabéns!";
+"try_again" = "Quase lá!";
+"completed_level" = "Nível %d concluído";
+"failed_level" = "Nível %d falhou";
+"correct_count" = "Corretas：%d";
+"error_count" = "Erros：%d";
+"total_time" = "Tempo total：%@";
+"accuracy" = "Precisão：%.0f%%";
+"earned_badge" = "Distintivo ganho";
+
+// MARK: - Mecanismo de falha
+"watch_ad_retry" = "Ver anúncio de 30s → Tentar nível novamente";
+"back_to_home" = "Voltar ao início → Tentar mais tarde";
+"ad_duration" = "Duração do anúncio：30s";
+"ad_description" = "Assista a um anúncio para tentar este nível novamente";
+
+// MARK: - Pular nível
+"skip_level" = "Pular nível";
+"skip_level_success" = "Ótimo trabalho! Você pulou 3 níveis!";
+"skip_to_level" = "Pular para o nível %d";
+
+// MARK: - Distintivos
+"badge" = "Distintivo";
+"badges" = "Distintivos";
+"earned_badges" = "Distintivos ganhos";
+"total_badges" = "Total de distintivos";
+"level_complete_badge" = "Guerreiro da adição";
+"skip_level_badge" = "Mestre da velocidade";
+"perfect_level_badge" = "Gênio do quiz";
+"consecutive_login_badge" = "Mestre da persistência";
+
+// MARK: - Personagem guia
+"guide_character" = "Personagem guia";
+"panda" = "Panda galáctico";
+"rabbit" = "Coelho galáctico";
+"unlock_character" = "Desbloquear personagem";
+"unlock_threshold" = "Requer %d distintivos para desbloquear";
+"character_message" = "Mensagem do personagem";
+
+// MARK: - Login consecutivo
+"consecutive_login" = "7 dias consecutivos de login";
+"consecutive_days" = "Fez login %d/%d dias consecutivos";
+"login_streak" = "Sequência de login";
+"keep_going" = "Continue assim!";
+
+// MARK: - Certificado
+"certificate" = "Certificado";
+"electronic_certificate" = "Certificado eletrônico";
+"save_to_album" = "Salvar no álbum";
+"share_to_social" = "Compartilhar nas redes sociais";
+"print_hint" = "Você pode imprimi-lo como um certificado de papel!";
+"certificate_title" = "Mestre da adição Mathaxy";
+"certificate_nickname" = "Apelido";
+"certificate_time" = "Tempo total de conclusão";
+"certificate_badges" = "Distintivos ganhos";
+
+// MARK: - Configurações
+"language_settings" = "Configurações de idioma";
+"sound_settings" = "Configurações de som";
+"music_settings" = "Configurações de música";
+"haptic_settings" = "Configurações hápticas";
+"about_app" = "Sobre o aplicativo";
+"version" = "Versão";
+"reset_data" = "Redefinir dados";
+"reset_data_warning" = "Tem certeza de que deseja redefinir todos os dados? Esta ação não pode ser desfeita!";
+"reset_data_confirm" = "Confirmar redefinição";
+
+// MARK: - Efeitos sonoros
+"correct" = "Correto";
+"incorrect" = "Incorreto";
+"correct_answer" = "Correct Answer";
+"timeout" = "Tempo esgotado";
+"badge_earned" = "Distintivo ganho";
+"character_unlocked" = "Personagem desbloqueado";
+
+// MARK: - Permissões
+"photo_library_permission" = "Permissão da biblioteca de fotos";
+"photo_library_permission_description" = "O acesso à biblioteca de fotos é necessário para salvar imagens de certificados";
+"permission_denied" = "Permissão negada";
+"go_to_settings" = "Ir para configurações";
+
+// MARK: - Outros
+"loading" = "Carregando...";
+"please_wait" = "Por favor aguarde...";
+"no_data" = "Sem dados";
+"error_occurred" = "Ocorreu um erro";
+"network_error" = "Erro de rede";
+"success" = "Sucesso";
+"failed" = "Falhou";
+"close" = "Fechar";
+"done" = "Concluído";
