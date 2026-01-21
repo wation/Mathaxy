@@ -18,6 +18,7 @@ struct SettingsView: View {
     
     // MARK: - 本地状态
     @State private var showResetAlert = false
+    @State private var showLanguageSheet = false
     
     // MARK: - Body
     var body: some View {
@@ -53,7 +54,7 @@ struct SettingsView: View {
                                 title: "Language",
                                 value: localizationService.currentLanguage.displayName
                             ) {
-                                // 语言选择操作
+                                showLanguageSheet = true
                             }
                             
                             Divider()
@@ -91,6 +92,14 @@ struct SettingsView: View {
                 }
             } message: {
                 Text("Are you sure you want to reset all data?")
+            }
+            .confirmationDialog("Select Language", isPresented: $showLanguageSheet, titleVisibility: .visible) {
+                ForEach(AppLanguage.allCases, id: \.self) { language in
+                    Button(language.displayName) {
+                        localizationService.switchLanguage(to: language)
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
             }
         }
     }

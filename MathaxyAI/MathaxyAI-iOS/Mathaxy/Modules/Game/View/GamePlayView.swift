@@ -33,7 +33,7 @@ struct GamePlayView: View {
                 topInfoBar
                     .padding(.horizontal, 20)
                     .padding(.top, 10)
-                Spacer()
+                Spacer().frame(maxHeight: 60)
                 
                 if let question = viewModel.currentQuestion {
                     questionArea(question: question)
