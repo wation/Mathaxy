@@ -54,6 +54,8 @@ struct GameView: View {
             }
             .padding(20)
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             loadUserProfile()
             viewModel.startTimer()

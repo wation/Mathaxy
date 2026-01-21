@@ -27,10 +27,12 @@ struct ResultView: View {
     // MARK: - Body
     var body: some View {
         ZStack {
-            // 背景
+            Color.black.ignoresSafeArea(edges: .all) // 状态栏遮挡
+
+            // 背景 - 全屏
             backgroundView
             
-            // 内容
+            // 内容 - 全屏
             VStack(spacing: 0) {
                 // 顶部导航
                 topBar
@@ -46,8 +48,11 @@ struct ResultView: View {
                 bottomButtons
                     .padding(.bottom, 40)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .sheet(isPresented: $showCertificate) {
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .fullScreenCover(isPresented: $showCertificate) {
             CertificateView(gameSession: gameSession)
         }
         .sheet(isPresented: $showShareSheet) {
@@ -62,9 +67,9 @@ struct ResultView: View {
     // MARK: - 背景视图
     private var backgroundView: some View {
         ZStack {
-            // 银河背景渐变
+            // 银河背景渐变 - 全屏
             Color.galaxyGradient
-                .ignoresSafeArea()
+                .ignoresSafeArea(.all)
             
             // 星星装饰
             starsView
@@ -235,6 +240,9 @@ struct ResultView: View {
     private var bottomButtons: some View {
         VStack(spacing: 15) {
             // 生成奖状按钮
+            // 需求：奖状按钮仅在第10关通关后可用，其它关卡显示为禁用状态
+            let canGenerateCertificate = (gameSession.level == GameConstants.totalLevels)
+            
             Button(action: {
                 SoundService.shared.playButtonClickSound()
                 showCertificate = true
@@ -252,6 +260,8 @@ struct ResultView: View {
             }
             .primaryButtonStyle()
             .padding(.horizontal, 40)
+            .disabled(!canGenerateCertificate)
+            .opacity(canGenerateCertificate ? 1.0 : 0.4)
             
             // 重试按钮
             Button(action: {

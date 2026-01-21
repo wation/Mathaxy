@@ -34,7 +34,7 @@ struct HomeView: View {
             contentView
         }
         .ignoresSafeArea()
-        .sheet(isPresented: $viewModel.showLevelSelect) {
+        .fullScreenCover(isPresented: $viewModel.showLevelSelect) {
             LevelSelectView(userProfile: userProfile)
         }
         .sheet(isPresented: $viewModel.showAchievement) {

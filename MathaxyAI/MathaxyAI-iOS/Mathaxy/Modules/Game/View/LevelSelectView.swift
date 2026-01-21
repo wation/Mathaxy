@@ -11,8 +11,12 @@ import SwiftUI
 // MARK: - 关卡选择视图
 struct LevelSelectView: View {
     
-    // MARK: - 用户资料
-    let userProfile: UserProfile
+    @StateObject private var viewModel: LevelSelectViewModel
+    
+    // MARK: - 初始化
+    init(userProfile: UserProfile? = nil) {
+        _viewModel = StateObject(wrappedValue: LevelSelectViewModel(userProfile: userProfile))
+    }
     
     // MARK: - 导航状态
     @State private var selectedLevel: Int?
@@ -21,29 +25,24 @@ struct LevelSelectView: View {
     @Environment(\.dismiss) private var dismiss
     
     // MARK: - Body
+    @State private var hideStatusBar = false
     var body: some View {
         NavigationStack {
             ZStack {
-                // 背景
-                Color.spaceBlue
-                    .ignoresSafeArea()
-                
-                // 内容
-                VStack {
+                Color.spaceBlue.ignoresSafeArea(.all)
+                VStack(spacing: 0) {
                     Text(LocalizedKeys.levelSelect.localized)
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(Color.starlightYellow)
                         .padding(.top, 20)
-                    
-                    // 关卡网格
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
                             ForEach(1...GameConstants.totalLevels, id: \.self) { level in
                                 LevelButtonView(
                                     level: level,
-                                    isCompleted: userProfile.completedLevels.contains(level),
-                                    isCurrentLevel: userProfile.currentLevel == level,
-                                    isUnlocked: level == 1 || userProfile.completedLevels.contains(level - 1)
+                                    isCompleted: viewModel.userProfile.completedLevels.contains(level),
+                                    isCurrentLevel: viewModel.userProfile.currentLevel == level,
+                                    isUnlocked: level == 1 || viewModel.userProfile.completedLevels.contains(level - 1)
                                 ) {
                                     selectedLevel = level
                                 }
@@ -51,10 +50,7 @@ struct LevelSelectView: View {
                         }
                         .padding(20)
                     }
-                    
                     Spacer()
-                    
-                    // 关闭按钮
                     Button(action: { dismiss() }) {
                         Text(LocalizedKeys.back.localized)
                             .font(.system(size: 16, weight: .semibold))
@@ -64,9 +60,16 @@ struct LevelSelectView: View {
                             .background(Color.stardustPurple)
                             .cornerRadius(8)
                     }
-                    .padding(20)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .statusBar(hidden: hideStatusBar)
+            .onAppear { hideStatusBar = true }
+            .onDisappear { hideStatusBar = false }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: Binding(
                 get: { selectedLevel != nil },
                 set: { if !$0 { selectedLevel = nil } }
@@ -123,5 +126,5 @@ private struct LevelButtonView: View {
 }
 
 #Preview {
-    LevelSelectView(userProfile: UserProfile())
+    LevelSelectView()
 }

@@ -16,6 +16,10 @@ extension Notification.Name {
 // MARK: - 应用入口
 @main
 struct MathaxyApp: App {
+    // 全局隐藏状态栏
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var hideStatusBar = true
+
     
     // MARK: - 应用状态
     @StateObject private var localizationService = LocalizationService.shared
@@ -28,6 +32,7 @@ struct MathaxyApp: App {
             RootView()
                 .environmentObject(localizationService)
                 .environmentObject(storageService)
+                .statusBar(hidden: true)
         }
     }
     

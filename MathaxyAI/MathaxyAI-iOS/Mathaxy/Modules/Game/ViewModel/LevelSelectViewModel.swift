@@ -29,15 +29,18 @@ class LevelSelectViewModel: ObservableObject {
             self.userProfile = UserProfile()
         }
         
+        // Observe profile updates so UI refreshes when a level is completed
+        NotificationCenter.default.addObserver(self, selector: #selector(loadUserProfile), name: .userProfileUpdated, object: nil)
         loadUserProfile()
     }
     
     // MARK: - 加载用户资料
-    private func loadUserProfile() {
+    @objc func loadUserProfile() {
         isLoading = true
         
         if let profile = storageService.loadUserProfile() {
             userProfile = profile
+            showError = false
         } else {
             showError = true
             errorMessage = "加载用户资料失败"

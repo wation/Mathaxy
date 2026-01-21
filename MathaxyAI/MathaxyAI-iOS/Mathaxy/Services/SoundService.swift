@@ -159,16 +159,44 @@ class SoundService: ObservableObject {
     
     // MARK: - 播放音效（私有方法）
     private func playSound(named name: String, withExtension ext: String) {
-        guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
-            print("找不到音效文件: \(name).\(ext)")
-            return
+        // 尝试先使用WAV文件
+        if let url = Bundle.main.url(forResource: name, withExtension: "wav") {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.play()
+                return
+            } catch {
+                print("播放WAV音效失败: \(error.localizedDescription)")
+            }
         }
         
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
-        } catch {
-            print("播放音效失败: \(error.localizedDescription)")
+        // 如果WAV文件不存在或播放失败，尝试使用MP3文件
+        if let url = Bundle.main.url(forResource: name, withExtension: ext) {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.play()
+                return
+            } catch {
+                print("播放\(ext)音效失败: \(error.localizedDescription)")
+            }
+        }
+        
+        // 如果所有文件都不存在或播放失败，生成简单的系统音效
+        playSystemSound(for: name)
+    }
+    
+    /// 播放系统音效
+    private func playSystemSound(for soundName: String) {
+        // 使用系统震动反馈代替音效
+        switch soundName {
+        case "button_click":
+            playHapticFeedback(style: .light)
+        case "correct", "success", "badge_earned", "character_unlocked", "level_complete":
+            playHapticFeedback(style: .medium)
+        case "incorrect", "error", "game_over", "timeout":
+            playHapticFeedback(style: .heavy)
+        default:
+            playHapticFeedback(style: .light)
         }
     }
     

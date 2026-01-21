@@ -28,26 +28,148 @@ class QuestionGenerator {
         var questions: [Question] = []
         var usedCombinations: Set<String> = []
         
-        while questions.count < count {
-            // 随机生成加数和被加数（0-9）
-            let addend1 = Int.random(in: 0...9)
-            let addend2 = Int.random(in: 0...9)
-            let combination = "\(addend1)+\(addend2)"
-            
-            // 检查是否已使用过该组合（同一关卡内不重复）
-            if !usedCombinations.contains(combination) {
-                usedCombinations.insert(combination)
-                
-                // 根据关卡配置设置时间限制
-                let timeLimit = levelConfig.perQuestionTime ?? 0
-                
-                let question = Question(
-                    addend1: addend1,
-                    addend2: addend2,
-                    timeLimit: timeLimit
-                )
-                questions.append(question)
+        // Per-level constraints introduced by product requirement
+        // level -> (maxZeroAddendCount, minTwoDigitSumCount, forbidZeroForAll)
+        let constraints: [Int: (maxZero: Int, minTwoDigit: Int, forbidZero: Bool)] = [
+            6: (maxZero: 2, minTwoDigit: 0, forbidZero: false),
+            7: (maxZero: 1, minTwoDigit: 0, forbidZero: false),
+            8: (maxZero: 1, minTwoDigit: 3, forbidZero: false),
+            9: (maxZero: 1, minTwoDigit: 5, forbidZero: false),
+            10: (maxZero: 0, minTwoDigit: 7, forbidZero: true)
+        ]
+        
+        let levelConstraint = constraints[level] ?? (maxZero: Int.max, minTwoDigit: 0, forbidZero: false)
+        
+        // Helper closures
+        let isZeroQuestion: (Int, Int) -> Bool = { a, b in
+            return a == 0 || b == 0
+        }
+        let isTwoDigitSum: (Int, Int) -> Bool = { a, b in
+            return (a + b) >= 10
+        }
+        
+        // Pre-generate candidate pools to make it easier to satisfy constraints
+        var zeroPool: [Question] = []
+        var twoDigitPool: [Question] = []
+        var normalPool: [Question] = []
+        var allPossible: [Question] = []
+        
+        for a in 0...9 {
+            for b in 0...9 {
+                let q = Question(addend1: a, addend2: b, timeLimit: levelConfig.perQuestionTime ?? 0)
+                allPossible.append(q)
+                if isZeroQuestion(a, b) { zeroPool.append(q) }
+                if isTwoDigitSum(a, b) { twoDigitPool.append(q) }
+                if !isZeroQuestion(a, b) && !isTwoDigitSum(a, b) { normalPool.append(q) }
             }
+        }
+        
+        // Shuffle pools to get randomness
+        zeroPool.shuffle()
+        twoDigitPool.shuffle()
+        normalPool.shuffle()
+        allPossible.shuffle()
+        
+        var zeroCount = 0
+        var twoDigitCount = 0
+        var attempt = 0
+        let maxAttempts = 10000
+        
+        // First, try to greedily satisfy minTwoDigit requirement
+        if levelConstraint.minTwoDigit > 0 {
+            for q in twoDigitPool {
+                let combo = "\(q.addend1)+\(q.addend2)"
+                if questions.count < count && !usedCombinations.contains(combo) {
+                    questions.append(q)
+                    usedCombinations.insert(combo)
+                    twoDigitCount += 1
+                }
+                if twoDigitCount >= levelConstraint.minTwoDigit { break }
+            }
+        }
+        
+        // Then fill remaining slots respecting zero limits and forbidZero
+        while questions.count < count && attempt < maxAttempts {
+            attempt += 1
+            // Prefer normal and two-digit (to meet counts), but allow others if needed
+            var candidatePools: [[Question]] = []
+            candidatePools.append(normalPool)
+            candidatePools.append(twoDigitPool)
+            candidatePools.append(zeroPool)
+            candidatePools.append(allPossible)
+            
+            var picked: Question? = nil
+            for pool in candidatePools {
+                if pool.isEmpty { continue }
+                // pick random index
+                let idx = Int.random(in: 0..<pool.count)
+                let q = pool[idx]
+                let combo = "\(q.addend1)+\(q.addend2)"
+                if usedCombinations.contains(combo) { continue }
+                // enforce forbidZero
+                if levelConstraint.forbidZero && isZeroQuestion(q.addend1, q.addend2) { continue }
+                // enforce maxZero
+                if isZeroQuestion(q.addend1, q.addend2) && zeroCount >= levelConstraint.maxZero { continue }
+                // ok
+                picked = q
+                break
+            }
+            
+            if let q = picked {
+                let combo = "\(q.addend1)+\(q.addend2)"
+                usedCombinations.insert(combo)
+                questions.append(q)
+                if isZeroQuestion(q.addend1, q.addend2) { zeroCount += 1 }
+                if isTwoDigitSum(q.addend1, q.addend2) { twoDigitCount += 1 }
+            } else {
+                // Nothing could be picked under current constraints; relax by allowing any unused
+                for q in allPossible {
+                    let combo = "\(q.addend1)+\(q.addend2)"
+                    if usedCombinations.contains(combo) { continue }
+                    // still enforce forbidZero
+                    if levelConstraint.forbidZero && isZeroQuestion(q.addend1, q.addend2) { continue }
+                    usedCombinations.insert(combo)
+                    questions.append(q)
+                    if isZeroQuestion(q.addend1, q.addend2) { zeroCount += 1 }
+                    if isTwoDigitSum(q.addend1, q.addend2) { twoDigitCount += 1 }
+                    break
+                }
+            }
+        }
+        
+        // Safety deterministic fallback: if constraints not met (due to limited pool), try deterministic construction
+        if twoDigitCount < levelConstraint.minTwoDigit {
+            // clear and build deterministic two-digit-first list
+            questions.removeAll()
+            usedCombinations.removeAll()
+            twoDigitCount = 0
+            zeroCount = 0
+            for q in twoDigitPool {
+                let combo = "\(q.addend1)+\(q.addend2)"
+                if !usedCombinations.contains(combo) {
+                    questions.append(q)
+                    usedCombinations.insert(combo)
+                    twoDigitCount += 1
+                }
+                if twoDigitCount >= levelConstraint.minTwoDigit { break }
+            }
+            // fill rest from non-zero pool if forbidZero, else from allPossible
+            let fillFrom = levelConstraint.forbidZero ? allPossible.filter { !isZeroQuestion($0.addend1, $0.addend2) } : allPossible
+            for q in fillFrom {
+                if questions.count >= count { break }
+                let combo = "\(q.addend1)+\(q.addend2)"
+                if usedCombinations.contains(combo) { continue }
+                // enforce maxZero if applicable
+                if isZeroQuestion(q.addend1, q.addend2) && zeroCount >= levelConstraint.maxZero { continue }
+                questions.append(q)
+                usedCombinations.insert(combo)
+                if isZeroQuestion(q.addend1, q.addend2) { zeroCount += 1 }
+            }
+        }
+        
+        // Final trim in rare case of overshoot
+        if questions.count > count {
+            questions = Array(questions.prefix(count))
         }
         
         return questions

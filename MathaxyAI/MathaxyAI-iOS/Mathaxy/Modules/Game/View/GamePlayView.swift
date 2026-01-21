@@ -13,6 +13,7 @@ struct GamePlayView: View {
     
     // MARK: - 视图模型
     @StateObject private var viewModel: GamePlayViewModel
+    @State private var showExitAlert = false
     
     // MARK: - 环境变量
     @Environment(\.dismiss) private var dismiss
@@ -23,21 +24,17 @@ struct GamePlayView: View {
     }
     
     // MARK: - Body
+    @State private var hideStatusBar = false
     var body: some View {
         ZStack {
-            // 背景
+            Color.black.ignoresSafeArea(edges: .all) // 状态栏遮挡
             backgroundView
-            
-            // 内容
             VStack(spacing: 0) {
-                // 顶部信息栏
                 topInfoBar
                     .padding(.horizontal, 20)
                     .padding(.top, 10)
-                
                 Spacer()
                 
-                // 题目显示区域
                 if let question = viewModel.currentQuestion {
                     questionArea(question: question)
                 } else {
@@ -46,36 +43,86 @@ struct GamePlayView: View {
                 
                 Spacer()
                 
-                // 答案选择区域
+                // 进度条
+                if !viewModel.isGameCompleted {
+                    ProgressView(value: viewModel.progress)
+                        .tint(Color.starlightYellow)
+                        .scaleEffect(y: 2)
+                        .padding(.horizontal, 40)
+                }
+                
+                Spacer()
+                
                 if !viewModel.isGameCompleted {
                     answerGrid
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
                 }
             }
-            
-            // 结果覆盖层
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             if viewModel.showResult {
                 resultOverlay
             }
+            if showExitAlert {
+                ZStack {
+                    Color.black.opacity(0.5).ignoresSafeArea()
+                    VStack(spacing: 24) {
+                        Text("是否退出当前游戏？")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color.starlightYellow)
+                            .padding(.top, 24)
+                        Text("退出后将丢失当前进度")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color.cometWhite.opacity(0.8))
+                            .padding(.horizontal, 24)
+                        HStack(spacing: 20) {
+                            Button(action: { showExitAlert = false }) {
+                                Text("取消")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(Color.starlightYellow)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.stardustPurple.opacity(0.7)))
+                            }
+                            Button(action: { dismiss() }) {
+                                Text("退出")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.alertRed))
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
+                    }
+                    .background(RoundedRectangle(cornerRadius: 20).fill(Color.galaxyGradient))
+                    .padding(.horizontal, 32)
+                    .scaleEffect(showExitAlert ? 1 : 0.8)
+                    .opacity(showExitAlert ? 1 : 0)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: showExitAlert)
+                }
+            }
         }
-        .onAppear {
-            viewModel.startGame()
-        }
-        .onDisappear {
-            viewModel.pauseGame()
-        }
-        .sheet(isPresented: $viewModel.showGameComplete) {
+        .statusBar(hidden: hideStatusBar)
+        .onAppear { hideStatusBar = true; viewModel.startGame() }
+        .onDisappear { hideStatusBar = false; viewModel.pauseGame() }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .fullScreenCover(isPresented: $viewModel.showGameComplete) {
             ResultView(gameSession: viewModel.gameSession)
+                .onDisappear {
+                    dismiss()
+                }
         }
     }
     
     // MARK: - 背景视图
     private var backgroundView: some View {
         ZStack {
-            // 银河背景渐变
+            // 银河背景渐变 - 全屏
             Color.galaxyGradient
-                .ignoresSafeArea()
+                .ignoresSafeArea(.all)
             
             // 星星装饰
             starsView
@@ -105,7 +152,7 @@ struct GamePlayView: View {
             // 返回按钮
             Button(action: {
                 SoundService.shared.playButtonClickSound()
-                dismiss()
+                showExitAlert = true
             }) {
                 Image(systemName: "chevron.left")
                     .font(.title2)
@@ -133,60 +180,62 @@ struct GamePlayView: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(Color.cometWhite.opacity(0.8))
                 
-                Text(String(format: "%.0f", viewModel.timeRemaining))
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
+                // 对于第7-10关需要显示到0.1s精度
+                let config = LevelConfig.getLevelConfig(viewModel.level)
+                if config.mode == .perQuestion {
+                    Text(String(format: "%.1f", max(0, viewModel.timeRemaining)))
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
+                } else {
+                    Text(String(format: "%.0f", viewModel.timeRemaining))
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
+                }
             }
         }
     }
     
     // MARK: - 题目区域
     private func questionArea(question: Question) -> some View {
-        VStack(spacing: 30) {
-            // 题目卡片
-            VStack(spacing: 20) {
-                // 题目表达式
-                HStack(spacing: 20) {
-                    Text("\(question.addend1)")
-                        .font(.system(size: 56, weight: .bold))
-                        .foregroundColor(Color.starlightYellow)
-                    
-                    Text("+")
-                        .font(.system(size: 42, weight: .bold))
-                        .foregroundColor(Color.cometWhite)
-                    
-                    Text("\(question.addend2)")
-                        .font(.system(size: 56, weight: .bold))
-                        .foregroundColor(Color.starlightYellow)
-                    
-                    Text("=")
-                        .font(.system(size: 42, weight: .bold))
-                        .foregroundColor(Color.cometWhite)
-                    
-                    // 显示用户输入的数字，如果没有输入则显示问号
-                    Text(viewModel.userInputAnswer.isEmpty ? "?" : viewModel.userInputAnswer)
-                        .font(.system(size: 56, weight: .bold))
-                        .foregroundColor(viewModel.userInputAnswer.isEmpty ? Color.stardustPurple : Color.starlightYellow)
-                        .frame(minWidth: 80)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 30)
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.stardustPurple.opacity(0.2))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.starlightYellow, lineWidth: 2)
-                        )
+        // 题目表达式
+        HStack(spacing: 20) {
+            Text("\(question.addend1)")
+                .font(.system(size: 56, weight: .bold))
+                .foregroundColor(Color.starlightYellow)
+            
+            Text("+")
+                .font(.system(size: 42, weight: .bold))
+                .foregroundColor(Color.cometWhite)
+            
+            Text("\(question.addend2)")
+                .font(.system(size: 56, weight: .bold))
+                .foregroundColor(Color.starlightYellow)
+            
+            Text("=")
+                .font(.system(size: 42, weight: .bold))
+                .foregroundColor(Color.cometWhite)
+            
+            // 显示用户输入的数字，如果没有输入则显示问号
+            Text(viewModel.userInputAnswer.isEmpty ? "?" : viewModel.userInputAnswer)
+                .font(.system(size: 56, weight: .bold))
+                .foregroundColor(
+                    viewModel.hasInputError ? Color.alertRed :
+                    (viewModel.userInputAnswer.isEmpty ? Color.stardustPurple : Color.starlightYellow)
                 )
-                
-                // 进度条
-                ProgressView(value: viewModel.progress)
-                    .tint(Color.starlightYellow)
-                    .scaleEffect(y: 2)
-                    .padding(.horizontal, 40)
-            }
+                .frame(minWidth: 80)
         }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 30)
+        .padding(.horizontal, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.stardustPurple.opacity(0.2))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.starlightYellow, lineWidth: 2)
+                )
+        )
+        .padding(.horizontal, 16)
     }
     
     // MARK: - 加载视图
@@ -208,6 +257,7 @@ struct GamePlayView: View {
             GridRow {
                 ForEach(7...9, id: \.self) { number in
                     NumberButton(number: number) {
+                        viewModel.playButtonClickSound()
                         viewModel.inputDigit(number)
                     }
                 }
@@ -215,6 +265,7 @@ struct GamePlayView: View {
             GridRow {
                 ForEach(4...6, id: \.self) { number in
                     NumberButton(number: number) {
+                        viewModel.playButtonClickSound()
                         viewModel.inputDigit(number)
                     }
                 }
@@ -222,21 +273,24 @@ struct GamePlayView: View {
             GridRow {
                 ForEach(1...3, id: \.self) { number in
                     NumberButton(number: number) {
+                        viewModel.playButtonClickSound()
                         viewModel.inputDigit(number)
                     }
                 }
             }
             GridRow {
                 ClearAllButton {
+                    viewModel.playButtonClickSound()
                     viewModel.clearAllInput()
                 }
                 NumberButton(number: 0) {
+                    viewModel.playButtonClickSound()
                     viewModel.inputDigit(0)
                 }
-                // 占位符，保持布局一致性
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .aspectRatio(1, contentMode: .fit)
+                ClearAllButton {
+                    viewModel.playButtonClickSound()
+                    viewModel.clearAllInput()
+                }
             }
         }
     }
@@ -288,7 +342,7 @@ private struct NumberButton: View {
                 .aspectRatio(1, contentMode: .fit)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.red) // 临时背景色，用于调试
+                        .fill(Color.stardustPurple.opacity(0.3))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(Color.stardustPurple, lineWidth: 2)
@@ -307,7 +361,31 @@ private struct ClearAllButton: View {
         Button(action: action) {
             Text("清空")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(Color.alertRed)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .aspectRatio(1, contentMode: .fit)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.red.opacity(0.7)) // 临时背景色，用于调试
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.alertRed, lineWidth: 2)
+                        )
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - 退格按钮
+private struct BackspaceButton: View {
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "delete.left")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(.white)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .aspectRatio(1, contentMode: .fit)
                 .background(

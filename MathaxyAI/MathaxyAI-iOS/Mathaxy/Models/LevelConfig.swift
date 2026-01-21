@@ -79,47 +79,47 @@ struct LevelConfig {
         case 6:
             return LevelConfig(
                 level: 6,
-                mode: .perQuestion,
-                totalTime: nil,
-                perQuestionTime: 4.0,  // 4秒
+                mode: .totalTime,
+                totalTime: 60.0,  // 60秒总时长
+                perQuestionTime: nil,
                 maxErrors: GameConstants.maxErrorsPerLevel,
-                description: "每题4秒"
+                description: "总时长60秒"
             )
         case 7:
             return LevelConfig(
                 level: 7,
                 mode: .perQuestion,
                 totalTime: nil,
-                perQuestionTime: 3.5,  // 3.5秒
+                perQuestionTime: 5.0,  // 5秒
                 maxErrors: GameConstants.maxErrorsPerLevel,
-                description: "每题3.5秒"
+                description: "每题5秒"
             )
         case 8:
             return LevelConfig(
                 level: 8,
                 mode: .perQuestion,
                 totalTime: nil,
-                perQuestionTime: 3.0,  // 3秒
+                perQuestionTime: 4.0,  // 4秒
                 maxErrors: GameConstants.maxErrorsPerLevel,
-                description: "每题3秒"
+                description: "每题4秒"
             )
         case 9:
             return LevelConfig(
                 level: 9,
                 mode: .perQuestion,
                 totalTime: nil,
-                perQuestionTime: 2.5,  // 2.5秒
+                perQuestionTime: 3.0,  // 3秒
                 maxErrors: GameConstants.maxErrorsPerLevel,
-                description: "每题2.5秒"
+                description: "每题3秒"
             )
         case 10:
             return LevelConfig(
                 level: 10,
                 mode: .perQuestion,
                 totalTime: nil,
-                perQuestionTime: 2.0,  // 2秒
+                perQuestionTime: 2.5,  // 2.5秒
                 maxErrors: GameConstants.maxErrorsPerLevel,
-                description: "每题2秒"
+                description: "每题2.5秒"
             )
         default:
             return LevelConfig(

@@ -113,6 +113,9 @@ class GameViewModel: ObservableObject {
         // 保存更新后的用户资料
         storageService.saveUserProfile(userProfile)
         
+        // 通知界面刷新用户资料（用于立即解锁下一关）
+        NotificationCenter.default.post(name: .userProfileUpdated, object: nil)
+        
         // 触发回调
         onGameComplete?(isCompleted, gameSession.level)
     }

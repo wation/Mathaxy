@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "panda_happy.png",
+      "filename" : "panda_character.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "panda_happy@2x.png",
+      "filename" : "panda_character@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "panda_happy@3x.png",
+      "filename" : "panda_character@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
