@@ -241,6 +241,14 @@ class StorageService: ObservableObject {
         return nil
     }
     
+    /// 退出登录（保留账号数据，仅清除当前会话状态）
+    func logout() {
+        // 清除当前账号ID
+        UserDefaults.standard.removeObject(forKey: Keys.currentAccountId)
+        // 清除UserDefaults中的活跃用户备份，防止自动登录
+        UserDefaults.standard.removeObject(forKey: Keys.userProfile)
+    }
+
     /// 删除用户资料
     func deleteUserProfile() {
         if let currentAccountId = getCurrentAccountId() {

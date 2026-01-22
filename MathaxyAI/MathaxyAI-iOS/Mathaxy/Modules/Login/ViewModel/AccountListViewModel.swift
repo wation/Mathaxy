@@ -52,6 +52,15 @@ class AccountListViewModel: ObservableObject {
         showAddAccount = true
     }
     
+    // MARK: - 准备添加新账号
+    func prepareForAddAccount() {
+        // 退出当前登录状态
+        storageService.logout()
+        
+        // 发送账号切换通知 (通知 RootView 刷新，此时无用户登录，会自动显示 LoginView)
+        NotificationCenter.default.post(name: .accountSwitched, object: nil)
+    }
+
     // MARK: - 获取当前账号
     func getCurrentAccountId() -> UUID? {
         return storageService.getCurrentAccountId()

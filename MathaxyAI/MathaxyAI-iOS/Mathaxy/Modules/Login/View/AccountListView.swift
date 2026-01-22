@@ -71,7 +71,19 @@ struct AccountListView: View {
                             }
                             
                             // 添加新账号按钮
-                            Button(action: { viewModel.addNewAccount() }) {
+                            Button(action: {
+                                // 1. 准备添加新账号（清除登录状态）
+                                viewModel.prepareForAddAccount()
+                                
+                                // 2. 通知回调
+                                onAccountSwitch?()
+                                
+                                // 3. 关闭当前页面
+                                dismiss()
+                                
+                                // 4. 关闭父级页面
+                                dismissParent?()
+                            }) {
                                 HStack(spacing: 15) {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.system(size: 18))
@@ -94,29 +106,6 @@ struct AccountListView: View {
                     
                     Spacer()
                 }
-            }
-            .fullScreenCover(isPresented: $viewModel.showAddAccount) {
-                LoginView(onLoginSuccess: { profile in
-                    // 1. 调用切换账号逻辑
-                    // 这会更新最后登录时间，并发送 .accountSwitched 通知
-                    // RootView 收到通知后会重置整个 UI 栈，返回首页
-                    viewModel.switchToAccount(profile.id)
-                    
-                    // 2. 记录操作日志
-                    print("AccountListView: New account created and switched: \(profile.nickname)")
-                    
-                    // 3. 执行外部回调
-                    onAccountSwitch?()
-                    
-                    // 4. 关闭当前页面
-                    dismiss()
-                    
-                    // 5. 关闭父级页面
-                    dismissParent?()
-                    
-                    // 6. 刷新列表状态
-                    viewModel.refreshAccounts()
-                })
             }
         }
     }
