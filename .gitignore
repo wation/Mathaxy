@@ -60,3 +60,23 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# macOS
+.DS_Store
+*.pem
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Build files
+build/
+DerivedData/
+
+# IDE
+.idea/
+.vscode/
+*.swiftuser
+*.swiftstate
+

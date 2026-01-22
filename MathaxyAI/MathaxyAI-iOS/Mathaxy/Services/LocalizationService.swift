@@ -119,9 +119,11 @@ struct LocalizedKeys {
     // MARK: - 登录
     static let guestLogin = "guest_login"
     static let parentBind = "parent_bind"
-    static let enterNickname = "enter_nickname"
     static let nickname = "nickname"
+    static let enterNickname = "enter_nickname"
+    static let setNicknameHint = "set_nickname_hint"
     static let welcome = "welcome"
+    static let saving = "saving"
     
     // MARK: - 游戏
     static let level = "level"
@@ -151,8 +153,9 @@ struct LocalizedKeys {
     static let tryAgain = "try_again"
     static let completedLevel = "completed_level"
     static let failedLevel = "failed_level"
-    static let correctCount = "correct_count"
+    static let correctAnswers = "correct_answers"
     static let errorCount = "error_count"
+    static let generateCertificate = "generate_certificate"
     static let totalTime = "total_time"
     static let accuracy = "accuracy"
     static let earnedBadge = "earned_badge"
@@ -230,6 +233,8 @@ struct LocalizedKeys {
     static let myBadges = "my_badges"
     static let earned = "earned"
     static let total = "total"
+    static let earnedDate = "earned_date"
+    static let relatedLevel = "related_level"
     
     // MARK: - 设置
     static let languageSettings = "language_settings"

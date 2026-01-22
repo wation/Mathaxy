@@ -106,6 +106,18 @@ struct RootView: View {
                 refreshID = UUID()
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .dataReset)) { _ in
+            // 数据重置，重新加载用户资料
+            loadUserProfile()
+            refreshID = UUID()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .accountSwitched)) { _ in
+            // 账号切换，重新加载用户资料
+            if let profile = storageService.loadUserProfile() {
+                userProfile = profile
+                refreshID = UUID()
+            }
+        }
     }
     
     // MARK: - 处理登录成功
@@ -122,6 +134,7 @@ struct RootView: View {
         } else {
             // 没有用户资料，显示登录页
             isLoggedIn = false
+            userProfile = nil
         }
     }
     

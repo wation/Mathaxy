@@ -81,4 +81,16 @@ class SettingsViewModel: ObservableObject {
         currentLanguage = appSettings.language
         saveSettings()
     }
+    
+    // MARK: - 重置所有数据
+    func resetAllData() {
+        // 调用存储服务清除所有数据
+        storageService.clearAllData()
+        
+        // 重置设置
+        resetSettings()
+        
+        // 发送数据重置通知
+        NotificationCenter.default.post(name: .dataReset, object: nil)
+    }
 }

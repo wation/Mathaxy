@@ -20,9 +20,11 @@
 // MARK: - 登录
 "guest_login" = "游客登录";
 "parent_bind" = "家长辅助绑定";
-"enter_nickname" = "请输入昵称";
 "nickname" = "昵称";
+"enter_nickname" = "请输入昵称";
+"set_nickname_hint" = "为孩子设置一个可爱的昵称吧！";
 "welcome" = "欢迎，%@！";
+"saving" = "保存中...";
 
 // MARK: - 游戏
 "level" = "关卡";
@@ -55,6 +57,8 @@
 "total_time" = "总用时：%@";
 "accuracy" = "正确率：%.0f%%";
 "earned_badge" = "获得勋章";
+"correct_answers" = "正确题数";
+"generate_certificate" = "生成奖状";
 
 // MARK: - 失败机制
 "watch_ad_retry" = "观看30秒广告→重新挑战本关";

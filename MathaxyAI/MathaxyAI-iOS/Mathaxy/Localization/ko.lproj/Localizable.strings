@@ -3,7 +3,7 @@
   Mathaxy
 */
 
-// MARK: - 공통
+// MARK: - 일반
 "app_name" = "수학 은하";
 "ok" = "확인";
 "cancel" = "취소";
@@ -14,15 +14,17 @@
 "save" = "저장";
 "share" = "공유";
 "settings" = "설정";
-"achievement" = "성취";
+"achievement" = "업적";
 "home" = "홈";
 
 // MARK: - 로그인
 "guest_login" = "게스트 로그인";
-"parent_bind" = "학부모 연동";
+"parent_bind" = "부모 연결";
 "enter_nickname" = "닉네임을 입력하세요";
 "nickname" = "닉네임";
-"welcome" = "환영합니다, %@님!";
+"set_nickname_hint" = "아이에게 귀여운 닉네임을 지어주세요!";
+"welcome" = "환영합니다, %@!";
+"saving" = "저장 중...";
 
 // MARK: - 게임
 "level" = "레벨";
@@ -33,74 +35,77 @@
 "continue_game" = "게임 계속";
 "level_select" = "레벨 선택";
 "current_level" = "현재 레벨";
-"unlocked" = "잠금 해제됨";
+"unlocked" = "해금됨";
 "locked" = "잠김";
-"completed" = "완료됨";
+"completed" = "완료";
 
 // MARK: - 레벨
 "level_description" = "레벨 설명";
 "total_time_mode" = "총 시간 모드";
-"per_question_mode" = "문제별 시간 모드";
+"per_question_mode" = "문제당 카운트다운 모드";
 "minutes" = "분";
 "seconds" = "초";
-"per_question" = "문제별";
+"per_question" = "문제당";
 
 // MARK: - 결과
-"congratulations" = "축하합니다!";
-"try_again" = "거의 다 왔어요!";
+"congratulations" = "클리어 축하합니다!";
+"try_again" = "아쉬워요!";
 "completed_level" = "레벨 %d 완료";
 "failed_level" = "레벨 %d 실패";
-"correct_count" = "정답：%d";
-"error_count" = "오답：%d";
-"total_time" = "총 시간：%@";
-"accuracy" = "정답률：%.0f%%";
-"earned_badge" = "획득 배지";
+"correct_count" = "정답";
+"error_count" = "오답: %d";
+"time_spent" = "사용 시간: ";
+"total_time" = "총 사용 시간: %@";
+"accuracy" = "정답률: ";
+"earned_badge" = "뱃지 획득";
+"correct_answers" = "정답 수";
+"generate_certificate" = "상장 만들기";
 
 // MARK: - 실패 메커니즘
-"watch_ad_retry" = "30초 광고 보기 → 레벨 다시 시도";
-"back_to_home" = "홈으로 돌아가기 → 나중에 다시 시도";
-"ad_duration" = "광고 시간：30초";
-"ad_description" = "이 레벨을 다시 시도하려면 광고를 보세요";
+"watch_ad_retry" = "30초 광고 보기 → 이 레벨 다시 도전";
+"back_to_home" = "홈으로 돌아가기 → 나중에 다시 도전";
+"ad_duration" = "광고 시간: 30초";
+"ad_description" = "광고를 보면 이 레벨을 다시 도전할 수 있습니다";
 
 // MARK: - 레벨 건너뛰기
 "skip_level" = "레벨 건너뛰기";
-"skip_level_success" = "훌륭해요! 3개의 레벨을 건너뛰었습니다!";
+"skip_level_success" = "멋져! 3개의 레벨을 건너뛰었어요!";
 "skip_to_level" = "레벨 %d로 건너뛰기";
 
-// MARK: - 배지
-"badge" = "배지";
-"badges" = "배지";
-"earned_badges" = "획득 배지";
-"total_badges" = "총 배지";
-"level_complete_badge" = "덧셈 전사";
-"skip_level_badge" = "속도 마스터";
-"perfect_level_badge" = "퀴즈 천재";
-"consecutive_login_badge" = "지속의 달인";
+// MARK: - 뱃지
+"badge" = "뱃지";
+"badges" = "뱃지";
+"earned_badges" = "획득한 뱃지";
+"total_badges" = "총 뱃지";
+"level_complete_badge" = "덧셈 용사";
+"skip_level_badge" = "신속한 전문가";
+"perfect_level_badge" = "완벽한 답변 천재";
+"consecutive_login_badge" = "지속하는 달인";
 
-// MARK: - 가이드 캐릭터
+// MARK: - 캐릭터
 "guide_character" = "가이드 캐릭터";
-"panda" = "은하 판다";
+"panda" = "은하 팬더";
 "rabbit" = "은하 토끼";
-"unlock_character" = "캐릭터 잠금 해제";
-"unlock_threshold" = "잠금 해제하려면 %d개의 배지가 필요합니다";
+"unlock_character" = "캐릭터 해금";
+"unlock_threshold" = "%d개의 뱃지로 해금";
 "character_message" = "캐릭터 메시지";
 
 // MARK: - 연속 로그인
 "consecutive_login" = "7일 연속 로그인";
-"consecutive_days" = "%d/%d일 연속 로그인";
-"login_streak" = "로그인 연속 일수";
-"keep_going" = "계속 노력하세요!";
+"consecutive_days" = "연속 %d/%d일 로그인";
+"login_streak" = "로그인 스트릭";
+"keep_going" = "계속加油!";
 
-// MARK: - 상장
-"certificate" = "상장";
-"electronic_certificate" = "전자 상장";
+// MARK: - 증명서
+"certificate" = "증명서";
+"electronic_certificate" = "전자 증명서";
 "save_to_album" = "앨범에 저장";
-"share_to_social" = "소셜에 공유";
-"print_hint" = "종이 상장으로 인쇄할 수 있습니다!";
+"share_to_social" = "SNS에 공유";
+"print_hint" = "인쇄하여 종이 증명서로 만들 수 있습니다!";
 "certificate_title" = "Mathaxy 덧셈 마스터";
 "certificate_nickname" = "닉네임";
-"certificate_time" = "총 완료 시간";
-"certificate_badges" = "획득 배지";
+"certificate_time" = "총 클리어 시간";
+"certificate_badges" = "획득 뱃지";
 
 // MARK: - 설정
 "language_settings" = "언어 설정";
@@ -111,29 +116,34 @@
 "version" = "버전";
 "reset_data" = "데이터 초기화";
 "reset_data_warning" = "모든 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다!";
-"reset_data_confirm" = "초기화 확인";
+"reset_data_confirm" = "데이터 초기화";
 
-// MARK: - 효과음
+// MARK: - 사운드 효과
 "correct" = "정답";
 "incorrect" = "오답";
-"correct_answer" = "Correct Answer";
+"correct_answer" = "정답 답안";
 "timeout" = "시간 초과";
-"badge_earned" = "배지 획득";
-"character_unlocked" = "캐릭터 잠금 해제";
+"badge_earned" = "뱃지 획득";
+"character_unlocked" = "캐릭터 해금";
 
 // MARK: - 권한
 "photo_library_permission" = "사진 라이브러리 권한";
-"photo_library_permission_description" = "상장 이미지를 저장하려면 사진 라이브러리 액세스가 필요합니다";
-"permission_denied" = "권한 거부됨";
+"photo_library_permission_description" = "증명서 사진을 저장하려면 사진 라이브러리 접근 권한이 필요합니다";
+"permission_denied" = "권한이 거부되었습니다";
 "go_to_settings" = "설정으로 이동";
 
 // MARK: - 기타
 "loading" = "로딩 중...";
-"please_wait" = "잠시 기다려주세요...";
-"no_data" = "데이터 없음";
+"please_wait" = "잠시만 기다려 주세요...";
+"no_data" = "데이터가 없습니다";
 "error_occurred" = "오류가 발생했습니다";
 "network_error" = "네트워크 오류";
 "success" = "성공";
 "failed" = "실패";
 "close" = "닫기";
 "done" = "완료";
+
+// MARK: - 게임 조언
+"retry_current_level" = "현재 레벨을 다시 도전하여 점수를 향상시켜 보세요!";
+"try_next_level" = "잘했어요! 다음은 레벨 %d를 시도해 보세요.";
+"all_levels_completed" = "축하합니다! 모든 레벨을 클리어했어요.";

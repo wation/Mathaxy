@@ -149,7 +149,7 @@ struct ParentBindView: View {
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(Color.cometWhite)
             
-            Text("为孩子设置一个可爱的昵称吧！")
+            Text(LocalizedKeys.setNicknameHint.localized)
                 .font(.system(size: 16))
                 .foregroundColor(Color.cometWhite.opacity(0.8))
                 .multilineTextAlignment(.center)
@@ -188,7 +188,7 @@ struct ParentBindView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: Color.spaceBlue))
                         .scaleEffect(1.2)
                     
-                    Text("保存中...")
+                    Text(LocalizedKeys.saving.localized)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(Color.spaceBlue)
                 }

@@ -34,7 +34,7 @@ struct HomeView: View {
             contentView
         }
         .ignoresSafeArea()
-        .fullScreenCover(isPresented: $viewModel.showLevelSelect) {
+        .sheet(isPresented: $viewModel.showLevelSelect) {
             LevelSelectView(userProfile: userProfile)
         }
         .sheet(isPresented: $viewModel.showAchievement) {
@@ -450,7 +450,7 @@ private struct SimpleGameView: View {
             
             // 异步生成题目
             DispatchQueue.main.async {
-                questions = QuestionGenerator.shared.generateQuestions(level: level, count: 20)
+                questions = QuestionGenerator.shared.generateQuestions(for: level, count: 20)
                 print("SimpleGameView - Generated \(questions.count) questions")
                 currentIndex = 0
                 correctCount = 0

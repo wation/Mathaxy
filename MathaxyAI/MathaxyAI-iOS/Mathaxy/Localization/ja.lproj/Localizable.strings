@@ -3,7 +3,7 @@
   Mathaxy
 */
 
-// MARK: - 共通
+// MARK: - 一般
 "app_name" = "数学の銀河";
 "ok" = "OK";
 "cancel" = "キャンセル";
@@ -22,7 +22,9 @@
 "parent_bind" = "保護者連携";
 "enter_nickname" = "ニックネームを入力してください";
 "nickname" = "ニックネーム";
-"welcome" = "ようこそ、%@さん！";
+"set_nickname_hint" = "お子様にかわいいニックネームをつけてあげましょう！";
+"welcome" = "ようこそ、%@！";
+"saving" = "保存中...";
 
 // MARK: - ゲーム
 "level" = "レベル";
@@ -33,107 +35,115 @@
 "continue_game" = "ゲーム続行";
 "level_select" = "レベル選択";
 "current_level" = "現在のレベル";
-"unlocked" = "アンロック済み";
+"unlocked" = "解放済み";
 "locked" = "ロック中";
 "completed" = "完了";
 
 // MARK: - レベル
 "level_description" = "レベル説明";
 "total_time_mode" = "総時間モード";
-"per_question_mode" = "問題ごとの時間モード";
+"per_question_mode" = "1問当たりカウントダウンモード";
 "minutes" = "分";
 "seconds" = "秒";
-"per_question" = "問題ごと";
+"per_question" = "1問当たり";
 
 // MARK: - 結果
-"congratulations" = "おめでとうございます！";
-"try_again" = "あと少し！";
-"completed_level" = "レベル %d 完了";
+"congratulations" = "クリアおめでとう！";
+"try_again" = "惜しかった！";
+"completed_level" = "レベル %d クリア";
 "failed_level" = "レベル %d 失敗";
-"correct_count" = "正解：%d";
-"error_count" = "不正解：%d";
-"total_time" = "総時間：%@";
-"accuracy" = "正答率：%.0f%%";
-"earned_badge" = "獲得バッジ";
+"correct_count" = "正解";
+"error_count" = "誤り：%d";
+"time_spent" = "使用時間：";
+"total_time" = "総使用時間：%@";
+"accuracy" = "正解率：";
+"earned_badge" = "バッジ獲得";
+"correct_answers" = "正解数";
+"generate_certificate" = "賞状を作成";
 
 // MARK: - 失敗メカニズム
-"watch_ad_retry" = "30秒広告を見る → レベルを再試行";
-"back_to_home" = "ホームに戻る → 後で再試行";
+"watch_ad_retry" = "30秒広告を視聴→このレベルを再チャレンジ";
+"back_to_home" = "ホームに戻る→後で再チャレンジ";
 "ad_duration" = "広告時間：30秒";
-"ad_description" = "このレベルを再試行するには広告を見てください";
+"ad_description" = "広告を視聴するとこのレベルを再チャレンジできます";
 
 // MARK: - レベルスキップ
 "skip_level" = "レベルスキップ";
-"skip_level_success" = "素晴らしい！3つのレベルをスキップしました！";
+"skip_level_success" = "すばらしい！3つのレベルをスキップしました！";
 "skip_to_level" = "レベル %d にスキップ";
 
 // MARK: - バッジ
 "badge" = "バッジ";
 "badges" = "バッジ";
-"earned_badges" = "獲得バッジ";
-"total_badges" = "総バッジ";
-"level_complete_badge" = "足し算の戦士";
-"skip_level_badge" = "スピードマスター";
-"perfect_level_badge" = "クイズの天才";
+"earned_badges" = "獲得したバッジ";
+"total_badges" = "総バッジ数";
+"level_complete_badge" = "加法の勇者";
+"skip_level_badge" = "神速のエキスパート";
+"perfect_level_badge" = "完璧な回答の天才";
 "consecutive_login_badge" = "継続の達人";
 
-// MARK: - ガイドキャラクター
+// MARK: - キャラクター
 "guide_character" = "ガイドキャラクター";
 "panda" = "銀河パンダ";
 "rabbit" = "銀河ウサギ";
-"unlock_character" = "キャラクターをアンロック";
-"unlock_threshold" = "アンロックには%d個のバッジが必要です";
+"unlock_character" = "キャラクターを解放";
+"unlock_threshold" = "%d バッジで解放";
 "character_message" = "キャラクターメッセージ";
 
 // MARK: - 連続ログイン
-"consecutive_login" = "7日連続ログイン";
-"consecutive_days" = "%d/%d日連続でログイン";
-"login_streak" = "ログイン連続日数";
-"keep_going" = "頑張ってください！";
+"consecutive_login" = "7日間連続ログイン";
+"consecutive_days" = "連続 %d/%d 日ログイン";
+"login_streak" = "ログインストリーク";
+"keep_going" = "頑張れ！";
 
-// MARK: - 賞状
-"certificate" = "賞状";
-"electronic_certificate" = "電子賞状";
+// MARK: - 証明書
+"certificate" = "証明書";
+"electronic_certificate" = "電子証明書";
 "save_to_album" = "アルバムに保存";
-"share_to_social" = "ソーシャルで共有";
-"print_hint" = "紙の賞状として印刷できます！";
-"certificate_title" = "Mathaxy 足し算マスター";
+"share_to_social" = "SNSに共有";
+"print_hint" = "印刷して紙の証明書にできます！";
+"certificate_title" = "Mathaxy 加法マスター";
 "certificate_nickname" = "ニックネーム";
-"certificate_time" = "総完了時間";
+"certificate_time" = "総クリア時間";
 "certificate_badges" = "獲得バッジ";
 
 // MARK: - 設定
 "language_settings" = "言語設定";
-"sound_settings" = "音声設定";
+"sound_settings" = "サウンド設定";
 "music_settings" = "音楽設定";
-"haptic_settings" = "触覚設定";
+"haptic_settings" = "ハプティック設定";
 "about_app" = "アプリについて";
 "version" = "バージョン";
 "reset_data" = "データリセット";
-"reset_data_warning" = "すべてのデータをリセットしてもよろしいですか？この操作は元に戻せません！";
-"reset_data_confirm" = "リセットを確認";
+"reset_data_warning" = "すべてのデータをリセットしますか？この操作は元に戻せません！";
+"reset_data_confirm" = "データをリセット";
 
-// MARK: - 効果音
+// MARK: - サウンドエフェクト
 "correct" = "正解";
 "incorrect" = "不正解";
-"correct_answer" = "Correct Answer";
+"correct_answer" = "正解の答え";
 "timeout" = "タイムアウト";
 "badge_earned" = "バッジ獲得";
-"character_unlocked" = "キャラクターアンロック";
+"character_unlocked" = "キャラクター解放";
 
 // MARK: - 権限
-"photo_library_permission" = "フォトライブラリ権限";
-"photo_library_permission_description" = "賞状画像を保存するにはフォトライブラリへのアクセスが必要です";
+"photo_library_permission" = "フォトライブラリー権限";
+"photo_library_permission_description" = "証明書の写真を保存するにはフォトライブラリーのアクセス権限が必要です";
 "permission_denied" = "権限が拒否されました";
 "go_to_settings" = "設定に移動";
 
 // MARK: - その他
 "loading" = "読み込み中...";
 "please_wait" = "お待ちください...";
-"no_data" = "データなし";
+"no_data" = "データがありません";
 "error_occurred" = "エラーが発生しました";
 "network_error" = "ネットワークエラー";
 "success" = "成功";
 "failed" = "失敗";
 "close" = "閉じる";
 "done" = "完了";
+
+// MARK: - ゲームアドバイス
+"retry_current_level" = "現在のレベルを再チャレンジしてスコアを向上させましょう！";
+"try_next_level" = "よくできました！次はレベル %d を試してみましょう。";
+"all_levels_completed" = "おめでとう！すべてのレベルをクリアしました。";

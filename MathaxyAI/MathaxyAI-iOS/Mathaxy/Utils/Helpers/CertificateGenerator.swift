@@ -31,7 +31,7 @@ class CertificateGenerator {
     ) -> UIImage? {
         
         // 创建奖状视图
-        let certificateView = CertificateContentView(
+        let certificateView = CertificateTemplateView(
             nickname: certificate.nickname,
             completionDate: certificate.completionDate,
             totalTime: certificate.totalTime,
@@ -44,6 +44,42 @@ class CertificateGenerator {
         renderer.scale = 3.0  // 高分辨率
         
         return renderer.uiImage
+    }
+    
+    // MARK: - 保存图片到相册
+    
+    /// 保存图片到相册
+    /// - Parameters:
+    ///   - image: 图片
+    ///   - completion: 完成回调 (成功/失败, 消息)
+    func saveCertificate(
+        image: UIImage,
+        completion: @escaping (Bool, String) -> Void
+    ) {
+        // 检查相册访问权限
+        checkPhotoLibraryPermission { [weak self] granted in
+            guard self != nil else { return }
+            
+            if granted {
+                Task { @MainActor in
+                    // 保存到相册
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: image)
+                    }) { success, error in
+                        DispatchQueue.main.async {
+                            if success {
+                                completion(true, LocalizedKeys.saveToAlbum.localized)
+                            } else {
+                                completion(false, error?.localizedDescription ?? LocalizedKeys.failed.localized)
+                            }
+                        }
+                    }
+                }
+            } else {
+                // 权限被拒绝
+                completion(false, LocalizedKeys.permissionDenied.localized)
+            }
+        }
     }
     
     // MARK: - 保存奖状到相册
@@ -85,35 +121,6 @@ class CertificateGenerator {
                     userInfo: [NSLocalizedDescriptionKey: "相册访问权限被拒绝"]
                 )
                 completion(false, error)
-            }
-        }
-    }
-    
-    /// 保存奖状图片到相册
-    /// - Parameters:
-    ///   - image: 奖状图片
-    ///   - completion: 完成回调
-    func saveCertificate(image: UIImage, completion: @escaping (Bool, String) -> Void) {
-        // 检查相册访问权限
-        checkPhotoLibraryPermission { [weak self] granted in
-            guard let self = self else { return }
-            
-            if granted {
-                // 保存到相册
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }) { success, error in
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            completion(false, "保存失败: \(error.localizedDescription)")
-                        } else {
-                            completion(true, "保存成功")
-                        }
-                    }
-                }
-            } else {
-                // 权限被拒绝
-                completion(false, "相册访问权限被拒绝")
             }
         }
     }
@@ -182,7 +189,7 @@ class CertificateGenerator {
 }
 
 // MARK: - 奖状视图
-struct CertificateContentView: View {
+struct CertificateTemplateView: View {
     
     // MARK: - 属性
     let nickname: String
@@ -381,9 +388,9 @@ struct CertificateContentView: View {
 }
 
 // MARK: - 预览
-struct CertificateContentView_Previews: PreviewProvider {
+struct CertificateTemplateView_Previews: PreviewProvider {
     static var previews: some View {
-        CertificateContentView(
+        CertificateTemplateView(
             nickname: "小银河123",
             completionDate: Date(),
             totalTime: 135.0,

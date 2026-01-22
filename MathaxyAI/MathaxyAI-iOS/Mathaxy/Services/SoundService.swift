@@ -157,46 +157,70 @@ class SoundService: ObservableObject {
         playSound(named: voiceFileName, withExtension: "mp3")
     }
     
-    // MARK: - 播放音效（私有方法）
-    private func playSound(named name: String, withExtension ext: String) {
-        // 尝试先使用WAV文件
-        if let url = Bundle.main.url(forResource: name, withExtension: "wav") {
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer?.play()
-                return
-            } catch {
-                print("播放WAV音效失败: \(error.localizedDescription)")
+    /// 批量测试所有语音文件
+    func testAllVoiceFiles() {
+        print("🔊 测试所有语音文件...")
+        
+        // 测试所有语言的所有语音类型
+        for language in AppLanguage.allCases {
+            print("\n🌍 测试语言: \(language.displayName)")
+            
+            // 测试答对语音
+            let correctFileName = getVoiceFileName(for: "correct", language: language)
+            if let _ = Bundle.main.url(forResource: correctFileName, withExtension: "mp3") {
+                print("✅ 答对语音: \(correctFileName)")
+            } else {
+                print("❌ 答对语音缺失: \(correctFileName)")
+            }
+            
+            // 测试答错语音
+            let incorrectFileName = getVoiceFileName(for: "incorrect", language: language)
+            if let _ = Bundle.main.url(forResource: incorrectFileName, withExtension: "mp3") {
+                print("✅ 答错语音: \(incorrectFileName)")
+            } else {
+                print("❌ 答错语音缺失: \(incorrectFileName)")
+            }
+            
+            // 测试鼓励语音
+            let encouragementFileName = getVoiceFileName(for: "encouragement", language: language)
+            if let _ = Bundle.main.url(forResource: encouragementFileName, withExtension: "mp3") {
+                print("✅ 鼓励语音: \(encouragementFileName)")
+            } else {
+                print("❌ 鼓励语音缺失: \(encouragementFileName)")
+            }
+            
+            // 测试熊猫问候语音
+            let pandaGreetingFileName = getVoiceFileName(for: "panda_greeting", language: language)
+            if let _ = Bundle.main.url(forResource: pandaGreetingFileName, withExtension: "mp3") {
+                print("✅ 熊猫问候: \(pandaGreetingFileName)")
+            } else {
+                print("❌ 熊猫问候缺失: \(pandaGreetingFileName)")
+            }
+            
+            // 测试兔子问候语音
+            let rabbitGreetingFileName = getVoiceFileName(for: "rabbit_greeting", language: language)
+            if let _ = Bundle.main.url(forResource: rabbitGreetingFileName, withExtension: "mp3") {
+                print("✅ 兔子问候: \(rabbitGreetingFileName)")
+            } else {
+                print("❌ 兔子问候缺失: \(rabbitGreetingFileName)")
             }
         }
         
-        // 如果WAV文件不存在或播放失败，尝试使用MP3文件
-        if let url = Bundle.main.url(forResource: name, withExtension: ext) {
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer?.play()
-                return
-            } catch {
-                print("播放\(ext)音效失败: \(error.localizedDescription)")
-            }
-        }
-        
-        // 如果所有文件都不存在或播放失败，生成简单的系统音效
-        playSystemSound(for: name)
+        print("\n📝 测试完成！")
     }
     
-    /// 播放系统音效
-    private func playSystemSound(for soundName: String) {
-        // 使用系统震动反馈代替音效
-        switch soundName {
-        case "button_click":
-            playHapticFeedback(style: .light)
-        case "correct", "success", "badge_earned", "character_unlocked", "level_complete":
-            playHapticFeedback(style: .medium)
-        case "incorrect", "error", "game_over", "timeout":
-            playHapticFeedback(style: .heavy)
-        default:
-            playHapticFeedback(style: .light)
+    // MARK: - 播放音效（私有方法）
+    private func playSound(named name: String, withExtension ext: String) {
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
+            print("找不到音效文件: \(name).\(ext)")
+            return
+        }
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            print("播放音效失败: \(error.localizedDescription)")
         }
     }
     

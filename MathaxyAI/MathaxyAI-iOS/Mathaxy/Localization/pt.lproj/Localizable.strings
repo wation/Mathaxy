@@ -3,8 +3,8 @@
   Mathaxy
 */
 
-// MARK: - Comum
-"app_name" = "Galáxia Matemática";
+// MARK: - Geral
+"app_name" = "Math Galaxy";
 "ok" = "OK";
 "cancel" = "Cancelar";
 "confirm" = "Confirmar";
@@ -14,15 +14,17 @@
 "save" = "Salvar";
 "share" = "Compartilhar";
 "settings" = "Configurações";
-"achievement" = "Conquistas";
+"achievement" = "Conquista";
 "home" = "Início";
 
 // MARK: - Login
-"guest_login" = "Convidado";
-"parent_bind" = "Vinculação parental";
-"enter_nickname" = "Digite seu apelido";
+"guest_login" = "Entrar como convidado";
+"parent_bind" = "Vincular com pais";
 "nickname" = "Apelido";
+"enter_nickname" = "Digite seu apelido";
+"set_nickname_hint" = "Dê um apelido fofo para seu filho!";
 "welcome" = "Bem-vindo, %@!";
+"saving" = "Salvando...";
 
 // MARK: - Jogo
 "level" = "Nível";
@@ -40,54 +42,57 @@
 // MARK: - Nível
 "level_description" = "Descrição do nível";
 "total_time_mode" = "Modo de tempo total";
-"per_question_mode" = "Modo de tempo por pergunta";
+"per_question_mode" = "Modo de contagem regressiva por pergunta";
 "minutes" = "minutos";
 "seconds" = "segundos";
 "per_question" = "por pergunta";
 
 // MARK: - Resultado
-"congratulations" = "Parabéns!";
+"congratulations" = "Parabéns por concluir!";
 "try_again" = "Quase lá!";
 "completed_level" = "Nível %d concluído";
 "failed_level" = "Nível %d falhou";
-"correct_count" = "Corretas：%d";
-"error_count" = "Erros：%d";
-"total_time" = "Tempo total：%@";
-"accuracy" = "Precisão：%.0f%%";
-"earned_badge" = "Distintivo ganho";
+"correct_count" = "Corretas：";
+"error_count" = "Erros: %d";
+"time_spent" = "Tempo gasto: ";
+"total_time" = "Tempo total: %@";
+"accuracy" = "Precisão: ";
+"earned_badge" = "Conquista obtida";
+"correct_answers" = "Respostas Corretas";
+"generate_certificate" = "Gerar Certificado";
 
 // MARK: - Mecanismo de falha
-"watch_ad_retry" = "Ver anúncio de 30s → Tentar nível novamente";
-"back_to_home" = "Voltar ao início → Tentar mais tarde";
-"ad_duration" = "Duração do anúncio：30s";
-"ad_description" = "Assista a um anúncio para tentar este nível novamente";
+"watch_ad_retry" = "Assista a um anúncio de 30 segundos → Tentar novamente este nível";
+"back_to_home" = "Voltar ao início → Tentar novamente mais tarde";
+"ad_duration" = "Duração do anúncio: 30 segundos";
+"ad_description" = "Assistir a um anúncio permite que você tente novamente este nível";
 
 // MARK: - Pular nível
 "skip_level" = "Pular nível";
-"skip_level_success" = "Ótimo trabalho! Você pulou 3 níveis!";
+"skip_level_success" = "Ótimo! Você pulou 3 níveis!";
 "skip_to_level" = "Pular para o nível %d";
 
-// MARK: - Distintivos
-"badge" = "Distintivo";
-"badges" = "Distintivos";
-"earned_badges" = "Distintivos ganhos";
-"total_badges" = "Total de distintivos";
+// MARK: - Insígnias
+"badge" = "Insígnia";
+"badges" = "Insígnias";
+"earned_badges" = "Insígnias obtidas";
+"total_badges" = "Total de insígnias";
 "level_complete_badge" = "Guerreiro da adição";
-"skip_level_badge" = "Mestre da velocidade";
-"perfect_level_badge" = "Gênio do quiz";
-"consecutive_login_badge" = "Mestre da persistência";
+"skip_level_badge" = "Especialista rápido";
+"perfect_level_badge" = "Gênio das respostas perfeitas";
+"consecutive_login_badge" = "Mestre da constância";
 
-// MARK: - Personagem guia
+// MARK: - Personagens
 "guide_character" = "Personagem guia";
 "panda" = "Panda galáctico";
 "rabbit" = "Coelho galáctico";
 "unlock_character" = "Desbloquear personagem";
-"unlock_threshold" = "Requer %d distintivos para desbloquear";
+"unlock_threshold" = "Você precisa de %d insígnias para desbloquear";
 "character_message" = "Mensagem do personagem";
 
 // MARK: - Login consecutivo
 "consecutive_login" = "7 dias consecutivos de login";
-"consecutive_days" = "Fez login %d/%d dias consecutivos";
+"consecutive_days" = "%d/%d dias consecutivos de login";
 "login_streak" = "Sequência de login";
 "keep_going" = "Continue assim!";
 
@@ -96,44 +101,49 @@
 "electronic_certificate" = "Certificado eletrônico";
 "save_to_album" = "Salvar no álbum";
 "share_to_social" = "Compartilhar nas redes sociais";
-"print_hint" = "Você pode imprimi-lo como um certificado de papel!";
-"certificate_title" = "Mestre da adição Mathaxy";
+"print_hint" = "Você pode imprimir como certificado em papel!";
+"certificate_title" = "Mathaxy Mestre da adição";
 "certificate_nickname" = "Apelido";
 "certificate_time" = "Tempo total de conclusão";
-"certificate_badges" = "Distintivos ganhos";
+"certificate_badges" = "Insígnias obtidas";
 
 // MARK: - Configurações
 "language_settings" = "Configurações de idioma";
 "sound_settings" = "Configurações de som";
 "music_settings" = "Configurações de música";
-"haptic_settings" = "Configurações hápticas";
+"haptic_settings" = "Configurações de vibração";
 "about_app" = "Sobre o aplicativo";
 "version" = "Versão";
 "reset_data" = "Redefinir dados";
-"reset_data_warning" = "Tem certeza de que deseja redefinir todos os dados? Esta ação não pode ser desfeita!";
-"reset_data_confirm" = "Confirmar redefinição";
+"reset_data_warning" = "Tem certeza que deseja redefinir todos os dados? Esta operação não pode ser desfeita!";
+"reset_data_confirm" = "Redefinir dados";
 
 // MARK: - Efeitos sonoros
 "correct" = "Correto";
 "incorrect" = "Incorreto";
-"correct_answer" = "Correct Answer";
+"correct_answer" = "Resposta correta";
 "timeout" = "Tempo esgotado";
-"badge_earned" = "Distintivo ganho";
+"badge_earned" = "Insígnia obtida";
 "character_unlocked" = "Personagem desbloqueado";
 
 // MARK: - Permissões
-"photo_library_permission" = "Permissão da biblioteca de fotos";
-"photo_library_permission_description" = "O acesso à biblioteca de fotos é necessário para salvar imagens de certificados";
+"photo_library_permission" = "Permissão de acesso à biblioteca de fotos";
+"photo_library_permission_description" = "É necessária permissão de acesso à biblioteca de fotos para salvar a imagem do certificado";
 "permission_denied" = "Permissão negada";
 "go_to_settings" = "Ir para configurações";
 
-// MARK: - Outros
+// MARK: - Outro
 "loading" = "Carregando...";
-"please_wait" = "Por favor aguarde...";
-"no_data" = "Sem dados";
+"please_wait" = "Por favor, aguarde...";
+"no_data" = "Nenhum dado";
 "error_occurred" = "Ocorreu um erro";
 "network_error" = "Erro de rede";
 "success" = "Sucesso";
 "failed" = "Falhou";
 "close" = "Fechar";
 "done" = "Concluído";
+
+// MARK: - Dicas de jogo
+"retry_current_level" = "Tente novamente o nível atual para melhorar sua pontuação!";
+"try_next_level" = "Bom trabalho! Tente o nível %d a seguir.";
+"all_levels_completed" = "Parabéns! Você concluiu todos os níveis.";

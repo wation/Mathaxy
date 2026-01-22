@@ -27,12 +27,10 @@ struct ResultView: View {
     // MARK: - Body
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea(edges: .all) // 状态栏遮挡
-
-            // 背景 - 全屏
+            // 背景
             backgroundView
             
-            // 内容 - 全屏
+            // 内容
             VStack(spacing: 0) {
                 // 顶部导航
                 topBar
@@ -48,11 +46,8 @@ struct ResultView: View {
                 bottomButtons
                     .padding(.bottom, 40)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .fullScreenCover(isPresented: $showCertificate) {
+        .sheet(isPresented: $showCertificate) {
             CertificateView(gameSession: gameSession)
         }
         .sheet(isPresented: $showShareSheet) {
@@ -67,9 +62,9 @@ struct ResultView: View {
     // MARK: - 背景视图
     private var backgroundView: some View {
         ZStack {
-            // 银河背景渐变 - 全屏
+            // 银河背景渐变
             Color.galaxyGradient
-                .ignoresSafeArea(.all)
+                .ignoresSafeArea()
             
             // 星星装饰
             starsView
@@ -149,13 +144,13 @@ struct ResultView: View {
         ZStack {
             // 背景圆圈
             Circle()
-                .fill(!gameSession.isFailed ? Color.starlightYellow.opacity(0.2) : Color.alertRed.opacity(0.2))
+                .fill(gameSession.isPassed ? Color.starlightYellow.opacity(0.2) : Color.alertRed.opacity(0.2))
                 .frame(width: 120, height: 120)
             
             // 图标
-            Image(systemName: !gameSession.isFailed ? "star.fill" : "xmark.circle.fill")
+            Image(systemName: gameSession.isPassed ? "star.fill" : "xmark.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(!gameSession.isFailed ? Color.starlightYellow : Color.alertRed)
+                .foregroundColor(gameSession.isPassed ? Color.starlightYellow : Color.alertRed)
         }
     }
     
@@ -203,13 +198,13 @@ struct ResultView: View {
             
             // 正确题数
             HStack {
-                Text(LocalizedKeys.correctCount.localized)
+                Text(LocalizedKeys.correctAnswers.localized)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(Color.cometWhite.opacity(0.8))
                 
                 Spacer()
                 
-                Text("\(gameSession.correctCount)/\(gameSession.questions.count)")
+                Text("\(gameSession.correctCount)/\(gameSession.questionCount)")
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(Color.starlightYellow)
             }
@@ -240,9 +235,6 @@ struct ResultView: View {
     private var bottomButtons: some View {
         VStack(spacing: 15) {
             // 生成奖状按钮
-            // 需求：奖状按钮仅在第10关通关后可用，其它关卡显示为禁用状态
-            let canGenerateCertificate = (gameSession.level == GameConstants.totalLevels)
-            
             Button(action: {
                 SoundService.shared.playButtonClickSound()
                 showCertificate = true
@@ -251,7 +243,7 @@ struct ResultView: View {
                     Image(systemName: "doc.badge.gearshape.fill")
                         .font(.title2)
                     
-                    Text(LocalizedKeys.certificate.localized)
+                    Text(LocalizedKeys.generateCertificate.localized)
                         .font(.system(size: 18, weight: .semibold))
                 }
                 .foregroundColor(Color.spaceBlue)
@@ -260,8 +252,6 @@ struct ResultView: View {
             }
             .primaryButtonStyle()
             .padding(.horizontal, 40)
-            .disabled(!canGenerateCertificate)
-            .opacity(canGenerateCertificate ? 1.0 : 0.4)
             
             // 重试按钮
             Button(action: {

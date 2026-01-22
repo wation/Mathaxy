@@ -1,5 +1,5 @@
 /*
-  Localizable.strings (繁體中文)
+  Localizable.strings (中文繁体)
   Mathaxy
 */
 
@@ -11,18 +11,20 @@
 "back" = "返回";
 "next" = "下一步";
 "retry" = "重試";
-"save" = "儲存";
+"save" = "保存";
 "share" = "分享";
-"settings" = "設定";
+"settings" = "設置";
 "achievement" = "成就";
 "home" = "首頁";
 
-// MARK: - 登入
-"guest_login" = "遊客登入";
+// MARK: - 登錄
+"guest_login" = "遊客登錄";
 "parent_bind" = "家長輔助綁定";
-"enter_nickname" = "請輸入暱稱";
 "nickname" = "暱稱";
+"enter_nickname" = "請輸入暱稱";
+"set_nickname_hint" = "為孩子設置一個可愛的暱稱吧！";
 "welcome" = "歡迎，%@！";
+"saving" = "保存中...";
 
 // MARK: - 遊戲
 "level" = "關卡";
@@ -31,10 +33,10 @@
 "score" = "得分";
 "start_game" = "開始遊戲";
 "continue_game" = "繼續遊戲";
-"level_select" = "選擇關卡";
+"level_select" = "關卡選擇";
 "current_level" = "當前關卡";
 "unlocked" = "已解鎖";
-"locked" = "已鎖定";
+"locked" = "未解鎖";
 "completed" = "已完成";
 
 // MARK: - 關卡
@@ -50,11 +52,14 @@
 "try_again" = "差一點哦！";
 "completed_level" = "已完成第 %d 關";
 "failed_level" = "第 %d 關失敗";
-"correct_count" = "正確：%d";
+"correct_count" = "正確";
 "error_count" = "錯誤：%d";
+"time_spent" = "用時：";
 "total_time" = "總用時：%@";
-"accuracy" = "正確率：%.0f%%";
+"accuracy" = "正確率：";
 "earned_badge" = "獲得勳章";
+"correct_answers" = "正確題數";
+"generate_certificate" = "生成獎狀";
 
 // MARK: - 失敗機制
 "watch_ad_retry" = "觀看30秒廣告→重新挑戰本關";
@@ -83,57 +88,62 @@
 "rabbit" = "銀河小兔子";
 "unlock_character" = "解鎖角色";
 "unlock_threshold" = "需要 %d 枚勳章解鎖";
-"character_message" = "角色訊息";
+"character_message" = "角色消息";
 
-// MARK: - 連續登入
-"consecutive_login" = "連續登入7天";
-"consecutive_days" = "已連續登入 %d/%d 天";
-"login_streak" = "登入連續天數";
+// MARK: - 連續登錄
+"consecutive_login" = "連續登錄7天";
+"consecutive_days" = "已連續登錄 %d/%d 天";
+"login_streak" = "登錄連續天數";
 "keep_going" = "繼續加油！";
 
 // MARK: - 獎狀
 "certificate" = "獎狀";
 "electronic_certificate" = "電子獎狀";
-"save_to_album" = "儲存到相簿";
+"save_to_album" = "保存到相冊";
 "share_to_social" = "分享到社交平台";
-"print_hint" = "可列印成紙質獎狀哦！";
+"print_hint" = "可打印成紙質獎狀哦！";
 "certificate_title" = "Mathaxy 加法大師";
 "certificate_nickname" = "暱稱";
 "certificate_time" = "通關總用時";
 "certificate_badges" = "獲得勳章";
 
-// MARK: - 設定
-"language_settings" = "語言設定";
-"sound_settings" = "音效設定";
-"music_settings" = "音樂設定";
-"haptic_settings" = "震動設定";
+// MARK: - 設置
+"language_settings" = "語言設置";
+"sound_settings" = "音效設置";
+"music_settings" = "音樂設置";
+"haptic_settings" = "震動設置";
 "about_app" = "關於應用";
 "version" = "版本";
-"reset_data" = "重置資料";
-"reset_data_warning" = "確定要重置所有資料嗎？此操作無法撤銷！";
+"reset_data" = "重置數據";
+"reset_data_warning" = "確定要重置所有數據嗎？此操作不可撤銷！";
 "reset_data_confirm" = "確定重置";
 
 // MARK: - 音效
 "correct" = "答對";
 "incorrect" = "答錯";
-"correct_answer" = "Correct Answer";
+"correct_answer" = "正確答案";
 "timeout" = "超時";
 "badge_earned" = "獲得勳章";
 "character_unlocked" = "解鎖角色";
 
 // MARK: - 權限
-"photo_library_permission" = "相簿存取權限";
-"photo_library_permission_description" = "需要相簿存取權限來儲存獎狀圖片";
+"photo_library_permission" = "相冊訪問權限";
+"photo_library_permission_description" = "需要相冊訪問權限來保存獎狀圖片";
 "permission_denied" = "權限被拒絕";
-"go_to_settings" = "前往設定";
+"go_to_settings" = "前往設置";
 
 // MARK: - 其他
-"loading" = "載入中...";
+"loading" = "加載中...";
 "please_wait" = "請稍候...";
-"no_data" = "暫無資料";
+"no_data" = "暫無數據";
 "error_occurred" = "發生錯誤";
-"network_error" = "網路錯誤";
+"network_error" = "網絡錯誤";
 "success" = "成功";
 "failed" = "失敗";
 "close" = "關閉";
 "done" = "完成";
+
+// MARK: - 遊戲建議
+"retry_current_level" = "重試當前關卡以提高分數！";
+"try_next_level" = "幹得好！接下來試試第 %d 關。";
+"all_levels_completed" = "恭喜！你已完成所有關卡。";

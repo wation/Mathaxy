@@ -33,7 +33,7 @@ class GameViewModel: ObservableObject {
     
     // MARK: - 初始化
     init(level: Int) {
-        let questions = QuestionGenerator.shared.generateQuestions(level: level, count: GameConstants.questionsPerLevel)
+        let questions = QuestionGenerator.shared.generateQuestions(for: level, count: GameConstants.questionsPerLevel)
         self.gameSession = GameSession(level: level, questions: questions)
         self.timeRemaining = Double(GameConstants.questionsPerLevel * 30) // 默认每题30秒
     }
@@ -112,9 +112,6 @@ class GameViewModel: ObservableObject {
         
         // 保存更新后的用户资料
         storageService.saveUserProfile(userProfile)
-        
-        // 通知界面刷新用户资料（用于立即解锁下一关）
-        NotificationCenter.default.post(name: .userProfileUpdated, object: nil)
         
         // 触发回调
         onGameComplete?(isCompleted, gameSession.level)

@@ -21,8 +21,10 @@
 "guest_login" = "Guest Login";
 "parent_bind" = "Parent Bind";
 "enter_nickname" = "Please enter nickname";
+"set_nickname_hint" = "Set a cute nickname for your child!";
 "nickname" = "Nickname";
 "welcome" = "Welcome, %@!";
+"saving" = "Saving...";
 
 // MARK: - Game
 "level" = "Level";
@@ -55,6 +57,8 @@
 "total_time" = "Total Time: %@";
 "accuracy" = "Accuracy: %.0f%%";
 "earned_badge" = "Earned Badge";
+"correct_answers" = "Correct Answers";
+"generate_certificate" = "Generate Certificate";
 
 // MARK: - Failure Mechanism
 "watch_ad_retry" = "Watch 30s Ad → Retry Level";

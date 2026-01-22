@@ -37,40 +37,64 @@ struct BadgeCollectionView: View {
             backgroundView
             
             // 内容
-            VStack(spacing: 0) {
-                // 顶部导航
-                topBar
-                
-                // 统计信息
-                statisticsView
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                
-                // 勋章网格
-                ScrollView {
-                    LazyVGrid(columns: [
-                        GridItem(.flexible()),
-                        GridItem(.flexible())
-                    ], spacing: 20) {
-                        ForEach(BadgeType.allCases, id: \.self) { badgeType in
-                            BadgeCardView(
-                                badgeType: badgeType,
-                                isEarned: userProfile.badges.contains(where: { $0.type == badgeType }),
-                                badge: userProfile.badges.first { $0.type == badgeType }
-                            ) {
-                                selectedBadge = userProfile.badges.first { $0.type == badgeType }
-                                showBadgeDetail = true
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
-                }
-            }
+            contentView
         }
         .sheet(isPresented: $showBadgeDetail) {
+            badgeDetailSheet
+        }
+    }
+    
+    // MARK: - 内容视图
+    private var contentView: some View {
+        VStack(spacing: 0) {
+            // 顶部导航
+            topBar
+            
+            // 统计信息
+            statisticsView
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+            
+            // 勋章网格
+            badgesGridView
+        }
+    }
+    
+    // MARK: - 勋章网格视图
+    private var badgesGridView: some View {
+        ScrollView {
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 20) {
+                ForEach(BadgeType.allCases, id: \.self) { badgeType in
+                    badgeCardView(for: badgeType)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+        }
+    }
+    
+    // MARK: - 勋章卡片视图
+    private func badgeCardView(for badgeType: BadgeType) -> some View {
+        BadgeCardView(
+            badgeType: badgeType,
+            isEarned: userProfile.badges.contains(where: { $0.type == badgeType }),
+            badge: userProfile.badges.first { $0.type == badgeType }
+        ) {
+            selectedBadge = userProfile.badges.first { $0.type == badgeType }
+            showBadgeDetail = true
+        }
+    }
+    
+    // MARK: - 勋章详情弹窗
+    private var badgeDetailSheet: some View {
+        Group {
             if let badge = selectedBadge {
                 BadgeDetailView(badge: badge)
+            } else {
+                EmptyView()
             }
         }
     }
@@ -201,8 +225,6 @@ private struct BadgeCardView: View {
                     Image(systemName: isEarned ? badgeType.systemImage : "lock.fill")
                         .font(.system(size: 36))
                         .foregroundColor(isEarned ? Color.starlightYellow : Color.cometWhite.opacity(0.5))
-                    
-
                 }
                 
                 // 勋章名称
@@ -212,15 +234,15 @@ private struct BadgeCardView: View {
                     .multilineTextAlignment(.center)
                 
                 // 获得日期
-                    if isEarned, let badge = badge {
-                        Text(DateHelper.shared.formatDate(badge.earnedDate, format: "yyyy-MM-dd"))
-                            .font(.system(size: 10))
-                            .foregroundColor(Color.cometWhite.opacity(0.6))
-                    } else {
-                        Text(LocalizedKeys.locked.localized)
-                            .font(.system(size: 10))
-                            .foregroundColor(Color.cometWhite.opacity(0.4))
-                    }
+                if isEarned, let badge = badge {
+                    Text(DateHelper.shared.formatDate(badge.earnedDate, format: "yyyy.MM.dd"))
+                        .font(.system(size: 10))
+                        .foregroundColor(Color.cometWhite.opacity(0.6))
+                } else {
+                    Text(LocalizedKeys.locked.localized)
+                        .font(.system(size: 10))
+                        .foregroundColor(Color.cometWhite.opacity(0.4))
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 15)
@@ -278,7 +300,7 @@ private struct BadgeDetailView: View {
                         // 获得信息
                         VStack(spacing: 10) {
                             HStack {
-                                Text(LocalizedKeys.earned.localized)
+                                Text(LocalizedKeys.earnedDate.localized)
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(Color.cometWhite.opacity(0.8))
                                 
@@ -289,15 +311,15 @@ private struct BadgeDetailView: View {
                                     .foregroundColor(Color.starlightYellow)
                             }
                             
-                            if let level = badge.level {
+                            if let relatedLevel = badge.level {
                                 HStack {
-                                    Text(LocalizedKeys.level.localized)
+                                    Text(LocalizedKeys.relatedLevel.localized)
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(Color.cometWhite.opacity(0.8))
                                     
                                     Spacer()
                                     
-                                    Text("\(level)")
+                                    Text(LocalizedKeys.level.localized + " \(relatedLevel)")
                                         .font(.system(size: 14))
                                         .foregroundColor(Color.starlightYellow)
                                 }
@@ -335,16 +357,13 @@ private struct BadgeDetailView: View {
 // MARK: - 预览
 struct BadgeCollectionView_Previews: PreviewProvider {
     static var previews: some View {
-        BadgeCollectionView(userProfile: createMockUserProfile())
-            .previewInterfaceOrientation(.portrait)
-    }
-    
-    private static func createMockUserProfile() -> UserProfile {
         var userProfile = UserProfile(nickname: "测试用户")
         userProfile.badges = [
             Badge(type: .levelComplete, level: 1),
             Badge(type: .skipLevel)
         ]
-        return userProfile
+        
+        return BadgeCollectionView(userProfile: userProfile)
+            .previewInterfaceOrientation(.portrait)
     }
 }

@@ -86,13 +86,13 @@ enum BadgeType: String, Codable, CaseIterable {
         }
     }
     
-    /// 勋章系统图标
+    /// 勋章图标（SF Symbols）
     var systemImage: String {
         switch self {
         case .levelComplete:
-            return "trophy.fill"
+            return "medal.fill"
         case .skipLevel:
-            return "bolt.fill"
+            return "hare.fill"
         case .perfectLevel:
             return "star.fill"
         case .consecutiveLogin:

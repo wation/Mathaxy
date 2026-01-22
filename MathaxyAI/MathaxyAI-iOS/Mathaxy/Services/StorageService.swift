@@ -139,19 +139,47 @@ class StorageService: ObservableObject {
     
     /// 保存用户资料
     func saveUserProfile(_ profile: UserProfile) {
-        // 保存到文件
+        print("StorageService: Saving user profile for \(profile.nickname) (\(profile.id))")
+        
+        // 1. 保存到文件
         let fileURL = userProfileFileURL(for: profile.id)
         if let data = try? JSONEncoder().encode(profile) {
             try? data.write(to: fileURL)
         }
         
-        // 同时保存到UserDefaults（作为备份）
+        // 2. 同时保存到UserDefaults（作为备份，代表当前活跃用户）
         if let data = try? JSONEncoder().encode(profile) {
             UserDefaults.standard.set(data, forKey: Keys.userProfile)
         }
         
-        // 更新账号列表中的最后登录时间
-        updateAccountLastLogin(at: profile.id)
+        // 3. 设置为当前账号ID
+        setCurrentAccountId(profile.id)
+        
+        // 4. 更新或添加到账号列表
+        var accounts = getAccountsList()
+        if let index = accounts.firstIndex(where: { $0.id == profile.id }) {
+            // 已存在，更新信息（昵称可能改变，登录时间更新）
+            print("StorageService: Updating existing account in list: \(profile.nickname)")
+            let existingAccount = accounts[index]
+            let updatedAccountInfo = AccountInfo(
+                id: existingAccount.id,
+                nickname: profile.nickname, // 更新昵称
+                createdAt: existingAccount.createdAt, //以此为准
+                lastLoginAt: Date() // 更新登录时间
+            )
+            accounts[index] = updatedAccountInfo
+        } else {
+            // 不存在，添加新账号
+            print("StorageService: Adding new account to list: \(profile.nickname)")
+            let accountInfo = AccountInfo(
+                id: profile.id,
+                nickname: profile.nickname,
+                createdAt: Date(), // 新账号创建时间
+                lastLoginAt: Date()
+            )
+            accounts.append(accountInfo)
+        }
+        saveAccountsList(accounts)
     }
     
     /// 加载用户资料

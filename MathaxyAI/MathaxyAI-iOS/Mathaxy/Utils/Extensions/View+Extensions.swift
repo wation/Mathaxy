@@ -96,7 +96,7 @@ extension View {
     /// - Returns: 应用卡片样式的View
     func cardStyle() -> some View {
         self
-            .background(AppColors.cardBackground)
+            .background(Color.cardBackground)
             .cornerRadius(20)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)

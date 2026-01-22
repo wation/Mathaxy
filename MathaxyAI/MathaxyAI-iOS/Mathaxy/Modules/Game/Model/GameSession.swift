@@ -103,6 +103,16 @@ struct GameSession: Identifiable, Codable {
         }
         return totalTime / Double(totalAnswered)
     }
+
+    /// 题目总数
+    var questionCount: Int {
+        return questions.count
+    }
+
+    /// 是否通过（正确率大于等于70%且未标记为失败）
+    var isPassed: Bool {
+        return !isFailed && accuracy >= 0.7
+    }
     
     /// 提交答案
     /// - Returns: 答案是否正确

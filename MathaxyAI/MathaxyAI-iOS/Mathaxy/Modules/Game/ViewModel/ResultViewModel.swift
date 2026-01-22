@@ -219,7 +219,7 @@ class ResultViewModel: ObservableObject {
 }
 
 // MARK: - 奖状内容视图
-private class ResultCertificateContentView: UIView {
+private class CertificateContentView: UIView {
     let gameSession: GameSession
     
     init(gameSession: GameSession) {
