@@ -33,7 +33,9 @@ struct GamePlayView: View {
                 topInfoBar
                     .padding(.horizontal, 20)
                     .padding(.top, 10)
-                Spacer().frame(maxHeight: 60)
+                
+                // 调整计算框位置，减小顶部间距
+                Spacer().frame(height: 20)
                 
                 if let question = viewModel.currentQuestion {
                     questionArea(question: question)
@@ -43,7 +45,7 @@ struct GamePlayView: View {
                 
                 Spacer()
                 
-                // 进度条
+                // 进度条：居中显示在计算框和键盘之间
                 if !viewModel.isGameCompleted {
                     ProgressView(value: viewModel.progress)
                         .tint(Color.starlightYellow)
