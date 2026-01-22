@@ -16,9 +16,12 @@ struct SettingsView: View {
     @EnvironmentObject private var localizationService: LocalizationService
     @EnvironmentObject private var storageService: StorageService
     
+    // MARK: - 视图模型
+    @StateObject private var viewModel = SettingsViewModel()
+    
     // MARK: - 本地状态
     @State private var showResetAlert = false
-    @State private var showLanguageSheet = false
+    @State private var showAccountList = false
     
     // MARK: - Body
     var body: some View {
@@ -48,24 +51,24 @@ struct SettingsView: View {
                     // 设置列表
                     ScrollView {
                         VStack(spacing: 15) {
-                            // 语言设置
-                            SettingRowView(
-                                icon: "globe",
-                                title: "Language",
-                                value: localizationService.currentLanguage.displayName
-                            ) {
-                                showLanguageSheet = true
-                            }
-                            
-                            Divider()
-                                .background(Color.cometWhite.opacity(0.2))
-                            
                             // 声音设置
                             SettingToggleView(
                                 icon: "speaker.wave.2.fill",
                                 title: "Sound Effects",
                                 isOn: .constant(true)
                             )
+                            
+                            Divider()
+                                .background(Color.cometWhite.opacity(0.2))
+                            
+                            // 账号切换
+                            Button(action: { showAccountList = true }) {
+                                SettingRowView(
+                                    icon: "person.crop.circle",
+                                    title: "账号切换",
+                                    value: ""
+                                ) {}
+                            }
                             
                             Divider()
                                 .background(Color.cometWhite.opacity(0.2))
@@ -85,23 +88,63 @@ struct SettingsView: View {
                     Spacer()
                 }
             }
-            .alert("Reset Data", isPresented: $showResetAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Reset", role: .destructive) {
-                    // 重置数据
-                }
-            } message: {
-                Text("Are you sure you want to reset all data?")
-            }
-            .confirmationDialog("Select Language", isPresented: $showLanguageSheet, titleVisibility: .visible) {
-                ForEach(AppLanguage.allCases, id: \.self) { language in
-                    Button(language.displayName) {
-                        localizationService.switchLanguage(to: language)
+        }
+        .overlay {
+            // 重置数据确认弹出框
+            if showResetAlert {
+                ZStack {
+                    Color.black.opacity(0.5).ignoresSafeArea()
+                    VStack(spacing: 24) {
+                        Text("Reset Data")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color.starlightYellow)
+                            .padding(.top, 24)
+                        Text("Are you sure you want to reset all data?")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color.cometWhite.opacity(0.8))
+                            .padding(.horizontal, 24)
+                        HStack(spacing: 20) {
+                            Button(action: { showResetAlert = false }) {
+                                Text("Cancel")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(Color.starlightYellow)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.stardustPurple.opacity(0.7)))
+                            }
+                            Button(action: { 
+                                viewModel.resetAllData()
+                                showResetAlert = false
+                            }) {
+                                Text("Reset")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.alertRed))
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
                     }
+                    .background(RoundedRectangle(cornerRadius: 20).fill(Color.galaxyGradient))
+                    .padding(.horizontal, 32)
+                    .scaleEffect(showResetAlert ? 1 : 0.8)
+                    .opacity(showResetAlert ? 1 : 0)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: showResetAlert)
                 }
-                Button("Cancel", role: .cancel) {}
             }
         }
+        .fullScreenCover(isPresented: $showAccountList) {
+            AccountListView(onAccountSwitch: {
+                // 账号切换成功，关闭设置页面
+                dismiss()
+            }, dismissParent: {
+                // 关闭设置页面
+                dismiss()
+            })
+        }
+
     }
 }
 

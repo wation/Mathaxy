@@ -205,28 +205,13 @@ struct HomeView: View {
     // MARK: - 底部导航视图
     private var bottomNavigationView: some View {
         HStack(spacing: 40) {
-            // 成就按钮
-            Button(action: {
-                viewModel.showAchievementView()
-            }) {
-                VStack(spacing: 5) {
-                    Image(systemName: "medal.fill")
-                        .font(.title2)
-                    
-                    Text(LocalizedKeys.achievement.localized)
-                        .font(.system(size: 14, weight: .medium))
-                }
-                .foregroundColor(Color.starlightYellow)
-            }
-            
-            // 勋章数量
-            VStack(spacing: 5) {
+            // 只显示勋章数量
+            VStack(spacing: 8) {
                 Text("\(viewModel.getTotalBadgeCount())")
-                    .font(.system(size: 32, weight: .bold))
+                    .font(.system(size: 40, weight: .bold))
                     .foregroundColor(Color.starlightYellow)
-                
                 Text(LocalizedKeys.badges.localized)
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(Color.cometWhite.opacity(0.8))
             }
         }

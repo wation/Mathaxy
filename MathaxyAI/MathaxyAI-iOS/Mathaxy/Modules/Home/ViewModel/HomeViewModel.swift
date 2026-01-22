@@ -27,6 +27,10 @@ class HomeViewModel: ObservableObject {
     // MARK: - 初始化
     init(userProfile: UserProfile) {
         self.userProfile = userProfile
+        // 确保showSettings初始化为false，避免设置页面意外显示
+        self.showSettings = false
+        self.showAchievement = false
+        self.showLevelSelect = false
     }
     
     // MARK: - 导航方法

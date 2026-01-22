@@ -15,50 +15,11 @@ class LocalizationService: ObservableObject {
     static let shared = LocalizationService()
     
     // MARK: - 当前语言
-    @Published var currentLanguage: AppLanguage = .chinese {
-        didSet {
-            updateLanguage()
-        }
-    }
+    @Published var currentLanguage: AppLanguage = .chinese
     
     private init() {
-        // 初始化时加载保存的语言设置
-        loadLanguage()
-    }
-    
-    // MARK: - 语言管理
-    
-    /// 加载保存的语言设置
-    private func loadLanguage() {
-        if let settings = StorageService.shared.loadAppSettings() {
-            currentLanguage = settings.language
-        } else {
-            // 如果没有保存的设置，使用系统语言
-            currentLanguage = AppSettings.getSystemLanguage()
-        }
-    }
-    
-    /// 更新语言
-    private func updateLanguage() {
-        // 更新UserDefaults
-        UserDefaults.standard.set(currentLanguage.rawValue, forKey: "currentLanguage")
-        
-        // 通知系统语言已更改
-        UserDefaults.standard.synchronize()
-        
-        // 发送通知
-        NotificationCenter.default.post(name: .languageDidChange, object: nil)
-    }
-    
-    /// 切换语言
-    func switchLanguage(to newLanguage: AppLanguage) {
-        currentLanguage = newLanguage
-        
-        // 保存到应用设置
-        if var settings = StorageService.shared.loadAppSettings() {
-            settings.switchLanguage(to: newLanguage)
-            StorageService.shared.saveAppSettings(settings)
-        }
+        // 初始化时使用系统语言
+        currentLanguage = AppSettings.getSystemLanguage()
     }
     
     // MARK: - 本地化字符串获取
@@ -78,24 +39,6 @@ class LocalizationService: ObservableObject {
     func localizedString(for key: String, arguments: CVarArg...) -> String {
         let format = localizedString(for: key)
         return String(format: format, arguments: arguments)
-    }
-}
-
-// MARK: - 通知名称扩展
-extension Notification.Name {
-    static let languageDidChange = Notification.Name("languageDidChange")
-}
-
-// MARK: - String扩展（便捷方法）
-extension String {
-    /// 获取本地化字符串
-    var localized: String {
-        return LocalizationService.shared.localizedString(for: self)
-    }
-    
-    /// 获取带参数的本地化字符串
-    func localized(arguments: CVarArg...) -> String {
-        return LocalizationService.shared.localizedString(for: self, arguments: arguments)
     }
 }
 
@@ -284,3 +227,16 @@ let levelText = LocalizedKeys.level.localized(arguments: currentLevel)
 Text(LocalizedKeys.appName.localized)
 Text(LocalizedKeys.welcome.localized(arguments: userProfile.nickname))
 */
+
+// MARK: - String扩展（便捷方法）
+extension String {
+    /// 获取本地化字符串
+    var localized: String {
+        return LocalizationService.shared.localizedString(for: self)
+    }
+    
+    /// 获取带参数的本地化字符串
+    func localized(arguments: CVarArg...) -> String {
+        return LocalizationService.shared.localizedString(for: self, arguments: arguments)
+    }
+}
