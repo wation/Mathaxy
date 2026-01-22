@@ -143,16 +143,13 @@ class GamePlayViewModel: ObservableObject {
             SoundService.shared.playIncorrectSound()
             // 错误答案停留在当前界面，用户可以清除重新输入
             self.hasInputError = true
+            self.showResult = true // 立即显示错误提示
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.showResult = true // 显示错误提示
-                
-                // 1秒后隐藏错误提示并清空输入，允许用户重试
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self.showResult = false
-                    self.hasInputError = false
-                    self.userInputAnswer = ""
-                }
+            // 1秒后隐藏错误提示并清空输入，允许用户重试
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.showResult = false
+                self.hasInputError = false
+                self.userInputAnswer = ""
             }
         }
     }
