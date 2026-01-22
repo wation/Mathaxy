@@ -173,15 +173,24 @@ class GamePlayViewModel: ObservableObject {
         // 播放音效
         if isCorrect {
             SoundService.shared.playCorrectSound()
+            // 正确答案自动跳转
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.moveToNextQuestion()
+            }
         } else {
             SoundService.shared.playIncorrectSound()
-            // 答错也需要标记错误状态
-            hasInputError = true
-        }
-        
-        // 无论对错，都在延迟后跳转下一题（恢复旧版逻辑）
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.moveToNextQuestion()
+            // 错误答案停留在当前界面，用户可以清除重新输入
+            self.hasInputError = true
+            
+            // 答错不需要跳转，只显示错误提示
+            self.showResult = true
+            
+            // 1秒后隐藏错误提示并清空输入，允许用户重试
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.showResult = false
+                self.hasInputError = false
+                self.userInputAnswer = ""
+            }
         }
     }
     
