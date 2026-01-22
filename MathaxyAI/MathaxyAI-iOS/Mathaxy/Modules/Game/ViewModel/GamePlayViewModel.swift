@@ -167,30 +167,24 @@ class GamePlayViewModel: ObservableObject {
               let userAnswer = Int(userInputAnswer) else { return }
         
         // 提交答案
-        let isCorrect = gameSession.submitAnswer(answer: userAnswer, timeTaken: 0) // timeTaken 暂时设为0
+        // 注意：这里我们记录一次提交，但如果错误，不强制跳转
+        let isCorrect = gameSession.submitAnswer(answer: userAnswer, timeTaken: 0) 
         isCorrectAnswer = isCorrect
         
-        // 播放音效
         if isCorrect {
+            // 答对：播放音效 -> 变黄(hasInputError=false) -> 自动跳转
             SoundService.shared.playCorrectSound()
-            // 正确答案自动跳转
+            hasInputError = false
+            
+            // 延迟后跳转下一题
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.moveToNextQuestion()
             }
         } else {
+            // 答错：播放音效 -> 变红(hasInputError=true) -> 不跳转 -> 不显示遮罩
             SoundService.shared.playIncorrectSound()
-            // 错误答案停留在当前界面，用户可以清除重新输入
-            self.hasInputError = true
-            
-            // 答错不需要跳转，只显示错误提示
-            self.showResult = true
-            
-            // 1秒后隐藏错误提示并清空输入，允许用户重试
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.showResult = false
-                self.hasInputError = false
-                self.userInputAnswer = ""
-            }
+            hasInputError = true
+            // 移除 showResult = true，保持在当前页面允许用户修改
         }
     }
     
