@@ -9,6 +9,14 @@
 import Foundation
 import Combine
 
+// MARK: - 账号信息结构体
+struct AccountInfo: Identifiable, Codable {
+    let id: UUID
+    let nickname: String
+    let createdAt: Date
+    let lastLoginAt: Date
+}
+
 // MARK: - 存储服务类
 class StorageService: ObservableObject {
     
@@ -23,6 +31,8 @@ class StorageService: ObservableObject {
         static let appSettings = "appSettings"
         static let isFirstLaunch = "isFirstLaunch"
         static let lastLaunchDate = "lastLaunchDate"
+        static let accountsList = "accountsList"
+        static let currentAccountId = "currentAccountId"
     }
     
     // MARK: - 文件管理器
@@ -34,12 +44,95 @@ class StorageService: ObservableObject {
     }
     
     // MARK: - 数据文件路径
-    private var userProfileFileURL: URL {
-        return documentsDirectory.appendingPathComponent("userProfile.json")
+    private func userProfileFileURL(for accountId: UUID) -> URL {
+        return documentsDirectory.appendingPathComponent("userProfile_accountId.uuidString).json")
     }
     
     private var appSettingsFileURL: URL {
         return documentsDirectory.appendingPathComponent("appSettings.json")
+    }
+    
+    // MARK: - 当前账号ID管理
+    
+    /// 获取当前账号ID
+    func getCurrentAccountId() -> UUID? {
+        guard let data = UserDefaults.standard.data(forKey: Keys.currentAccountId) else {
+            return nil
+        }
+        return try? JSONDecoder().decode(UUID.self, from: data)
+    }
+    
+    /// 设置当前账号ID
+    func setCurrentAccountId(_ accountId: UUID) {
+        if let data = try? JSONEncoder().encode(accountId) {
+            UserDefaults.standard.set(data, forKey: Keys.currentAccountId)
+        }
+    }
+    
+    // MARK: - 账号列表管理
+    
+    /// 获取账号列表
+    func getAccountsList() -> [AccountInfo] {
+        guard let data = UserDefaults.standard.data(forKey: Keys.accountsList) else {
+            return []
+        }
+        return (try? JSONDecoder().decode([AccountInfo].self, from: data)) ?? []
+    }
+    
+    /// 保存账号列表
+    private func saveAccountsList(_ accounts: [AccountInfo]) {
+        if let data = try? JSONEncoder().encode(accounts) {
+            UserDefaults.standard.set(data, forKey: Keys.accountsList)
+        }
+    }
+    
+    /// 添加新账号到列表
+    func addAccount(_ accountInfo: AccountInfo) {
+        var accounts = getAccountsList()
+        accounts.append(accountInfo)
+        saveAccountsList(accounts)
+    }
+    
+    /// 更新账号信息
+    func updateAccount(_ updatedAccount: AccountInfo) {
+        var accounts = getAccountsList()
+        if let index = accounts.firstIndex(where: { $0.id == updatedAccount.id }) {
+            accounts[index] = updatedAccount
+            saveAccountsList(accounts)
+        }
+    }
+    
+    /// 删除账号
+    func deleteAccount(_ accountId: UUID) {
+        // 删除账号文件
+        let fileURL = userProfileFileURL(for: accountId)
+        try? fileManager.removeItem(at: fileURL)
+        
+        // 从列表中移除
+        var accounts = getAccountsList()
+        accounts.removeAll { $0.id == accountId }
+        saveAccountsList(accounts)
+        
+        // 如果删除的是当前账号，清空当前账号ID
+        if getCurrentAccountId() == accountId {
+            UserDefaults.standard.removeObject(forKey: Keys.currentAccountId)
+        }
+    }
+    
+    /// 更新账号最后登录时间
+    func updateAccountLastLogin(at accountId: UUID) {
+        var accounts = getAccountsList()
+        if let index = accounts.firstIndex(where: { $0.id == accountId }) {
+            var updatedAccount = accounts[index]
+            let updatedAccountInfo = AccountInfo(
+                id: updatedAccount.id,
+                nickname: updatedAccount.nickname,
+                createdAt: updatedAccount.createdAt,
+                lastLoginAt: Date()
+            )
+            accounts[index] = updatedAccountInfo
+            saveAccountsList(accounts)
+        }
     }
     
     // MARK: - 用户资料管理
@@ -47,40 +140,107 @@ class StorageService: ObservableObject {
     /// 保存用户资料
     func saveUserProfile(_ profile: UserProfile) {
         // 保存到文件
+        let fileURL = userProfileFileURL(for: profile.id)
         if let data = try? JSONEncoder().encode(profile) {
-            try? data.write(to: userProfileFileURL)
+            try? data.write(to: fileURL)
         }
         
         // 同时保存到UserDefaults（作为备份）
         if let data = try? JSONEncoder().encode(profile) {
             UserDefaults.standard.set(data, forKey: Keys.userProfile)
         }
+        
+        // 更新账号列表中的最后登录时间
+        updateAccountLastLogin(at: profile.id)
     }
     
     /// 加载用户资料
     func loadUserProfile() -> UserProfile? {
-        // 优先从文件加载
-        if let data = try? Data(contentsOf: userProfileFileURL),
-           let profile = try? JSONDecoder().decode(UserProfile.self, from: data) {
-            return profile
+        // 1. 获取当前账号ID
+        let currentAccountId = getCurrentAccountId()
+        
+        // 2. 如果有当前账号ID，尝试从文件加载
+        if let accountId = currentAccountId {
+            let fileURL = userProfileFileURL(for: accountId)
+            if let data = try? Data(contentsOf: fileURL),
+               let profile = try? JSONDecoder().decode(UserProfile.self, from: data) {
+                // 验证ID是否匹配
+                if profile.id == accountId {
+                    return profile
+                }
+            }
         }
         
-        // 如果文件不存在，从UserDefaults加载
+        // 3. 尝试从UserDefaults加载（作为备份）
         if let data = UserDefaults.standard.data(forKey: Keys.userProfile),
            let profile = try? JSONDecoder().decode(UserProfile.self, from: data) {
-            return profile
+            
+            // 如果没有当前账号ID（首次启动或重置），使用这个profile
+            if currentAccountId == nil {
+                addAccountToHistory(profile)
+                return profile
+            }
+            
+            // 如果有当前账号ID，必须匹配才能使用
+            if profile.id == currentAccountId {
+                // 恢复文件
+                saveUserProfile(profile)
+                return profile
+            }
+        }
+        
+        // 4. 如果有当前账号ID但无法加载资料，尝试从账号列表恢复（应对数据丢失）
+        if let accountId = currentAccountId {
+            let accounts = getAccountsList()
+            if let accountInfo = accounts.first(where: { $0.id == accountId }) {
+                // 创建新的用户资料，保留昵称和ID
+                let recoveredProfile = UserProfile(id: accountId, nickname: accountInfo.nickname)
+                saveUserProfile(recoveredProfile)
+                return recoveredProfile
+            }
         }
         
         return nil
     }
     
+    /// 加载指定账号的用户资料
+    func loadUserProfile(for accountId: UUID) -> UserProfile? {
+        let fileURL = userProfileFileURL(for: accountId)
+        if let data = try? Data(contentsOf: fileURL),
+           let profile = try? JSONDecoder().decode(UserProfile.self, from: data) {
+            return profile
+        }
+        return nil
+    }
+    
     /// 删除用户资料
     func deleteUserProfile() {
-        // 删除文件
-        try? fileManager.removeItem(at: userProfileFileURL)
+        if let currentAccountId = getCurrentAccountId() {
+            // 删除当前账号文件
+            let fileURL = userProfileFileURL(for: currentAccountId)
+            try? fileManager.removeItem(at: fileURL)
+            
+            // 从账号列表中删除
+            deleteAccount(currentAccountId)
+        }
         
-        // 删除UserDefaults
+        // 删除UserDefaults备份
         UserDefaults.standard.removeObject(forKey: Keys.userProfile)
+    }
+    
+    /// 为现有账号添加到历史记录
+    private func addAccountToHistory(_ profile: UserProfile) {
+        let accounts = getAccountsList()
+        if !accounts.contains(where: { $0.id == profile.id }) {
+            let accountInfo = AccountInfo(
+                id: profile.id,
+                nickname: profile.nickname,
+                createdAt: profile.loginRecord.lastLoginDate,
+                lastLoginAt: profile.loginRecord.lastLoginDate
+            )
+            addAccount(accountInfo)
+            setCurrentAccountId(profile.id)
+        }
     }
     
     // MARK: - 应用设置管理

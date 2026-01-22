@@ -41,8 +41,8 @@ struct UserProfile: Identifiable, Codable {
     var totalPlayTime: TimeInterval = 0
     
     /// 初始化方法（游客登录）
-    init(nickname: String = "") {
-        self.id = UUID()
+    init(id: UUID = UUID(), nickname: String = "") {
+        self.id = id
         self.nickname = nickname.isEmpty ? UserProfile.generateGuestNickname() : nickname
         self.currentLevel = 1
         self.completedLevels = []
