@@ -97,39 +97,25 @@ struct AccountListView: View {
             }
             .fullScreenCover(isPresented: $viewModel.showAddAccount) {
                 LoginView(onLoginSuccess: { profile in
-                    print("AccountListView: New account added, starting transition sequence")
+                    // 1. 调用切换账号逻辑
+                    // 这会更新最后登录时间，并发送 .accountSwitched 通知
+                    // RootView 收到通知后会重置整个 UI 栈，返回首页
+                    viewModel.switchToAccount(profile.id)
                     
-                    // 1. 关闭添加账号页面 (LoginView)
-                    // 必须先关闭当前模态视图，才能处理后续的页面跳转
-                    viewModel.showAddAccount = false
+                    // 2. 记录操作日志
+                    print("AccountListView: New account created and switched: \(profile.nickname)")
                     
-                    // 2. 延迟执行以确保视图关闭动画开始
-                    // 给予 UI 足够的时间来处理 LoginView 的关闭动画
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        print("AccountListView: Dismissing self and parent")
-                        
-                        // 3. 关闭当前页面 (AccountListView)
-                        dismiss()
-                        
-                        // 4. 关闭父级页面 (通常是 SettingsView)
-                        dismissParent?()
-                        
-                        // 5. 再次延迟以确保页面完全关闭，然后切换数据源
-                        // 这样可以避免在视图销毁过程中更新数据导致的状态冲突
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            print("AccountListView: Switching account context to \(profile.nickname)")
-                            
-                            // 6. 切换账号 (触发 RootView 重建)
-                            // 这将发送 Notification，导致 App 根视图重置
-                            viewModel.switchToAccount(profile.id)
-                            
-                            // 7. 刷新列表状态 (虽然页面已关闭，但保持状态一致性)
-                            viewModel.refreshAccounts()
-                            
-                            // 8. 通知回调
-                            onAccountSwitch?()
-                        }
-                    }
+                    // 3. 执行外部回调
+                    onAccountSwitch?()
+                    
+                    // 4. 关闭当前页面
+                    dismiss()
+                    
+                    // 5. 关闭父级页面
+                    dismissParent?()
+                    
+                    // 6. 刷新列表状态
+                    viewModel.refreshAccounts()
                 })
             }
         }
