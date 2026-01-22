@@ -54,7 +54,16 @@ class GamePlayViewModel: ObservableObject {
     init(level: Int) {
         let questions = questionGenerator.generateQuestions(for: level, count: GameConstants.questionsPerLevel)
         self.gameSession = GameSession(level: level, questions: questions)
-        self.timeRemaining = GameConstants.timePerQuestion * Double(questions.count)
+        
+        // 恢复旧版初始化逻辑：根据LevelConfig设置初始时间
+        let config = LevelConfig.getLevelConfig(level)
+        if config.mode == .totalTime, let totalTime = config.totalTime {
+            self.timeRemaining = totalTime
+        } else if config.mode == .perQuestion, let perQuestionTime = config.perQuestionTime {
+            self.timeRemaining = perQuestionTime
+        } else {
+            self.timeRemaining = GameConstants.timePerQuestion * Double(questions.count)
+        }
     }
     
     // MARK: - 开始游戏
@@ -105,17 +114,50 @@ class GamePlayViewModel: ObservableObject {
         if userInputAnswer.count < 2 {
             userInputAnswer += "\(digit)"
         }
-        // 检查答案是否可以提交
-        checkAndSubmitAnswer()
+        
+        // 检查答案是否正确，用于更新显示颜色
+        checkAnswerForDisplay()
+        
+        // 如果输入达到最大长度（2位），检查是否可以提交
+        if userInputAnswer.count == 2 {
+            checkAndSubmitAnswer()
+            return
+        }
+        
+        // 支持个位数答案直接提交（第6-10关单题倒计时时会出现个位答案）
+        if let currentQuestion = currentQuestion, let userVal = Int(userInputAnswer), userVal == currentQuestion.correctAnswer {
+            checkAndSubmitAnswer()
+        }
     }
     
     func clearAllInput() {
+        // 重置错误状态和用户输入
+        hasInputError = false
         userInputAnswer = ""
     }
     
     func backspaceInput() {
         if !userInputAnswer.isEmpty {
             userInputAnswer.removeLast()
+            // 清除输入时重置错误状态
+            hasInputError = false
+        }
+    }
+    
+    // MARK: - 检查答案是否正确（用于更新显示颜色）
+    private func checkAnswerForDisplay() {
+        guard let currentQuestion = currentQuestion,
+              let userAnswer = Int(userInputAnswer) else { return }
+        
+        // 检查答案是否正确
+        let isCorrect = userAnswer == currentQuestion.correctAnswer
+        
+        // 如果答案正确，清除错误状态
+        if isCorrect {
+            hasInputError = false
+        } else {
+            // 如果答案不正确，设置错误状态
+            hasInputError = true
         }
     }
     
@@ -124,10 +166,6 @@ class GamePlayViewModel: ObservableObject {
         guard let currentQuestion = currentQuestion,
               let userAnswer = Int(userInputAnswer) else { return }
         
-        // 只有当用户输入了完整的答案（例如，如果正确答案是两位数，则需要输入两位）
-        // 或者用户输入了一位，且正确答案也是一位时，才进行判断
-        // 这里简化为只要有输入就判断，后续可根据需求调整
-        
         // 提交答案
         let isCorrect = gameSession.submitAnswer(answer: userAnswer, timeTaken: 0) // timeTaken 暂时设为0
         isCorrectAnswer = isCorrect
@@ -135,22 +173,15 @@ class GamePlayViewModel: ObservableObject {
         // 播放音效
         if isCorrect {
             SoundService.shared.playCorrectSound()
-            // 正确答案自动跳转
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.moveToNextQuestion()
-            }
         } else {
             SoundService.shared.playIncorrectSound()
-            // 错误答案停留在当前界面，用户可以清除重新输入
-            self.hasInputError = true
-            self.showResult = true // 立即显示错误提示
-            
-            // 1秒后隐藏错误提示并清空输入，允许用户重试
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.showResult = false
-                self.hasInputError = false
-                self.userInputAnswer = ""
-            }
+            // 答错也需要标记错误状态
+            hasInputError = true
+        }
+        
+        // 无论对错，都在延迟后跳转下一题（恢复旧版逻辑）
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.moveToNextQuestion()
         }
     }
     
@@ -160,6 +191,13 @@ class GamePlayViewModel: ObservableObject {
         
         if currentQuestionIndex < totalQuestions {
             loadCurrentQuestion()
+            // 6-10关每题倒计时，切题时重置并重启计时器
+            let config = LevelConfig.getLevelConfig(level)
+            if config.mode == .perQuestion, let perQuestionTime = config.perQuestionTime {
+                timeRemaining = perQuestionTime
+                stopTimer()
+                startTimer()
+            }
         } else {
             completeGame()
         }
@@ -263,7 +301,20 @@ class GamePlayViewModel: ObservableObject {
     
     // MARK: - 更新计时器
     private func updateTimer() {
+        // 每次定时器回调仅减少剩余时间并在时间耗尽时处理超时逻辑。
+        // 对于总时长模式（例如第6关）timeRemaining 表示剩余总时长。
+        // 对于单题倒计时模式（第7-10关）timeRemaining 表示当前题目的剩余时间（显示精确到0.1s）。
         timeRemaining -= 0.1
+        
+        // 保证精度：针对需要显示一位小数的关卡，将 timeRemaining 保留到 0.1s
+        let config = LevelConfig.getLevelConfig(level)
+        if config.mode == .perQuestion {
+            // 不允许出现负数的小数误差
+            timeRemaining = max(0, (timeRemaining * 10).rounded(.down) / 10)
+        } else {
+            // 对于总时长，保留整数秒显示（但内部仍跟踪小数）
+            timeRemaining = max(0, timeRemaining)
+        }
         
         if timeRemaining <= 0 {
             timeUp()
