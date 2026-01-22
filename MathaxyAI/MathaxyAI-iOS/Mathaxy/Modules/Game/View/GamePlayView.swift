@@ -150,20 +150,21 @@ struct GamePlayView: View {
     
     // MARK: - 顶部信息栏
     private var topInfoBar: some View {
-        HStack {
-            // 返回按钮
-            Button(action: {
-                SoundService.shared.playButtonClickSound()
-                showExitAlert = true
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 32, weight: .bold)) // 增大返回按钮
-                    .foregroundColor(Color.starlightYellow)
+        ZStack {
+            // 左侧：返回按钮
+            HStack {
+                Button(action: {
+                    SoundService.shared.playButtonClickSound()
+                    showExitAlert = true
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 32, weight: .bold)) // 增大返回按钮
+                        .foregroundColor(Color.starlightYellow)
+                }
+                Spacer()
             }
             
-            Spacer()
-            
-            // 关卡信息
+            // 中间：关卡信息 (绝对居中)
             VStack(spacing: 6) { // 增加间距
                 Text(LocalizedKeys.level.localized + " \(viewModel.level)")
                     .font(.system(size: 24, weight: .bold)) // 增大关卡标题
@@ -173,25 +174,29 @@ struct GamePlayView: View {
                     .font(.system(size: 18, weight: .semibold)) // 增大进度文字
                     .foregroundColor(Color.cometWhite.opacity(0.7))
             }
+            .frame(maxWidth: .infinity) // 允许居中
             
-            Spacer()
-            
-            // 计时器
-            VStack(spacing: 6) { // 增加间距
-                Text(LocalizedKeys.time.localized)
-                    .font(.system(size: 16, weight: .semibold)) // 增大时间标签
-                    .foregroundColor(Color.cometWhite.opacity(0.9))
-                
-                // 对于第7-10关需要显示到0.1s精度
-                let config = LevelConfig.getLevelConfig(viewModel.level)
-                if config.mode == .perQuestion {
-                    Text(String(format: "%.1f", max(0, viewModel.timeRemaining)))
-                        .font(.system(size: 24, weight: .bold)) // 增大时间数值
-                        .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
-                } else {
-                    Text(String(format: "%.0f", viewModel.timeRemaining))
-                        .font(.system(size: 24, weight: .bold)) // 增大时间数值
-                        .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
+            // 右侧：计时器
+            HStack {
+                Spacer()
+                VStack(spacing: 6) { // 增加间距
+                    Text(LocalizedKeys.time.localized)
+                        .font(.system(size: 16, weight: .semibold)) // 增大时间标签
+                        .foregroundColor(Color.cometWhite.opacity(0.9))
+                    
+                    // 对于第7-10关需要显示到0.1s精度
+                    let config = LevelConfig.getLevelConfig(viewModel.level)
+                    if config.mode == .perQuestion {
+                        Text(String(format: "%.1f", max(0, viewModel.timeRemaining)))
+                            .font(.system(size: 24, weight: .bold)) // 增大时间数值
+                            .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
+                            .frame(minWidth: 60, alignment: .trailing) // 固定最小宽度，防止数字抖动
+                    } else {
+                        Text(String(format: "%.0f", viewModel.timeRemaining))
+                            .font(.system(size: 24, weight: .bold)) // 增大时间数值
+                            .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
+                            .frame(minWidth: 60, alignment: .trailing) // 固定最小宽度，防止数字抖动
+                    }
                 }
             }
         }
