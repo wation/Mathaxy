@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mathaxy Image</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: \(width)px;
+            height: \(height)px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Mathaxy AI</h1>
+        <p>\(output_file)</p>
+        <p>Prompt: \(prompt)</p>
+    </div>
+</body>
+</html>

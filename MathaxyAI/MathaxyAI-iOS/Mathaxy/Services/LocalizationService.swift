@@ -214,6 +214,11 @@ struct LocalizedKeys {
     static let failed = "failed"
     static let close = "close"
     static let done = "done"
+    
+    // MARK: - 游戏退出确认
+    static let exitGame = "exit_game"
+    static let exitWarning = "exit_warning"
+    static let exit = "exit"
 }
 
 // MARK: - 本地化字符串使用示例

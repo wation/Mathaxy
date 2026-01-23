@@ -55,6 +55,47 @@ struct AppResources {
         // UI 交互音效
         static let buttonTap = "button_tap.mp3"
         static let notification = "notification.mp3"
+        
+        // 多语言语音提示
+        static let correct_zh_Hans = "correct_zh-Hans.mp3"
+        static let correct_zh_Hant = "correct_zh-Hant.mp3"
+        static let correct_en = "correct_en.mp3"
+        static let correct_ja = "correct_ja.mp3"
+        static let correct_ko = "correct_ko.mp3"
+        static let correct_es = "correct_es.mp3"
+        static let correct_pt = "correct_pt.mp3"
+        
+        static let incorrect_zh_Hans = "incorrect_zh-Hans.mp3"
+        static let incorrect_zh_Hant = "incorrect_zh-Hant.mp3"
+        static let incorrect_en = "incorrect_en.mp3"
+        static let incorrect_ja = "incorrect_ja.mp3"
+        static let incorrect_ko = "incorrect_ko.mp3"
+        static let incorrect_es = "incorrect_es.mp3"
+        static let incorrect_pt = "incorrect_pt.mp3"
+        
+        static let encouragement_zh_Hans = "encouragement_zh-Hans.mp3"
+        static let encouragement_zh_Hant = "encouragement_zh-Hant.mp3"
+        static let encouragement_en = "encouragement_en.mp3"
+        static let encouragement_ja = "encouragement_ja.mp3"
+        static let encouragement_ko = "encouragement_ko.mp3"
+        static let encouragement_es = "encouragement_es.mp3"
+        static let encouragement_pt = "encouragement_pt.mp3"
+        
+        static let panda_greeting_zh_Hans = "panda_greeting_zh-Hans.mp3"
+        static let panda_greeting_zh_Hant = "panda_greeting_zh-Hant.mp3"
+        static let panda_greeting_en = "panda_greeting_en.mp3"
+        static let panda_greeting_ja = "panda_greeting_ja.mp3"
+        static let panda_greeting_ko = "panda_greeting_ko.mp3"
+        static let panda_greeting_es = "panda_greeting_es.mp3"
+        static let panda_greeting_pt = "panda_greeting_pt.mp3"
+        
+        static let rabbit_greeting_zh_Hans = "rabbit_greeting_zh-Hans.mp3"
+        static let rabbit_greeting_zh_Hant = "rabbit_greeting_zh-Hant.mp3"
+        static let rabbit_greeting_en = "rabbit_greeting_en.mp3"
+        static let rabbit_greeting_ja = "rabbit_greeting_ja.mp3"
+        static let rabbit_greeting_ko = "rabbit_greeting_ko.mp3"
+        static let rabbit_greeting_es = "rabbit_greeting_es.mp3"
+        static let rabbit_greeting_pt = "rabbit_greeting_pt.mp3"
     }
     
     // MARK: - 背景音乐文件名（需要在 Sounds 文件夹中添加实际的音乐文件）
@@ -100,6 +141,35 @@ struct AppResources {
         // 其他
         static let emptyState = "empty_state"
         static let errorState = "error_state"
+        
+        // 新生成的图片资源
+        static let algebraKnowledge = "algebra_knowledge"
+        static let arithmeticKnowledge = "arithmetic_knowledge"
+        static let fractionsKnowledge = "fractions_knowledge"
+        static let geometryKnowledge = "geometry_knowledge"
+        
+        // 界面功能配图
+        static let function1 = "function_1"
+        static let function2 = "function_2"
+        static let function3 = "function_3"
+        static let function4 = "function_4"
+        
+        // 知识点讲解配图
+        static let knowledge1 = "knowledge_1"
+        static let knowledge2 = "knowledge_2"
+        static let knowledge3 = "knowledge_3"
+        static let knowledge4 = "knowledge_4"
+        
+        // 奖励成就配图
+        static let achievement1 = "achievement_1"
+        static let achievement2 = "achievement_2"
+        static let achievement3 = "achievement_3"
+        static let achievement4 = "achievement_4"
+        
+        // 引导页
+        static let guide1 = "guide_1"
+        static let guide2 = "guide_2"
+        static let guide3 = "guide_3"
     }
     
     // MARK: - 资源验证

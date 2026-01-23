@@ -339,14 +339,14 @@ class StorageService: ObservableObject {
     }
     
     // MARK: - 通用数据存储
-    
+
     /// 保存自定义数据
     func saveCustomData<T: Codable>(_ data: T, forKey key: String) {
         if let encoded = try? JSONEncoder().encode(data) {
             UserDefaults.standard.set(encoded, forKey: key)
         }
     }
-    
+
     /// 加载自定义数据
     func loadCustomData<T: Codable>(forKey key: String, type: T.Type) -> T? {
         guard let data = UserDefaults.standard.data(forKey: key) else {
@@ -354,10 +354,37 @@ class StorageService: ObservableObject {
         }
         return try? JSONDecoder().decode(type, from: data)
     }
-    
+
     /// 删除自定义数据
     func deleteCustomData(forKey key: String) {
         UserDefaults.standard.removeObject(forKey: key)
+    }
+
+    // MARK: - 测试兼容方法（用于单元测试）
+
+    /// 保存数据（泛型，测试兼容）
+    func save<T: Codable>(_ data: T, forKey key: String) {
+        saveCustomData(data, forKey: key)
+    }
+
+    /// 加载数据（泛型，测试兼容）
+    func load<T: Codable>(forKey key: String) -> T? {
+        return loadCustomData(forKey: key, type: T.self)
+    }
+
+    /// 删除数据（测试兼容）
+    func remove(forKey key: String) {
+        deleteCustomData(forKey: key)
+    }
+
+    /// 检查数据是否存在（测试兼容）
+    func exists(forKey key: String) -> Bool {
+        return UserDefaults.standard.object(forKey: key) != nil
+    }
+
+    /// 清空所有数据（测试兼容）
+    func clearAll() {
+        clearAllData()
     }
     
     // MARK: - 清除所有数据

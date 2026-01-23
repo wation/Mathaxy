@@ -55,6 +55,7 @@
 "correct_count" = "正确：%d";
 "error_count" = "错误：%d";
 "total_time" = "总用时：%@";
+"time_spent" = "用时：";
 "accuracy" = "正确率：%.0f%%";
 "earned_badge" = "获得勋章";
 "correct_answers" = "正确题数";
@@ -141,6 +142,11 @@
 "failed" = "失败";
 "close" = "关闭";
 "done" = "完成";
+
+// MARK: - 游戏退出确认
+"exit_game" = "退出游戏";
+"exit_warning" = "退出后将丢失当前进度";
+"exit" = "退出";
 
 // MARK: - 游戏建议
 "retry_current_level" = "重试当前关卡以提高分数！";

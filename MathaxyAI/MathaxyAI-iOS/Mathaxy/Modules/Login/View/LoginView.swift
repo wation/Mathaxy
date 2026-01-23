@@ -2,8 +2,13 @@
 //  LoginView.swift
 //  Mathaxy
 //
-//  登录页面
+//  登录页面（Q版风格）
 //  提供游客登录和家长辅助绑定两种登录方式
+//  改造说明：
+//  - 背景使用 QBackground(pageType: .login) 替换原有的渐变+随机星点
+//  - 主按钮使用 QPrimaryButton，次按钮使用 QSecondaryButton
+//  - 输入框使用 QCardStyle 统一样式
+//  - Logo 区使用 Q 版装饰（星星装饰）
 //
 
 import SwiftUI
@@ -27,45 +32,12 @@ struct LoginView: View {
     
     // MARK: - Body
     var body: some View {
-        ZStack {
-            // 背景
-            backgroundView
-            
-            // 内容
+        // 使用 Q 版统一背景容器
+        QBackground(pageType: .login) {
             contentView
         }
-        .ignoresSafeArea()
         .onAppear {
             viewModel.onLoginSuccess = onLoginSuccess
-        }
-    }
-    
-    // MARK: - 背景视图
-    private var backgroundView: some View {
-        ZStack {
-            // 银河背景渐变
-            Color.galaxyGradient
-                .ignoresSafeArea()
-            
-            // 星星装饰
-            starsView
-        }
-    }
-    
-    // MARK: - 星星装饰
-    private var starsView: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(0..<30, id: \.self) { index in
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(Double.random(in: 0.3...0.8)))
-                        .frame(width: CGFloat.random(in: 2...6))
-                        .position(
-                            x: CGFloat.random(in: 0...geometry.size.width),
-                            y: CGFloat.random(in: 0...geometry.size.height)
-                        )
-                }
-            }
         }
     }
     
@@ -94,170 +66,145 @@ struct LoginView: View {
         }
     }
     
-    // MARK: - Logo和标题视图
+    // MARK: - Logo和标题视图（Q版风格）
     private var logoView: some View {
-        VStack(spacing: 20) {
-            // Logo占位图
+        VStack(spacing: QSpace.l) {
+            // Logo 占位图 - 使用 Q 版星星装饰
             ZStack {
                 Circle()
-                    .fill(Color.starlightYellow.opacity(0.2))
-                    .frame(width: 120, height: 120)
+                    .fill(QColor.brand.accent.opacity(0.2))
+                    .frame(width: QSize.avatar, height: QSize.avatar)
                 
-                Image(systemName: "star.fill")
+                // 使用 Q 版星星装饰图标
+                Image(QAsset.decoration.star)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 80, height: 80)
-                    .foregroundColor(Color.starlightYellow)
             }
             
-            // 应用名称
+            // 应用名称 - 使用 Q 版字体 token
             Text(LocalizedKeys.appName.localized)
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(Color.starlightYellow)
+                .font(QFont.displayHero)
+                .foregroundColor(QColor.brand.accent)
         }
-        .padding(.top, 80)
+        .padding(.top, QSpace.xl)
     }
     
-    // MARK: - 游客登录视图
+    // MARK: - 游客登录视图（Q版风格）
     private var guestLoginView: some View {
-        VStack(spacing: 30) {
-            // 游客登录按钮
-            Button(action: {
+        VStack(spacing: QSpace.l) {
+            // 游客登录按钮 - 使用 QPrimaryButton
+            QPrimaryButton(
+                title: LocalizedKeys.guestLogin.localized,
+                isLoading: false,
+                isDisabled: false
+            ) {
                 viewModel.guestLogin()
-            }) {
-                HStack {
-                    Image(systemName: "person.crop.circle.fill")
-                        .font(.title2)
-                    
-                    Text(LocalizedKeys.guestLogin.localized)
-                        .font(.system(size: 20, weight: .semibold))
-                }
-                .foregroundColor(Color.spaceBlue)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 20)
             }
-            .primaryButtonStyle()
-            .padding(.horizontal, 40)
             
-            // 家长辅助绑定按钮
-            Button(action: {
+            // 家长辅助绑定按钮 - 使用 QSecondaryButton
+            QSecondaryButton(
+                title: LocalizedKeys.parentBind.localized,
+                isLoading: false,
+                isDisabled: false
+            ) {
                 SoundService.shared.playButtonClickSound()
                 withAnimation(.spring()) {
                     showParentBind = true
                 }
-            }) {
-                HStack {
-                    Image(systemName: "link")
-                        .font(.title2)
-                    
-                    Text(LocalizedKeys.parentBind.localized)
-                        .font(.system(size: 18, weight: .medium))
-                }
-                .foregroundColor(Color.starlightYellow)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 20)
             }
-            .secondaryButtonStyle()
-            .padding(.horizontal, 40)
         }
+        .padding(.horizontal, QSpace.pagePadding)
     }
     
-    // MARK: - 家长辅助绑定视图
+    // MARK: - 家长辅助绑定视图（Q版风格）
     private var parentBindView: some View {
-        VStack(spacing: 30) {
-            VStack(spacing: 30) {
-                // 返回按钮
+        VStack(spacing: QSpace.l) {
+            VStack(spacing: QSpace.l) {
+                // 返回按钮 - 使用 QSecondaryButton 小尺寸
                 Button(action: {
                     SoundService.shared.playButtonClickSound()
                     withAnimation(.spring()) {
                         showParentBind = false
                     }
                 }) {
-                    HStack {
+                    HStack(spacing: QSpace.xs) {
                         Image(systemName: "chevron.left")
                             .font(.title2)
                         
                         Text(LocalizedKeys.back.localized)
-                            .font(.system(size: 16, weight: .medium))
+                            .font(QFont.body)
                     }
+                    .foregroundColor(QColor.brand.accent)
                 }
-                .foregroundColor(Color.starlightYellow)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 10)
+                .padding(.horizontal, QSpace.m)
+                .padding(.vertical, QSpace.s)
                 
-                // 昵称输入
-                VStack(alignment: .leading, spacing: 10) {
+                // 昵称输入 - 使用 QCardStyle
+                VStack(alignment: .leading, spacing: QSpace.s) {
                     Text(LocalizedKeys.enterNickname.localized)
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(Color.cometWhite.opacity(0.8))
+                        .font(QFont.body)
+                        .foregroundColor(QColor.text.onDarkSecondary)
                     
                     TextField("", text: $viewModel.nickname)
-                        .textFieldStyle(LoginTextFieldStyle())
-                        .font(.system(size: 18))
-                        .padding(.horizontal, 20)
+                        .textFieldStyle(QLoginTextFieldStyle())
+                        .font(QFont.body)
                         .onChange(of: viewModel.nickname) {
                             viewModel.clearError()
                         }
                 }
-                .padding(.horizontal, 40)
                 
-                // 确认按钮
-                Button(action: {
+                // 确认按钮 - 使用 QPrimaryButton，支持 loading 状态
+                QPrimaryButton(
+                    title: LocalizedKeys.confirm.localized,
+                    isLoading: viewModel.isSaving,
+                    isDisabled: viewModel.isSaving
+                ) {
                     viewModel.parentBind()
-                }) {
-                    if viewModel.isSaving {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.spaceBlue))
-                    } else {
-                        Text(LocalizedKeys.confirm.localized)
-                            .font(.system(size: 20, weight: .semibold))
-                    }
                 }
-                .foregroundColor(Color.spaceBlue)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 20)
-                .disabled(viewModel.isSaving)
             }
-            .primaryButtonStyle()
-            .padding(.horizontal, 40)
+            .padding(.horizontal, QSpace.pagePadding)
             
             // 错误提示
             if viewModel.showError {
                 Text(viewModel.errorMessage)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color.alertRed)
-                    .padding(.top, 10)
+                    .font(QFont.caption)
+                    .foregroundColor(QColor.state.danger)
+                    .padding(.top, QSpace.s)
                     .transition(.opacity)
             }
         }
     }
     
-    // MARK: - 版本信息视图
+    // MARK: - 版本信息视图（Q版风格）
     private var versionView: some View {
         VStack(spacing: 5) {
             Text(AppVersionInfo.fullVersion)
-                .font(.system(size: 12))
-                .foregroundColor(Color.cometWhite.opacity(0.6))
+                .font(QFont.caption)
+                .foregroundColor(QColor.text.onDarkSecondary)
             
             Text(AppVersionInfo.copyright)
                 .font(.system(size: 10))
-                .foregroundColor(Color.cometWhite.opacity(0.4))
+                .foregroundColor(QColor.text.onDarkSecondary.opacity(0.7))
         }
     }
 }
 
-// MARK: - 圆角边框文本框样式
-struct LoginTextFieldStyle: TextFieldStyle {
+// MARK: - Q版登录文本框样式
+/// Q版风格的登录文本框样式
+/// 使用 QCardStyle token 统一圆角、描边、背景
+struct QLoginTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .padding(.horizontal, 15)
-            .padding(.vertical, 12)
-            .background(Color.cometWhite.opacity(0.1))
-            .cornerRadius(10)
+            .padding(.horizontal, QSpace.m)
+            .padding(.vertical, QSpace.s)
+            .background(QColor.text.onDarkPrimary.opacity(0.1))
+            .cornerRadius(QRadius.chip)
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.starlightYellow, lineWidth: 2)
+                RoundedRectangle(cornerRadius: QRadius.chip)
+                    .stroke(QColor.brand.accent, lineWidth: QStroke.thin)
             )
+            .foregroundColor(QColor.text.onDarkPrimary)
     }
 }
 

@@ -133,6 +133,23 @@ struct LevelConfig {
         }
     }
     
+    /// 计时上限（秒）兼容层：用于旧代码中统一读取关卡的“计时上限”概念。
+    ///
+    /// - 总时长模式（第1-6关）：返回 `totalTime`（整关倒计时总时长）。
+    /// - 单题倒计时模式（第7-10关）：返回 `perQuestionTime`（单题倒计时上限）。
+    ///
+    /// 说明：该属性完全由现有字段计算得到，不改变任何存量配置/加载格式，仅用于兼容视图层对 `timeLimit` 的历史引用。
+    var timeLimit: Double {
+        switch mode {
+        case .totalTime:
+            // 兜底：若配置缺失，回退到“默认每题时间 * 题数”的总时长估算。
+            return totalTime ?? (GameConstants.timePerQuestion * Double(GameConstants.questionsPerLevel))
+        case .perQuestion:
+            // 兜底：若配置缺失，回退到默认每题时间。
+            return perQuestionTime ?? GameConstants.timePerQuestion
+        }
+    }
+    
     /// 计算平均每题时间（仅总时长模式）
     var averageTimePerQuestion: Double? {
         guard mode == .totalTime, let totalTime = totalTime else {

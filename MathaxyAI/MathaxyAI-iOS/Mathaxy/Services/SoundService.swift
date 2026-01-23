@@ -59,70 +59,80 @@ class SoundService: ObservableObject {
     /// 播放答对音效
     func playCorrectSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "correct", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "correct", withExtension: "m4a")
         playHapticFeedback(style: .light)
     }
     
     /// 播放答错音效
     func playIncorrectSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "incorrect", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "incorrect", withExtension: "m4a")
         playHapticFeedback(style: .medium)
     }
     
     /// 播放超时音效
     func playTimeoutSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "timeout", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "timeout", withExtension: "m4a")
         playHapticFeedback(style: .medium)
     }
     
     /// 播放获得勋章音效
     func playBadgeEarnedSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "badge_earned", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "badge_earned", withExtension: "m4a")
         playHapticFeedback(style: .heavy)
     }
     
     /// 播放解锁角色音效
     func playCharacterUnlockedSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "character_unlocked", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "character_unlocked", withExtension: "m4a")
         playHapticFeedback(style: .heavy)
     }
     
     /// 播放跳关音效
     func playSkipLevelSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "skip_level", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "skip_level", withExtension: "m4a")
         playHapticFeedback(style: .heavy)
     }
     
     /// 播放成功音效
     func playSuccessSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "success", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "success", withExtension: "m4a")
         playHapticFeedback(style: .heavy)
     }
     
     /// 播放游戏完成音效
     func playGameCompleteSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "game_complete", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "game_complete", withExtension: "m4a")
         playHapticFeedback(style: .heavy)
     }
     
     /// 播放通用错误音效
     func playErrorSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "error", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "error", withExtension: "m4a")
         playHapticFeedback(style: .heavy)
     }
     
     /// 播放按钮点击音效
     func playButtonClickSound() {
         guard isSoundEnabled else { return }
-        playSound(named: "button_click", withExtension: "mp3")
+        // Q版音效使用 .m4a 格式，旧版音效使用 .mp3 格式
+        playSound(named: "button_click", withExtension: "m4a")
         playHapticFeedback(style: .light)
     }
     
@@ -132,21 +142,27 @@ class SoundService: ObservableObject {
     func playCorrectVoice(language: AppLanguage) {
         guard isSoundEnabled else { return }
         let voiceFileName = getVoiceFileName(for: "correct", language: language)
-        playSound(named: voiceFileName, withExtension: "mp3")
+        // Q版语音使用 .m4a 格式，旧版语音使用 .mp3 格式
+        let ext = voiceFileName.hasPrefix("q_voice_") ? "m4a" : "mp3"
+        playSound(named: voiceFileName, withExtension: ext)
     }
     
     /// 播放答错语音
     func playIncorrectVoice(language: AppLanguage) {
         guard isSoundEnabled else { return }
         let voiceFileName = getVoiceFileName(for: "incorrect", language: language)
-        playSound(named: voiceFileName, withExtension: "mp3")
+        // Q版语音使用 .m4a 格式，旧版语音使用 .mp3 格式
+        let ext = voiceFileName.hasPrefix("q_voice_") ? "m4a" : "mp3"
+        playSound(named: voiceFileName, withExtension: ext)
     }
     
     /// 播放鼓励语音
     func playEncouragementVoice(language: AppLanguage) {
         guard isSoundEnabled else { return }
         let voiceFileName = getVoiceFileName(for: "encouragement", language: language)
-        playSound(named: voiceFileName, withExtension: "mp3")
+        // Q版语音使用 .m4a 格式，旧版语音使用 .mp3 格式
+        let ext = voiceFileName.hasPrefix("q_voice_") ? "m4a" : "mp3"
+        playSound(named: voiceFileName, withExtension: ext)
     }
     
     /// 播放角色问候语音
@@ -154,7 +170,9 @@ class SoundService: ObservableObject {
         guard isSoundEnabled else { return }
         let characterName = characterType == .panda ? "panda" : "rabbit"
         let voiceFileName = getVoiceFileName(for: "\(characterName)_greeting", language: language)
-        playSound(named: voiceFileName, withExtension: "mp3")
+        // Q版语音使用 .m4a 格式，旧版语音使用 .mp3 格式
+        let ext = voiceFileName.hasPrefix("q_voice_") ? "m4a" : "mp3"
+        playSound(named: voiceFileName, withExtension: ext)
     }
     
     /// 批量测试所有语音文件
@@ -211,8 +229,27 @@ class SoundService: ObservableObject {
     
     // MARK: - 播放音效（私有方法）
     private func playSound(named name: String, withExtension ext: String) {
+        // Q版音效映射策略：优先加载 Q 版新命名音效，若资源缺失则回退旧命名（兼容）
+        // 这样可以确保即使 Q 版音效文件缺失，应用仍能正常播放原有音效
+        let qStyleName = getQStyleName(for: name)
+        
+        // Q版音效使用 .m4a 格式，旧版音效使用传入的扩展名（通常是 .mp3）
+        let qStyleExt = "m4a"
+        
+        // 首先尝试加载 Q 版音效（使用 .m4a 扩展名）
+        if let url = Bundle.main.url(forResource: qStyleName, withExtension: qStyleExt) {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.play()
+                return
+            } catch {
+                print("播放 Q 版音效失败 \(qStyleName).\(qStyleExt): \(error.localizedDescription)")
+            }
+        }
+        
+        // Q 版音效不存在，回退到旧命名音效（使用传入的扩展名，兼容性保障）
         guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
-            print("找不到音效文件: \(name).\(ext)")
+            print("找不到音效文件: \(name).\(ext) (Q版: \(qStyleName).\(qStyleExt) 也不存在)")
             return
         }
         
@@ -224,9 +261,52 @@ class SoundService: ObservableObject {
         }
     }
     
+    // MARK: - 获取 Q 版音效名称
+    /// 将旧音效名称映射到 Q 版音效名称
+    /// - Parameter name: 旧音效名称（如 "correct", "button_click"）
+    /// - Returns: Q 版音效名称（如 "q_sfx_correct_01", "q_sfx_button_click_01"）
+    private func getQStyleName(for name: String) -> String {
+        // Q版音效映射表：旧名称 -> Q版名称
+        let qStyleMapping: [String: String] = [
+            // 答题反馈
+            "correct": "q_sfx_correct_01",
+            "incorrect": "q_sfx_incorrect_01",
+            
+            // 游戏状态
+            "timeout": "q_sfx_timeout_01",
+            "level_complete": "q_sfx_level_complete_01",
+            "game_over": "q_sfx_game_over_01",
+            "game_complete": "q_sfx_game_complete_01",
+            
+            // 成就与角色
+            "badge_earned": "q_sfx_badge_earned_01",
+            "character_unlocked": "q_sfx_character_unlocked_01",
+            
+            // 操作反馈
+            "error": "q_sfx_error_01",
+            "success": "q_sfx_success_01",
+            "skip_level": "q_sfx_skip_level_01",
+            
+            // UI 交互
+            "button_click": "q_sfx_button_click_01"
+        ]
+        
+        return qStyleMapping[name] ?? name
+    }
+    
     // MARK: - 获取语音文件名
     private func getVoiceFileName(for type: String, language: AppLanguage) -> String {
         let languageCode = language.rawValue
+        // Q版语音映射策略：优先使用 Q 版语音，若不存在则回退旧命名
+        // 这样可以确保即使 Q 版语音文件缺失，应用仍能正常播放原有语音
+        let qStyleVoiceName = "q_voice_\(type)_\(languageCode)_01"
+        
+        // 检查 Q 版语音是否存在
+        if let _ = Bundle.main.url(forResource: qStyleVoiceName, withExtension: "m4a") {
+            return qStyleVoiceName
+        }
+        
+        // Q 版语音不存在，回退到旧命名（兼容性保障）
         return "\(type)_\(languageCode)"
     }
     

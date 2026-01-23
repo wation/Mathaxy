@@ -4,6 +4,7 @@
 //
 //  游戏玩法视图
 //  显示实际的游戏界面和交互
+//  Q版化：使用 QBackground + QTimerBadge + QProgressBar + QAnswerOptionButton + QPopupContainer
 //
 
 import SwiftUI
@@ -26,16 +27,16 @@ struct GamePlayView: View {
     // MARK: - Body
     @State private var hideStatusBar = false
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea(edges: .all) // 状态栏遮挡
-            backgroundView
+        // Q版背景容器：使用 game 背景图
+        QBackground(pageType: .game) {
             VStack(spacing: 0) {
+                // 顶部信息栏
                 topInfoBar
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
+                    .padding(.horizontal, QSpace.pagePadding)
+                    .padding(.top, QSpace.s)
                 
                 // 调整计算框位置，减小顶部间距
-                Spacer().frame(height: 20)
+                Spacer().frame(height: QSpace.s)
                 
                 if let question = viewModel.currentQuestion {
                     questionArea(question: question)
@@ -45,105 +46,41 @@ struct GamePlayView: View {
                 
                 Spacer()
                 
-                // 进度条：居中显示在计算框和键盘之间
+                // Q版进度条：使用 QProgressBar 组件
                 if !viewModel.isGameCompleted {
-                    ProgressView(value: viewModel.progress)
-                        .tint(Color.starlightYellow)
-                        .scaleEffect(y: 2)
-                        .padding(.horizontal, 40)
+                    QProgressBar(progress: viewModel.progress, height: 24)
+                        .padding(.horizontal, QSpace.xl)
                 }
                 
                 Spacer()
                 
                 if !viewModel.isGameCompleted {
                     answerGrid
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 20)
+                        .padding(.horizontal, QSpace.pagePadding)
+                        .padding(.bottom, QSpace.l)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            if viewModel.showResult {
-                resultOverlay
-            }
-            if showExitAlert {
-                ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
-                    VStack(spacing: 24) {
-                        Text("是否退出当前游戏？")
-                            .font(.system(size: 22, weight: .bold))
-                            .foregroundColor(Color.starlightYellow)
-                            .padding(.top, 24)
-                        Text("退出后将丢失当前进度")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.cometWhite.opacity(0.8))
-                            .padding(.horizontal, 24)
-                        HStack(spacing: 20) {
-                            Button(action: { showExitAlert = false }) {
-                                Text("取消")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(Color.starlightYellow)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.stardustPurple.opacity(0.7)))
-                            }
-                            Button(action: { dismiss() }) {
-                                Text("退出")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.alertRed))
-                            }
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 24)
-                    }
-                    .background(RoundedRectangle(cornerRadius: 20).fill(Color.galaxyGradient))
-                    .padding(.horizontal, 32)
-                    .scaleEffect(showExitAlert ? 1 : 0.8)
-                    .opacity(showExitAlert ? 1 : 0)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: showExitAlert)
-                }
-            }
         }
+        .overlay(
+            // Q版结果反馈覆盖层
+            viewModel.showResult ? resultOverlay : nil
+        )
+        .overlay(
+            // Q版退出确认弹窗
+            showExitAlert ? exitAlertPopup : nil
+        )
         .statusBar(hidden: hideStatusBar)
         .onAppear { hideStatusBar = true; viewModel.startGame() }
         .onDisappear { hideStatusBar = false; viewModel.pauseGame() }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .fullScreenCover(isPresented: $viewModel.showGameComplete) {
-            ResultView(gameSession: viewModel.gameSession)
-                .onDisappear {
-                    dismiss()
-                }
-        }
-    }
-    
-    // MARK: - 背景视图
-    private var backgroundView: some View {
-        ZStack {
-            // 银河背景渐变 - 全屏
-            Color.galaxyGradient
-                .ignoresSafeArea(.all)
-            
-            // 星星装饰
-            starsView
-        }
-    }
-    
-    // MARK: - 星星装饰
-    private var starsView: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(0..<20, id: \.self) { index in
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(Double.random(in: 0.2...0.6)))
-                        .frame(width: CGFloat.random(in: 2...4))
-                        .position(
-                            x: CGFloat.random(in: 0...geometry.size.width),
-                            y: CGFloat.random(in: 0...geometry.size.height)
-                        )
-                }
+            if let gameSession = viewModel.gameSession {
+                ResultView(gameSession: gameSession)
+                    .onDisappear {
+                        dismiss()
+                    }
             }
         }
     }
@@ -158,144 +95,150 @@ struct GamePlayView: View {
                     showExitAlert = true
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 32, weight: .bold)) // 增大返回按钮
-                        .foregroundColor(Color.starlightYellow)
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(QColor.text.onDarkPrimary)
                 }
                 Spacer()
             }
             
             // 中间：关卡信息 (绝对居中)
-            VStack(spacing: 6) { // 增加间距
+            VStack(spacing: QSpace.xs) {
                 Text(LocalizedKeys.level.localized + " \(viewModel.level)")
-                    .font(.system(size: 24, weight: .bold)) // 增大关卡标题
-                    .foregroundColor(Color.cometWhite.opacity(0.9))
+                    .font(QFont.titlePage)
+                    .foregroundColor(QColor.text.onDarkPrimary)
                 
                 Text("\(viewModel.currentQuestionIndex + 1)/\(viewModel.totalQuestions)")
-                    .font(.system(size: 18, weight: .semibold)) // 增大进度文字
-                    .foregroundColor(Color.cometWhite.opacity(0.7))
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
-            .frame(maxWidth: .infinity) // 允许居中
+            .frame(maxWidth: .infinity)
             
-            // 右侧：计时器
+            // 右侧：Q版计时器徽章
             HStack {
                 Spacer()
-                VStack(spacing: 6) { // 增加间距
+                VStack(spacing: QSpace.xs) {
                     Text(LocalizedKeys.time.localized)
-                        .font(.system(size: 16, weight: .semibold)) // 增大时间标签
-                        .foregroundColor(Color.cometWhite.opacity(0.9))
+                        .font(QFont.caption)
+                        .foregroundColor(QColor.text.onDarkPrimary)
                     
                     // 对于第7-10关需要显示到0.1s精度
                     let config = LevelConfig.getLevelConfig(viewModel.level)
-                    if config.mode == .perQuestion {
-                        Text(String(format: "%.1f", max(0, viewModel.timeRemaining)))
-                            .font(.system(size: 24, weight: .bold)) // 增大时间数值
-                            .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
-                            .frame(minWidth: 60, alignment: .trailing) // 固定最小宽度，防止数字抖动
-                    } else {
-                        Text(String(format: "%.0f", viewModel.timeRemaining))
-                            .font(.system(size: 24, weight: .bold)) // 增大时间数值
-                            .foregroundColor(viewModel.timeRemaining < 10 ? Color.alertRed : Color.starlightYellow)
-                            .frame(minWidth: 60, alignment: .trailing) // 固定最小宽度，防止数字抖动
-                    }
+                    let remainingTime = Int(viewModel.timeRemaining)
+                    
+                    // 使用 Q版计时器徽章组件
+                    QTimerBadge(
+                        remainingTime: remainingTime,
+                        totalTime: Int(config.timeLimit)
+                    )
                 }
             }
         }
-        .padding(.vertical, 10) // 增加垂直内边距，使标题栏整体更高
+        .padding(.vertical, QSpace.s)
     }
     
-    // MARK: - 题目区域
+    // MARK: - 题目区域（Q版卡片样式）
     private func questionArea(question: Question) -> some View {
         // 题目表达式
-        HStack(spacing: 20) {
+        HStack(spacing: QSpace.l) {
             Text("\(question.addend1)")
-                .font(.system(size: 56, weight: .bold))
-                .foregroundColor(Color.starlightYellow)
+                .font(QFont.game.questionNumber)
+                .foregroundColor(QColor.brand.accent)
             
             Text("+")
-                .font(.system(size: 42, weight: .bold))
-                .foregroundColor(Color.cometWhite)
+                .font(QFont.game.mathOperator)
+                .foregroundColor(QColor.text.onDarkPrimary)
             
             Text("\(question.addend2)")
-                .font(.system(size: 56, weight: .bold))
-                .foregroundColor(Color.starlightYellow)
+                .font(QFont.game.questionNumber)
+                .foregroundColor(QColor.brand.accent)
             
             Text("=")
-                .font(.system(size: 42, weight: .bold))
-                .foregroundColor(Color.cometWhite)
+                .font(QFont.game.mathOperator)
+                .foregroundColor(QColor.text.onDarkPrimary)
             
             // 显示用户输入的数字，如果没有输入则显示问号
             Text(viewModel.userInputAnswer.isEmpty ? "?" : viewModel.userInputAnswer)
-                .font(.system(size: 56, weight: .bold))
+                .font(QFont.game.questionNumber)
                 .foregroundColor(
-                    viewModel.hasInputError ? Color.alertRed :
-                    (viewModel.userInputAnswer.isEmpty ? Color.stardustPurple : Color.starlightYellow)
+                    viewModel.hasInputError ? QColor.state.danger :
+                    (viewModel.userInputAnswer.isEmpty ? QColor.text.onDarkSecondary : QColor.brand.accent)
                 )
                 .frame(minWidth: 80)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 30)
-        .padding(.horizontal, 16)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.stardustPurple.opacity(0.2))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.starlightYellow, lineWidth: 2)
-                )
-        )
-        .padding(.horizontal, 16)
+        .padding(.vertical, QSpace.l)
+        .padding(.horizontal, QSpace.m)
+        .qCardStyle() // 使用 Q 版卡片样式
+        .padding(.horizontal, QSpace.m)
     }
     
     // MARK: - 加载视图
     private var loadingView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: QSpace.m) {
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: Color.starlightYellow))
+                .progressViewStyle(CircularProgressViewStyle(tint: QColor.brand.accent))
                 .scaleEffect(1.5)
             
             Text(LocalizedKeys.loading.localized)
-                .font(.system(size: 18, weight: .medium))
-                .foregroundColor(Color.cometWhite.opacity(0.8))
+                .font(QFont.body)
+                .foregroundColor(QColor.text.onDarkSecondary)
         }
     }
     
-    // MARK: - 答案网格
+    // MARK: - 答案网格（使用 QAnswerOptionButton）
     private var answerGrid: some View {
-        Grid(horizontalSpacing: 12, verticalSpacing: 12) {
+        Grid(horizontalSpacing: QSpace.s, verticalSpacing: QSpace.s) {
             GridRow {
                 ForEach(7...9, id: \.self) { number in
-                    NumberButton(number: number) {
-                        viewModel.playButtonClickSound()
-                        viewModel.inputDigit(number)
-                    }
+                    QAnswerOptionButton(
+                        value: "\(number)",
+                        state: .normal,
+                        onTap: {
+                            viewModel.playButtonClickSound()
+                            viewModel.inputDigit(number)
+                        }
+                    )
                 }
             }
             GridRow {
                 ForEach(4...6, id: \.self) { number in
-                    NumberButton(number: number) {
-                        viewModel.playButtonClickSound()
-                        viewModel.inputDigit(number)
-                    }
+                    QAnswerOptionButton(
+                        value: "\(number)",
+                        state: .normal,
+                        onTap: {
+                            viewModel.playButtonClickSound()
+                            viewModel.inputDigit(number)
+                        }
+                    )
                 }
             }
             GridRow {
                 ForEach(1...3, id: \.self) { number in
-                    NumberButton(number: number) {
-                        viewModel.playButtonClickSound()
-                        viewModel.inputDigit(number)
-                    }
+                    QAnswerOptionButton(
+                        value: "\(number)",
+                        state: .normal,
+                        onTap: {
+                            viewModel.playButtonClickSound()
+                            viewModel.inputDigit(number)
+                        }
+                    )
                 }
             }
             GridRow {
-                ClearAllButton {
+                // 清空按钮（使用 Q 版样式）
+                QClearButton {
                     viewModel.playButtonClickSound()
                     viewModel.clearAllInput()
                 }
-                NumberButton(number: 0) {
-                    viewModel.playButtonClickSound()
-                    viewModel.inputDigit(0)
-                }
-                ClearAllButton {
+                QAnswerOptionButton(
+                    value: "0",
+                    state: .normal,
+                    onTap: {
+                        viewModel.playButtonClickSound()
+                        viewModel.inputDigit(0)
+                    }
+                )
+                QClearButton {
                     viewModel.playButtonClickSound()
                     viewModel.clearAllInput()
                 }
@@ -303,81 +246,91 @@ struct GamePlayView: View {
         }
     }
     
-    // MARK: - 结果覆盖层
+    // MARK: - Q版结果反馈覆盖层
+    /// 包含轻量动画：弹跳/抖动/淡入淡出
+    /// 触发时机沿用原逻辑（由 ViewModel 控制 showResult）
     private var resultOverlay: some View {
         ZStack {
-            Color.black.opacity(0.7)
+            QColor.overlay.scrim
                 .ignoresSafeArea()
             
-            VStack(spacing: 30) {
-                // 结果图标
-                Image(systemName: viewModel.isCorrectAnswer ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(viewModel.isCorrectAnswer ? Color.starlightYellow : Color.alertRed)
+            VStack(spacing: QSpace.xl) {
+                // Q版结果反馈图标（带弹跳动画）
+                HStack {
+                    Spacer()
+                    Image(viewModel.isCorrectAnswer ? QAsset.feedback.correct : QAsset.feedback.incorrect)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 240, height: 240) // 图标放大2倍，横向居中
+                        .modifier(QFeedbackAnimation(isCorrect: viewModel.isCorrectAnswer))
+                    Spacer()
+                }
                 
-                // 结果文本
+                // 结果文本（带淡入动画）
                 Text(viewModel.isCorrectAnswer ? LocalizedKeys.correct.localized : LocalizedKeys.incorrect.localized)
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(Color.cometWhite)
+                    .font(QFont.displayHero)
+                    .foregroundColor(QColor.text.onDarkPrimary)
+                    .transition(.opacity.combined(with: .scale(scale: 0.9)))
                 
-                // 正确答案
+                // 正确答案（带淡入动画）
                 if !viewModel.isCorrectAnswer, let question = viewModel.currentQuestion {
                     Text(LocalizedKeys.correctAnswer.localized + ": \(question.correctAnswer)")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(Color.starlightYellow)
+                        .font(QFont.body)
+                        .foregroundColor(QColor.brand.accent)
+                        .transition(.opacity.combined(with: .scale(scale: 0.9)))
                 }
             }
-            .padding(40)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.stardustPurple.opacity(0.9))
-            )
+            .padding(QSpace.xl)
+            .qCardStyle() // 使用 Q 版卡片样式
+            .transition(.asymmetric(
+                insertion: .scale(scale: 0.8).combined(with: .opacity),
+                removal: .scale(scale: 0.8).combined(with: .opacity)
+            ))
         }
     }
-}
-
-// MARK: - 数字按钮
-private struct NumberButton: View {
-    let number: Int
-    let action: () -> Void
     
-    var body: some View {
-        Button(action: action) {
-            Text("\(number)")
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(Color.cometWhite)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .aspectRatio(1, contentMode: .fit)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.stardustPurple.opacity(0.3))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.stardustPurple, lineWidth: 2)
-                        )
-                )
+    // MARK: - Q版退出确认弹窗
+    private var exitAlertPopup: some View {
+        QPopupContainer(
+            title: LocalizedKeys.exitGame.localized,
+            content: {
+                VStack(spacing: QSpace.s) {
+                    Text(LocalizedKeys.exitWarning.localized)
+                        .font(QFont.body)
+                        .foregroundColor(QColor.text.onLightPrimary)
+                        .multilineTextAlignment(.center)
+                }
+            },
+            primaryButtonTitle: LocalizedKeys.exit.localized,
+            secondaryButtonTitle: LocalizedKeys.cancel.localized,
+            onPrimary: { dismiss() },
+            onSecondary: { showExitAlert = false }
+        )
+        .onAppear {
+            SoundService.shared.playButtonClickSound()
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
-// MARK: - 清空按钮
-private struct ClearAllButton: View {
+// MARK: - Q版清空按钮
+/// Q版清空按钮组件
+/// 使用 Q 版样式，与 QAnswerOptionButton 保持视觉一致
+private struct QClearButton: View {
     let action: () -> Void
     
     var body: some View {
         Button(action: action) {
             Text("清空")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.white)
+                .font(QFont.bodyEmphasis)
+                .foregroundColor(QColor.state.danger)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .aspectRatio(1, contentMode: .fit)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.red.opacity(0.7)) // 临时背景色，用于调试
+                    RoundedRectangle(cornerRadius: QRadius.button)
+                        .fill(Color.white.opacity(0.2))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.alertRed, lineWidth: 2)
+                            RoundedRectangle(cornerRadius: QRadius.button)
+                                .stroke(QColor.state.danger, lineWidth: QStroke.medium)
                         )
                 )
         }
@@ -385,27 +338,41 @@ private struct ClearAllButton: View {
     }
 }
 
-// MARK: - 退格按钮
-private struct BackspaceButton: View {
-    let action: () -> Void
+// MARK: - QFeedbackAnimation（反馈动画 ViewModifier）
+/// Q版反馈动画 ViewModifier
+/// 用于正确/错误反馈的弹跳/抖动动画
+/// 轻量实现，不影响布局
+private struct QFeedbackAnimation: ViewModifier {
+    let isCorrect: Bool
+    @State private var scale: CGFloat = 0.0
+    @State private var rotation: CGFloat = 0.0
+    @State private var opacity: Double = 0.0
     
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: "delete.left")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .aspectRatio(1, contentMode: .fit)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.red.opacity(0.7)) // 临时背景色，用于调试
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.alertRed, lineWidth: 2)
-                        )
-                )
-        }
-        .buttonStyle(PlainButtonStyle())
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(scale)
+            .rotationEffect(.degrees(rotation))
+            .opacity(opacity)
+            .onAppear {
+                // 淡入 + 弹跳动画
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                    scale = 1.0
+                    opacity = 1.0
+                }
+                
+                // 错误答案时添加轻微抖动效果
+                if !isCorrect {
+                    withAnimation(.easeInOut(duration: 0.1).repeatCount(3, autoreverses: true)) {
+                        rotation = 5.0
+                    }
+                    // 恢复旋转
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            rotation = 0.0
+                        }
+                    }
+                }
+            }
     }
 }
 

@@ -4,6 +4,7 @@
 //
 //  勋章收藏视图
 //  展示用户获得的所有勋章和收藏
+//  Q版化：使用 QBackground + QCardStyle + QFont + QSpace + QDecoration
 //
 
 import SwiftUI
@@ -32,11 +33,9 @@ struct BadgeCollectionView: View {
     
     // MARK: - Body
     var body: some View {
-        ZStack {
-            // 背景
-            backgroundView
-            
-            // 内容
+        // Q版背景容器：使用 achievement 背景图
+        QBackground(pageType: .achievement) {
+            // 内容视图
             contentView
         }
         .sheet(isPresented: $showBadgeDetail) {
@@ -50,10 +49,10 @@ struct BadgeCollectionView: View {
             // 顶部导航
             topBar
             
-            // 统计信息
+            // 统计信息（Q版卡片样式）
             statisticsView
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
+                .padding(.horizontal, QSpace.pagePadding)
+                .padding(.top, QSpace.l)
             
             // 勋章网格
             badgesGridView
@@ -66,13 +65,13 @@ struct BadgeCollectionView: View {
             LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible())
-            ], spacing: 20) {
+            ], spacing: QSpace.l) {
                 ForEach(BadgeType.allCases, id: \.self) { badgeType in
                     badgeCardView(for: badgeType)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+            .padding(.horizontal, QSpace.pagePadding)
+            .padding(.bottom, QSpace.xl)
         }
     }
     
@@ -88,7 +87,7 @@ struct BadgeCollectionView: View {
         }
     }
     
-    // MARK: - 勋章详情弹窗
+    // MARK: - 勋章详情弹窗（Q版样式）
     private var badgeDetailSheet: some View {
         Group {
             if let badge = selectedBadge {
@@ -99,36 +98,7 @@ struct BadgeCollectionView: View {
         }
     }
     
-    // MARK: - 背景视图
-    private var backgroundView: some View {
-        ZStack {
-            // 银河背景渐变
-            Color.galaxyGradient
-                .ignoresSafeArea()
-            
-            // 星星装饰
-            starsView
-        }
-    }
-    
-    // MARK: - 星星装饰
-    private var starsView: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(0..<25, id: \.self) { index in
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(Double.random(in: 0.2...0.6)))
-                        .frame(width: CGFloat.random(in: 2...4))
-                        .position(
-                            x: CGFloat.random(in: 0...geometry.size.width),
-                            y: CGFloat.random(in: 0...geometry.size.height)
-                        )
-                }
-            }
-        }
-    }
-    
-    // MARK: - 顶部导航栏
+    // MARK: - 顶部导航栏（Q版样式）
     private var topBar: some View {
         HStack {
             // 关闭按钮
@@ -138,15 +108,15 @@ struct BadgeCollectionView: View {
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title2)
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
             
             Spacer()
             
-            // 标题
+            // 标题：使用 Q 版字体 token
             Text(LocalizedKeys.myBadges.localized)
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(Color.starlightYellow)
+                .font(QFont.titlePage)
+                .foregroundColor(QColor.text.onDarkPrimary)
             
             Spacer()
             
@@ -157,54 +127,48 @@ struct BadgeCollectionView: View {
             }) {
                 Image(systemName: "heart.fill")
                     .font(.title2)
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 10)
+        .padding(.horizontal, QSpace.pagePadding)
+        .padding(.top, QSpace.s)
     }
     
-    // MARK: - 统计视图
+    // MARK: - 统计视图（Q版卡片样式）
     private var statisticsView: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: QSpace.m) {
             // 已获得勋章数
-            VStack(spacing: 8) {
+            VStack(spacing: QSpace.s) {
                 Text("\(userProfile.badges.count)")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.displayHero)
+                    .foregroundColor(QColor.brand.accent)
                 
                 Text(LocalizedKeys.earned.localized)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 15)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.stardustPurple.opacity(0.3))
-            )
+            .padding(.vertical, QSpace.m)
+            .qCardStyle()
             
             // 总勋章数
-            VStack(spacing: 8) {
+            VStack(spacing: QSpace.s) {
                 Text("\(BadgeType.allCases.count)")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.displayHero)
+                    .foregroundColor(QColor.brand.accent)
                 
                 Text(LocalizedKeys.total.localized)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 15)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.stardustPurple.opacity(0.3))
-            )
+            .padding(.vertical, QSpace.m)
+            .qCardStyle()
         }
     }
 }
 
-// MARK: - 勋章卡片视图
+// MARK: - 勋章卡片视图（Q版卡片样式）
 private struct BadgeCardView: View {
     let badgeType: BadgeType
     let isEarned: Bool
@@ -213,129 +177,116 @@ private struct BadgeCardView: View {
     
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 12) {
-                // 勋章图标
+            VStack(spacing: QSpace.m) {
+                // 勋章图标（使用 Q 版样式）
                 ZStack {
                     // 背景圆圈
                     Circle()
-                        .fill(isEarned ? Color.starlightYellow.opacity(0.2) : Color.cometWhite.opacity(0.1))
+                        .fill(isEarned ? QColor.brand.accent.opacity(0.2) : QColor.text.onDarkSecondary.opacity(0.1))
                         .frame(width: 80, height: 80)
                     
                     // 勋章图标
                     Image(systemName: isEarned ? badgeType.systemImage : "lock.fill")
                         .font(.system(size: 36))
-                        .foregroundColor(isEarned ? Color.starlightYellow : Color.cometWhite.opacity(0.5))
+                        .foregroundColor(isEarned ? QColor.brand.accent : QColor.text.onDarkSecondary.opacity(0.5))
                 }
                 
-                // 勋章名称
+                // 勋章名称：使用 Q 版字体 token
                 Text(badgeType.displayName)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(isEarned ? Color.cometWhite : Color.cometWhite.opacity(0.5))
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(isEarned ? QColor.text.onDarkPrimary : QColor.text.onDarkSecondary.opacity(0.5))
                     .multilineTextAlignment(.center)
                 
                 // 获得日期
                 if isEarned, let badge = badge {
                     Text(DateHelper.shared.formatDate(badge.earnedDate, format: "yyyy.MM.dd"))
-                        .font(.system(size: 10))
-                        .foregroundColor(Color.cometWhite.opacity(0.6))
+                        .font(QFont.caption)
+                        .foregroundColor(QColor.text.onDarkSecondary)
                 } else {
                     Text(LocalizedKeys.locked.localized)
-                        .font(.system(size: 10))
-                        .foregroundColor(Color.cometWhite.opacity(0.4))
+                        .font(QFont.caption)
+                        .foregroundColor(QColor.text.onDarkSecondary.opacity(0.4))
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 15)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isEarned ? Color.stardustPurple.opacity(0.3) : Color.spaceBlue.opacity(0.3))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(isEarned ? Color.starlightYellow.opacity(0.5) : Color.cometWhite.opacity(0.2), lineWidth: 1)
-                    )
-            )
+            .padding(.vertical, QSpace.l)
+            .qCardStyle() // 使用 Q 版卡片样式
         }
         .disabled(!isEarned)
     }
 }
 
-// MARK: - 勋章详情视图
+// MARK: - 勋章详情视图（Q版样式）
 private struct BadgeDetailView: View {
     let badge: Badge
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
-            ZStack {
-                // 背景
-                Color.galaxyGradient
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 30) {
+            // Q版背景容器：使用 achievement 背景图
+            QBackground(pageType: .achievement) {
+                VStack(spacing: QSpace.xl) {
                     // 勋章大图标
                     ZStack {
                         Circle()
-                            .fill(Color.starlightYellow.opacity(0.2))
+                            .fill(QColor.brand.accent.opacity(0.2))
                             .frame(width: 150, height: 150)
                         
                         Image(systemName: badge.type.systemImage)
                             .font(.system(size: 80))
-                            .foregroundColor(Color.starlightYellow)
+                            .foregroundColor(QColor.brand.accent)
                     }
                     
                     // 勋章信息
-                    VStack(spacing: 20) {
-                        // 勋章名称
+                    VStack(spacing: QSpace.l) {
+                        // 勋章名称：使用 Q 版字体 token
                         Text(badge.type.displayName)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(Color.starlightYellow)
+                            .font(QFont.titleSection)
+                            .foregroundColor(QColor.brand.accent)
                         
                         // 勋章描述
                         Text(badge.type.description)
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.cometWhite)
+                            .font(QFont.body)
+                            .foregroundColor(QColor.text.onDarkPrimary)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, QSpace.pagePadding)
                         
-                        // 获得信息
-                        VStack(spacing: 10) {
+                        // 获得信息（Q版卡片样式）
+                        VStack(spacing: QSpace.s) {
                             HStack {
                                 Text(LocalizedKeys.earnedDate.localized)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                                    .font(QFont.body)
+                                    .foregroundColor(QColor.text.onDarkSecondary)
                                 
                                 Spacer()
                                 
                                 Text(DateHelper.shared.formatFullDate(badge.earnedDate))
-                                    .font(.system(size: 14))
-                                    .foregroundColor(Color.starlightYellow)
+                                    .font(QFont.bodyEmphasis)
+                                    .foregroundColor(QColor.brand.accent)
                             }
                             
                             if let relatedLevel = badge.level {
                                 HStack {
                                     Text(LocalizedKeys.relatedLevel.localized)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(Color.cometWhite.opacity(0.8))
+                                        .font(QFont.body)
+                                        .foregroundColor(QColor.text.onDarkSecondary)
                                     
                                     Spacer()
                                     
                                     Text(LocalizedKeys.level.localized + " \(relatedLevel)")
-                                        .font(.system(size: 14))
-                                        .foregroundColor(Color.starlightYellow)
+                                        .font(QFont.bodyEmphasis)
+                                        .foregroundColor(QColor.brand.accent)
                                 }
                             }
                         }
-                        .padding(.horizontal, 30)
-                        .padding(.vertical, 20)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.stardustPurple.opacity(0.3))
-                        )
+                        .padding(.horizontal, QSpace.l)
+                        .padding(.vertical, QSpace.m)
+                        .qCardStyle()
                     }
                     
                     Spacer()
                 }
-                .padding(.top, 50)
+                .padding(.top, QSpace.xl)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -346,7 +297,7 @@ private struct BadgeDetailView: View {
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title2)
-                            .foregroundColor(Color.cometWhite.opacity(0.8))
+                            .foregroundColor(QColor.text.onDarkSecondary)
                     }
                 }
             }

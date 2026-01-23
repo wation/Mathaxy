@@ -2,8 +2,9 @@
 //  GameView.swift
 //  Mathaxy
 //
-//  游戏视图
+//  游戏视图（备用实现）
 //  显示游戏题目和交互
+//  Q版化：使用 QBackground + QProgressBar + QCardStyle
 //
 
 import SwiftUI
@@ -28,13 +29,9 @@ struct GameView: View {
     
     // MARK: - Body
     var body: some View {
-        ZStack {
-            // 背景
-            Color.spaceBlue
-                .ignoresSafeArea()
-            
-            // 内容
-            VStack(spacing: 20) {
+        // Q版背景容器：使用 game 背景图
+        QBackground(pageType: .game) {
+            VStack(spacing: QSpace.m) {
                 // 顶部信息栏
                 topInfoBar
                 
@@ -52,7 +49,7 @@ struct GameView: View {
                     answerOptions
                 }
             }
-            .padding(20)
+            .padding(QSpace.pagePadding)
         }
         .onAppear {
             loadUserProfile()
@@ -61,7 +58,7 @@ struct GameView: View {
         .onDisappear {
             viewModel.stopTimer()
         }
-        .onChange(of: viewModel.showGameOver) { newValue in
+        .onChange(of: viewModel.showGameOver) { _, newValue in
             if newValue {
                 // 重新加载用户资料以获取最新数据
                 userProfile = storageService.loadUserProfile()
@@ -76,76 +73,75 @@ struct GameView: View {
         userProfile = storageService.loadUserProfile()
     }
     
-    // MARK: - 顶部信息栏
+    // MARK: - 顶部信息栏（Q版样式）
     private var topInfoBar: some View {
         HStack {
-            // 进度条
-            VStack(alignment: .leading, spacing: 4) {
+            // Q版进度条
+            VStack(alignment: .leading, spacing: QSpace.xs) {
                 Text("Progress")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.caption)
+                    .foregroundColor(QColor.text.onDarkSecondary)
                 
-                ProgressView(value: viewModel.getProgress())
-                    .tint(Color.starlightYellow)
+                QProgressBar(progress: viewModel.getProgress(), height: 12)
             }
             
             Spacer()
             
             // 计时器
-            VStack(alignment: .trailing, spacing: 4) {
+            VStack(alignment: .trailing, spacing: QSpace.xs) {
                 Text("Time")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.caption)
+                    .foregroundColor(QColor.text.onDarkSecondary)
                 
-                Text(String(format: "%.1f s", max(0, viewModel.timeRemaining)))
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(viewModel.timeRemaining < 5 ? Color.red : Color.starlightYellow)
+                let remainingTime = Int(viewModel.timeRemaining)
+                Text("\(remainingTime) s")
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(viewModel.timeRemaining < 5 ? QColor.state.danger : QColor.brand.accent)
             }
         }
     }
     
-    // MARK: - 题目卡片
+    // MARK: - 题目卡片（Q版卡片样式）
     private func questionCard(_ question: Question) -> some View {
-        VStack(spacing: 30) {
+        VStack(spacing: QSpace.l) {
             // 题号
             Text("Question \(viewModel.gameSession.currentIndex + 1)/\(viewModel.gameSession.questions.count)")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color.cometWhite.opacity(0.8))
+                .font(QFont.caption)
+                .foregroundColor(QColor.text.onDarkSecondary)
             
             // 题目
-            HStack(spacing: 20) {
+            HStack(spacing: QSpace.l) {
                 Text("\(question.addend1)")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.game.questionNumber)
+                    .foregroundColor(QColor.brand.accent)
                 
                 Text("+")
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(Color.cometWhite)
+                    .font(QFont.game.mathOperator)
+                    .foregroundColor(QColor.text.onDarkPrimary)
                 
                 Text("\(question.addend2)")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.game.questionNumber)
+                    .foregroundColor(QColor.brand.accent)
                 
                 Text("=")
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(Color.cometWhite)
+                    .font(QFont.game.mathOperator)
+                    .foregroundColor(QColor.text.onDarkPrimary)
                 
                 Text("?")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundColor(Color.stardustPurple)
+                    .font(QFont.game.questionNumber)
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(20)
-            .background(Color.stardustPurple.opacity(0.2))
-            .cornerRadius(12)
+            .padding(QSpace.m)
         }
+        .qCardStyle() // 使用 Q 版卡片样式
     }
     
-    // MARK: - 答案选项
+    // MARK: - 答案选项（Q版样式）
     private var answerOptions: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: QSpace.s) {
             ForEach([0, 1, 2, 3], id: \.self) { row in
-                HStack(spacing: 12) {
+                HStack(spacing: QSpace.s) {
                     ForEach([0, 1, 2], id: \.self) { col in
                         let index = row * 3 + col
                         if index < 19 {
@@ -154,15 +150,15 @@ struct GameView: View {
                                 viewModel.submitAnswer(answer)
                             }) {
                                 Text("\(answer)")
-                                    .font(.system(size: 24, weight: .bold))
+                                    .font(QFont.bodyEmphasis)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .foregroundColor(Color.cometWhite)
+                                    .foregroundColor(QColor.text.onDarkPrimary)
                                     .background(
                                         viewModel.selectedAnswer == answer ?
-                                        Color.starlightYellow :
-                                        Color.stardustPurple
+                                        QColor.brand.accent :
+                                        Color.white.opacity(0.2)
                                     )
-                                    .cornerRadius(8)
+                                    .cornerRadius(QRadius.button)
                             }
                         }
                     }
@@ -171,48 +167,48 @@ struct GameView: View {
         }
     }
     
-    // MARK: - 游戏结束视图
+    // MARK: - 游戏结束视图（Q版样式）
     private var gameOverView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: QSpace.m) {
             Text(viewModel.gameSession.isFailed ? "Game Over" : "Congratulations!")
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(viewModel.gameSession.isFailed ? Color.red : Color.starlightYellow)
+                .font(QFont.displayHero)
+                .foregroundColor(viewModel.gameSession.isFailed ? QColor.state.danger : QColor.brand.accent)
             
-            VStack(spacing: 10) {
+            VStack(spacing: QSpace.s) {
                 HStack {
                     Text("Correct:")
+                        .foregroundColor(QColor.text.onDarkSecondary)
                     Spacer()
                     Text("\(viewModel.gameSession.correctCount)")
+                        .foregroundColor(QColor.brand.accent)
                 }
                 
                 HStack {
                     Text("Errors:")
+                        .foregroundColor(QColor.text.onDarkSecondary)
                     Spacer()
                     Text("\(viewModel.gameSession.errorCount)")
+                        .foregroundColor(QColor.state.danger)
                 }
                 
                 HStack {
                     Text("Accuracy:")
+                        .foregroundColor(QColor.text.onDarkSecondary)
                     Spacer()
                     Text(String(format: "%.1f%%", viewModel.gameSession.accuracy * 100))
+                        .foregroundColor(QColor.brand.accent)
                 }
             }
-            .foregroundColor(Color.cometWhite)
-            .padding(20)
-            .background(Color.stardustPurple.opacity(0.2))
-            .cornerRadius(12)
+            .padding(QSpace.m)
+            .qCardStyle() // 使用 Q 版卡片样式
             
             Spacer()
             
-            Button(action: { dismiss() }) {
-                Text("Back to Home")
-                    .font(.system(size: 16, weight: .semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.starlightYellow)
-                    .foregroundColor(Color.spaceBlue)
-                    .cornerRadius(8)
-            }
+            // 返回按钮：使用 QPrimaryButton
+            QPrimaryButton(
+                title: "Back to Home",
+                action: { dismiss() }
+            )
         }
     }
 }

@@ -143,6 +143,11 @@
 "close" = "Cerrar";
 "done" = "Hecho";
 
+// MARK: - Confirmación de salida del juego
+"exit_game" = "Salir del juego";
+"exit_warning" = "Perderás el progreso actual";
+"exit" = "Salir";
+
 // MARK: - Consejos de juego
 "retry_current_level" = "¡Reintenta el nivel actual para mejorar tu puntuación!";
 "try_next_level" = "¡Bien hecho! Prueba el nivel %d a continuación.";

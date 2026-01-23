@@ -2,13 +2,19 @@
 //  HomeView.swift
 //  Mathaxy
 //
-//  首页
+//  首页 - Q版风格UI版本
 //  显示用户信息和主要导航
+//  Q版化改造说明：
+//  - 背景使用 QBackground(pageType: .home) 替换原渐变+随机星点
+//  - 按钮使用 QPrimaryButton 统一样式
+//  - 字体、颜色、间距使用 QFont、QColor、QSpace tokens
+//  - 装饰使用 QAsset.decoration.star 和 QAsset.character.numberSprite
+//  - 勋章展示使用 QAsset.component.badgeStyle
 //
 
 import SwiftUI
 
-// MARK: - 首页
+// MARK: - 首页（Q版风格）
 struct HomeView: View {
     
     // MARK: - 用户资料
@@ -26,14 +32,11 @@ struct HomeView: View {
     
     // MARK: - Body
     var body: some View {
-        ZStack {
-            // 背景
-            backgroundView
-            
-            // 内容
+        // Q版背景容器：使用 QStyle 首页背景图
+        QBackground(pageType: .home) {
+            // 内容层
             contentView
         }
-        .ignoresSafeArea()
         .fullScreenCover(isPresented: $viewModel.showLevelSelect) {
             LevelSelectView(userProfile: userProfile)
         }
@@ -42,35 +45,6 @@ struct HomeView: View {
         }
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView()
-        }
-    }
-    
-    // MARK: - 背景视图
-    private var backgroundView: some View {
-        ZStack {
-            // 银河背景渐变
-            Color.galaxyGradient
-                .ignoresSafeArea()
-            
-            // 星星装饰
-            starsView
-        }
-    }
-    
-    // MARK: - 星星装饰
-    private var starsView: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(0..<40, id: \.self) { index in
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(Double.random(in: 0.2...0.6)))
-                        .frame(width: CGFloat.random(in: 2...5))
-                        .position(
-                            x: CGFloat.random(in: 0...geometry.size.width),
-                            y: CGFloat.random(in: 0...geometry.size.height)
-                        )
-                }
-            }
         }
     }
     
@@ -87,7 +61,7 @@ struct HomeView: View {
             
             Spacer()
             
-            // 开始游戏按钮
+            // 开始游戏按钮 - 使用Q版主按钮样式
             startGameButton
             
             // 关卡进度
@@ -101,121 +75,140 @@ struct HomeView: View {
         }
     }
     
-    // MARK: - 顶部导航视图
+    // MARK: - 顶部导航视图（Q版风格）
     private var topNavigationView: some View {
         HStack {
             Spacer()
             
-            // 设置按钮
+            // 设置按钮 - 使用Q版星星装饰底
             Button(action: {
                 viewModel.showSettingsView()
             }) {
-                Image(systemName: "gearshape.fill")
-                    .font(.title2)
-                    .foregroundColor(Color.starlightYellow)
+                ZStack {
+                    // Q版星星装饰作为按钮底座
+                    Image(QAsset.decoration.star)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    
+                    // 设置图标
+                    Image(systemName: "gearshape.fill")
+                        .font(.title2)
+                        .foregroundColor(QColor.brand.accent)
+                }
             }
             .padding(.trailing, 20)
             .padding(.top, 20)
             
-            // 成就按钮
+            // 成就按钮 - 使用Q版星星装饰底
             Button(action: {
                 viewModel.showAchievementView()
             }) {
-                Image(systemName: "medal.fill")
-                    .font(.title2)
-                    .foregroundColor(Color.starlightYellow)
+                ZStack {
+                    // Q版星星装饰作为按钮底座
+                    Image(QAsset.decoration.star)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    
+                    // 成就图标
+                    Image(systemName: "medal.fill")
+                        .font(.title2)
+                        .foregroundColor(QColor.brand.accent)
+                }
             }
             .padding(.trailing, 20)
             .padding(.top, 20)
         }
     }
     
-    // MARK: - 卡通角色视图
+    // MARK: - 卡通角色视图（Q版风格）
     private var characterView: some View {
-        VStack(spacing: 15) {
-            // 卡通角色
-            if let characterType = viewModel.getLatestUnlockedCharacter() {
+        VStack(spacing: QSpace.s) {
+            // 卡通角色 - 使用Q版数字精灵
+            if let _ = viewModel.getLatestUnlockedCharacter() {
                 ZStack {
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(0.2))
-                        .frame(width: 120, height: 120)
-                    
-                    // 占位图：角色
-                    Image(systemName: characterType == .panda ? "star.fill" : "star.circle.fill")
+                    // Q版星星装饰作为角色背景
+                    Image(QAsset.decoration.star)
+                        .resizable()
+                        .frame(width: QSize.avatar, height: QSize.avatar)
+
+                    // 使用Q版数字精灵
+                    Image(QAsset.character.numberSprite)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 80, height: 80)
-                        .foregroundColor(Color.starlightYellow)
                 }
             } else {
-                // 未解锁角色
+                // 未解锁角色 - 显示锁定状态
                 ZStack {
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(0.1))
-                        .frame(width: 120, height: 120)
+                    // Q版星星装饰作为背景
+                    Image(QAsset.decoration.star)
+                        .resizable()
+                        .frame(width: QSize.avatar, height: QSize.avatar)
                     
+                    // 锁定图标
                     Image(systemName: "lock.fill")
                         .font(.system(size: 40))
-                        .foregroundColor(Color.starlightYellow.opacity(0.5))
+                        .foregroundColor(QColor.brand.accent.opacity(0.5))
                 }
             }
             
-            // 昵称
+            // 昵称 - 使用 Q版标题字体
             Text(userProfile.nickname)
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(Color.cometWhite)
+                .font(QFont.titlePage)
+                .foregroundColor(QColor.text.onDarkPrimary)
         }
         .padding(.top, 40)
     }
     
-    // MARK: - 开始游戏按钮视图
+    // MARK: - 开始游戏按钮视图（Q版风格）
     private var startGameButton: some View {
-        Button(action: {
+        // 使用 QPrimaryButton 组件，统一 Q 版按钮样式
+        QPrimaryButton(title: LocalizedKeys.startGame.localized) {
             viewModel.showLevelSelectView()
-        }) {
-            HStack {
-                Image(systemName: "play.fill")
-                    .font(.title2)
-                
-                Text(LocalizedKeys.startGame.localized)
-                    .font(.system(size: 24, weight: .semibold))
-            }
-            .foregroundColor(Color.spaceBlue)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 20)
         }
-        .primaryButtonStyle()
-        .padding(.horizontal, 40)
+        .padding(.horizontal, QSpace.l)
     }
     
-    // MARK: - 关卡进度视图
+    // MARK: - 关卡进度视图（Q版风格）
     private var levelProgressView: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: QSpace.s) {
+            // 当前关卡标签 - 使用 Q 版正文字体
             Text(LocalizedKeys.currentLevel.localized)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color.cometWhite.opacity(0.8))
+                .font(QFont.body)
+                .foregroundColor(QColor.text.onDarkSecondary)
             
+            // 关卡进度数字 - 使用 Q 版大号字体，品牌色强调
             Text(viewModel.getCurrentLevelProgress())
-                .font(.system(size: 36, weight: .bold))
-                .foregroundColor(Color.starlightYellow)
+                .font(QFont.displayHero)
+                .foregroundColor(QColor.brand.accent)
         }
-        .padding(.top, 30)
+        .padding(.top, QSpace.xl)
     }
     
-    // MARK: - 底部导航视图
+    // MARK: - 底部导航视图（Q版风格）
     private var bottomNavigationView: some View {
-        HStack(spacing: 40) {
-            // 只显示勋章数量
-            VStack(spacing: 8) {
-                Text("\(viewModel.getTotalBadgeCount())")
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+        HStack(spacing: QSpace.xl) {
+            // 只显示勋章数量 - 使用Q版勋章样式底图
+            VStack(spacing: QSpace.xs) {
+                ZStack {
+                    // Q版勋章样式底图
+                    Image(QAsset.component.badgeStyle)
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                    
+                    // 勋章数量 - 使用 Q 版强调字体
+                    Text("\(viewModel.getTotalBadgeCount())")
+                        .font(QFont.bodyEmphasis)
+                        .foregroundColor(.white)
+                }
+                
+                // 勋章标签 - 使用 Q 版强调字体
                 Text(LocalizedKeys.badges.localized)
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
         }
-        .padding(.horizontal, 40)
+        .padding(.horizontal, QSpace.l)
     }
 }
 
@@ -227,274 +220,3 @@ struct HomeView_Previews: PreviewProvider {
             .previewInterfaceOrientation(.portrait)
     }
 }
-
-
-
-// MARK: - 游戏结束原因枚举
-enum GameOverReason {
-    case completed      // 完成所有题目
-    case timeOut       // 时间耗尽
-}
-
-// MARK: - 简单游戏视图
-private struct SimpleGameView: View {
-    let level: Int
-    let userProfile: UserProfile
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var storageService: StorageService
-    @State private var questions: [Question] = []
-    @State private var currentIndex = 0
-    @State private var selectedAnswer: Int?
-    @State private var showResult = false
-    @State private var isCorrect = false
-    @State private var correctCount = 0
-    @State private var timeRemaining = 300.0
-    @State private var timer: Timer?
-    @State private var isLoading = true
-    @State private var isGameOver = false
-    @State private var gameOverReason: GameOverReason = .completed
-    
-    var currentQuestion: Question? {
-        guard currentIndex < questions.count else { return nil }
-        return questions[currentIndex]
-    }
-    
-    var body: some View {
-        ZStack {
-            Color.spaceBlue
-                .ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                // 顶部信息栏
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .foregroundColor(Color.starlightYellow)
-                    }
-                    
-                    Spacer()
-                    
-                    Text("Level \(level)")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(Color.cometWhite.opacity(0.8))
-                    
-                    Spacer()
-                    
-                    Text(String(format: "%.0f", timeRemaining))
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(timeRemaining < 10 ? Color.red : Color.starlightYellow)
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
-                
-                Spacer()
-                
-                // 题目显示
-                if isLoading {
-                    // 加载状态
-                    VStack(spacing: 20) {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.starlightYellow))
-                            .scaleEffect(1.5)
-                        
-                        Text(LocalizedKeys.loading.localized)
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(Color.cometWhite.opacity(0.8))
-                    }
-                } else if let question = currentQuestion {
-                    VStack(spacing: 30) {
-                        Text("Question \(currentIndex + 1)/20")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color.cometWhite.opacity(0.8))
-                        
-                        HStack(spacing: 20) {
-                            Text("\(question.addend1)")
-                                .font(.system(size: 48, weight: .bold))
-                                .foregroundColor(Color.starlightYellow)
-                            
-                            Text("+")
-                                .font(.system(size: 36, weight: .bold))
-                                .foregroundColor(Color.cometWhite)
-                            
-                            Text("\(question.addend2)")
-                                .font(.system(size: 48, weight: .bold))
-                                .foregroundColor(Color.starlightYellow)
-                            
-                            Text("=")
-                                .font(.system(size: 36, weight: .bold))
-                                .foregroundColor(Color.cometWhite)
-                            
-                            Text("?")
-                                .font(.system(size: 48, weight: .bold))
-                                .foregroundColor(Color.nebulaPurple)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(20)
-                        .background(Color.nebulaPurple.opacity(0.2))
-                        .cornerRadius(12)
-                    }
-                } else {
-                    // 游戏完成状态
-                    VStack(spacing: 20) {
-                        if gameOverReason == .timeOut {
-                            Text("时间到!")
-                                .font(.system(size: 32, weight: .bold))
-                                .foregroundColor(Color.alertRed)
-                            
-                            Text("答对: \(correctCount)/\(currentIndex)")
-                                .font(.system(size: 24, weight: .medium))
-                                .foregroundColor(Color.cometWhite)
-                        } else {
-                            Text("游戏完成!")
-                                .font(.system(size: 32, weight: .bold))
-                                .foregroundColor(Color.starlightYellow)
-                            
-                            Text("答对: \(correctCount)/20")
-                                .font(.system(size: 24, weight: .medium))
-                                .foregroundColor(Color.cometWhite)
-                        }
-                        
-                        Button(action: { dismiss() }) {
-                            Text("返回关卡选择")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(Color.spaceBlue)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                        }
-                        .background(Color.starlightYellow)
-                        .cornerRadius(8)
-                        .padding(.horizontal, 40)
-                    }
-                }
-                
-                Spacer()
-                
-                // 答案选项
-                if currentQuestion != nil {
-                    VStack(spacing: 12) {
-                        ForEach(0..<3, id: \.self) { row in
-                            HStack(spacing: 12) {
-                                ForEach(0..<3, id: \.self) { col in
-                                    let index = row * 3 + col
-                                    if index < 19 {
-                                        let answer = index
-                                        Button(action: {
-                                            if !showResult && timeRemaining > 0 {
-                                                selectedAnswer = answer
-                                                let correct = answer == currentQuestion?.correctAnswer
-                                                isCorrect = correct
-                                                showResult = true
-                                                
-                                                if correct {
-                                                    correctCount += 1
-                                                }
-                                                
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                                    showResult = false
-                                                    selectedAnswer = nil
-                                                    currentIndex += 1
-                                                    
-                                                    // 检查是否所有题目已完成
-                                                    if currentIndex >= questions.count {
-                                                        stopTimer()
-                                                        isGameOver = true
-                                                        gameOverReason = .completed
-                                                        saveGameProgress()
-                                                    }
-                                                }
-                                            }
-                                        }) {
-                                            Text("\(answer)")
-                                                .font(.system(size: 24, weight: .bold))
-                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                                .foregroundColor(Color.cometWhite)
-                                                .background(
-                                                    selectedAnswer == answer ?
-                                                    Color.starlightYellow :
-                                                    Color.nebulaPurple
-                                                )
-                                                .cornerRadius(8)
-                                        }
-                                        .disabled(showResult || timeRemaining <= 0)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
-                }
-            }
-        }
-        .onAppear {
-            print("SimpleGameView onAppear - Level: \(level)")
-            isLoading = true
-            isGameOver = false
-            gameOverReason = .completed
-            
-            // 异步生成题目
-            DispatchQueue.main.async {
-                questions = QuestionGenerator.shared.generateQuestions(for: level, count: 20)
-                print("SimpleGameView - Generated \(questions.count) questions")
-                currentIndex = 0
-                correctCount = 0
-                
-                // 完成加载
-                isLoading = false
-                
-                // 启动计时器
-                startTimer()
-            }
-        }
-        .onDisappear {
-            stopTimer()
-        }
-    }
-    
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            timeRemaining -= 0.1
-            if timeRemaining <= 0 {
-                timeRemaining = 0
-                stopTimer()
-                isGameOver = true
-                gameOverReason = .timeOut
-            }
-        }
-    }
-    
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    private func saveGameProgress() {
-        // 创建可变副本
-        var updatedProfile = userProfile
-        
-        if gameOverReason == .completed && correctCount >= 10 {
-            // 答对超过10题，标记为完成
-            updatedProfile.completeLevel(level)
-            
-            // 如果全对，添加勋章
-            if correctCount == 20 {
-                let badge = Badge(type: .perfectLevel, level: level)
-                updatedProfile.addBadge(badge)
-            } else {
-                // 添加关卡完成勋章
-                let badge = Badge(type: .levelComplete, level: level)
-                updatedProfile.addBadge(badge)
-            }
-            
-            // 保存更新后的用户资料
-            storageService.saveUserProfile(updatedProfile)
-        }
-    }
-}
-
-
-
-
-
-

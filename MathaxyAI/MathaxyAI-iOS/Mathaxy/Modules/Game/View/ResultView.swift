@@ -4,6 +4,7 @@
 //
 //  游戏结果视图
 //  显示游戏完成后的成绩和统计
+//  Q版化：使用 QBackground + QPrimaryButton + QSecondaryButton + QCardStyle
 //
 
 import SwiftUI
@@ -26,11 +27,8 @@ struct ResultView: View {
     
     // MARK: - Body
     var body: some View {
-        ZStack {
-            // 背景
-            backgroundView
-            
-            // 内容
+        // Q版背景容器：使用 result 背景图
+        QBackground(pageType: .result) {
             VStack(spacing: 0) {
                 // 顶部导航
                 topBar
@@ -44,7 +42,7 @@ struct ResultView: View {
                 
                 // 底部按钮
                 bottomButtons
-                    .padding(.bottom, 40)
+                    .padding(.bottom, QSpace.xl)
             }
         }
         .sheet(isPresented: $showCertificate) {
@@ -59,35 +57,6 @@ struct ResultView: View {
         }
     }
     
-    // MARK: - 背景视图
-    private var backgroundView: some View {
-        ZStack {
-            // 银河背景渐变
-            Color.galaxyGradient
-                .ignoresSafeArea()
-            
-            // 星星装饰
-            starsView
-        }
-    }
-    
-    // MARK: - 星星装饰
-    private var starsView: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(0..<30, id: \.self) { index in
-                    Circle()
-                        .fill(Color.starlightYellow.opacity(Double.random(in: 0.2...0.6)))
-                        .frame(width: CGFloat.random(in: 2...5))
-                        .position(
-                            x: CGFloat.random(in: 0...geometry.size.width),
-                            y: CGFloat.random(in: 0...geometry.size.height)
-                        )
-                }
-            }
-        }
-    }
-    
     // MARK: - 顶部导航栏
     private var topBar: some View {
         HStack {
@@ -98,15 +67,15 @@ struct ResultView: View {
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title2)
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
             
             Spacer()
             
-            // 标题
+            // 标题：使用 Q 版字体 token
             Text(LocalizedKeys.result.localized)
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(Color.starlightYellow)
+                .font(QFont.titlePage)
+                .foregroundColor(QColor.text.onDarkPrimary)
             
             Spacer()
             
@@ -117,18 +86,22 @@ struct ResultView: View {
             }) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.title2)
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .foregroundColor(QColor.text.onDarkSecondary)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 10)
+        .padding(.horizontal, QSpace.pagePadding)
+        .padding(.top, QSpace.s)
     }
     
     // MARK: - 结果内容
     private var resultContent: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: QSpace.xl) {
             // 成绩图标
-            resultIcon
+            HStack {
+                Spacer()
+                resultIcon
+                Spacer()
+            }
             
             // 成绩统计
             statisticsView
@@ -136,147 +109,123 @@ struct ResultView: View {
             // 星级评价
             starRating
         }
-        .padding(.horizontal, 30)
+        .padding(.horizontal, QSpace.pagePadding)
     }
     
-    // MARK: - 成绩图标
+    // MARK: - 成绩图标（Q版样式）
     private var resultIcon: some View {
         ZStack {
             // 背景圆圈
             Circle()
-                .fill(gameSession.isPassed ? Color.starlightYellow.opacity(0.2) : Color.alertRed.opacity(0.2))
-                .frame(width: 120, height: 120)
+                .fill(gameSession.isPassed ? QColor.brand.accent.opacity(0.2) : QColor.state.danger.opacity(0.2))
+                .frame(width: QSize.avatar, height: QSize.avatar)
             
-            // 图标
-            Image(systemName: gameSession.isPassed ? "star.fill" : "xmark.circle.fill")
-                .font(.system(size: 60))
-                .foregroundColor(gameSession.isPassed ? Color.starlightYellow : Color.alertRed)
+            // Q版反馈图标
+            Image(gameSession.isPassed ? QAsset.feedback.correct : QAsset.feedback.incorrect)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 160, height: 160) // 图标放大2倍，横向居中
         }
     }
     
-    // MARK: - 统计视图
+    // MARK: - 统计视图（Q版卡片样式）
     private var statisticsView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: QSpace.m) {
             // 关卡信息
             HStack {
                 Text(LocalizedKeys.level.localized)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
                 
                 Spacer()
                 
                 Text("\(gameSession.level)")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(QColor.brand.accent)
             }
             
             // 正确率
             HStack {
                 Text(LocalizedKeys.accuracy.localized)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
                 
                 Spacer()
                 
                 Text(String(format: "%.1f%%", gameSession.accuracy * 100))
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(QColor.brand.accent)
             }
             
             // 用时
             HStack {
                 Text(LocalizedKeys.timeSpent.localized)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
                 
                 Spacer()
                 
                 Text(String(format: "%.1f \(LocalizedKeys.seconds.localized)", gameSession.totalTime))
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(QColor.brand.accent)
             }
             
             // 正确题数
             HStack {
                 Text(LocalizedKeys.correctAnswers.localized)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color.cometWhite.opacity(0.8))
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
                 
                 Spacer()
                 
                 Text("\(gameSession.correctCount)/\(gameSession.questionCount)")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color.starlightYellow)
+                    .font(QFont.bodyEmphasis)
+                    .foregroundColor(QColor.brand.accent)
             }
         }
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.stardustPurple.opacity(0.3))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.starlightYellow.opacity(0.5), lineWidth: 1)
-                )
-        )
+        .padding(QSpace.l)
+        .qCardStyle() // 使用 Q 版卡片样式
     }
     
-    // MARK: - 星级评价
+    // MARK: - 星级评价（Q版星星装饰）
     private var starRating: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: QSpace.s) {
             ForEach(0..<3, id: \.self) { index in
-                Image(systemName: index < viewModel.starRating ? "star.fill" : "star")
-                    .font(.system(size: 30))
-                    .foregroundColor(index < viewModel.starRating ? Color.starlightYellow : Color.cometWhite.opacity(0.3))
+                Image(index < viewModel.starRating ? QAsset.decoration.star : "star")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 64, height: 64) // 成就图标放大2倍，横向居中
+                    .foregroundColor(index < viewModel.starRating ? QColor.brand.accent : QColor.text.onDarkSecondary.opacity(0.3))
             }
         }
     }
     
-    // MARK: - 底部按钮
+    // MARK: - 底部按钮（使用 Q 版按钮组件）
     private var bottomButtons: some View {
-        VStack(spacing: 15) {
-            // 生成奖状按钮
-            Button(action: {
-                SoundService.shared.playButtonClickSound()
-                showCertificate = true
-            }) {
-                HStack {
-                    Image(systemName: "doc.badge.gearshape.fill")
-                        .font(.title2)
-                    
-                    Text(LocalizedKeys.generateCertificate.localized)
-                        .font(.system(size: 18, weight: .semibold))
+        VStack(spacing: QSpace.m) {
+            // 生成奖状按钮：使用 QPrimaryButton
+            QPrimaryButton(
+                title: LocalizedKeys.generateCertificate.localized,
+                action: {
+                    SoundService.shared.playButtonClickSound()
+                    showCertificate = true
                 }
-                .foregroundColor(Color.spaceBlue)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-            }
-            .primaryButtonStyle()
-            .padding(.horizontal, 40)
+            )
+            .padding(.horizontal, QSpace.pagePadding)
             
-            // 重试按钮
-            Button(action: {
-                SoundService.shared.playButtonClickSound()
-                // TODO: 重新开始游戏
-                dismiss()
-            }) {
-                HStack {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.title2)
-                    
-                    Text(LocalizedKeys.retry.localized)
-                        .font(.system(size: 18, weight: .semibold))
+            // 重试按钮：使用 QSecondaryButton
+            QSecondaryButton(
+                title: LocalizedKeys.retry.localized,
+                action: {
+                    SoundService.shared.playButtonClickSound()
+                    // TODO: 重新开始游戏
+                    dismiss()
                 }
-                .foregroundColor(Color.cometWhite)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-            }
-            .secondaryButtonStyle()
-            .padding(.horizontal, 40)
+            )
+            .padding(.horizontal, QSpace.pagePadding)
         }
     }
 }
-
-
 
 // MARK: - 预览
 struct ResultView_Previews: PreviewProvider {

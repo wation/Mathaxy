@@ -143,6 +143,11 @@
 "close" = "關閉";
 "done" = "完成";
 
+// MARK: - 遊戲退出確認
+"exit_game" = "退出遊戲";
+"exit_warning" = "退出後將丟失當前進度";
+"exit" = "退出";
+
 // MARK: - 遊戲建議
 "retry_current_level" = "重試當前關卡以提高分數！";
 "try_next_level" = "幹得好！接下來試試第 %d 關。";

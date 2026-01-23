@@ -1,0 +1,23 @@
+{
+  "info": {
+    "author": "xcode",
+    "version": 1
+  },
+  "images": [
+    {
+      "filename": "geometry_knowledge.png",
+      "idiom": "universal",
+      "scale": "1x"
+    },
+    {
+      "filename": "geometry_knowledge@2x.png",
+      "idiom": "universal",
+      "scale": "2x"
+    },
+    {
+      "filename": "geometry_knowledge@3x.png",
+      "idiom": "universal",
+      "scale": "3x"
+    }
+  ]
+}

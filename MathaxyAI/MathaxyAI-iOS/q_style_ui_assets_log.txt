@@ -1,0 +1,187 @@
+============================================================
+开始添加Q版风格UI图片到Assets.xcassets
+============================================================
+错误: Assets目录不存在 /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Math/Resources/Assets.xcassets
+============================================================
+开始添加Q版风格UI图片到Assets.xcassets
+============================================================
+✓ 复制: 1._APP图标.png -> app_icon_qstyle.imageset/
+✓ 创建: app_icon_qstyle.imageset/Contents.json
+✓ 复制: 2._启动页.png -> launch_screen_qstyle.imageset/
+✓ 创建: launch_screen_qstyle.imageset/Contents.json
+✓ 复制: 3._首页背景.png -> home_background_qstyle.imageset/
+✓ 创建: home_background_qstyle.imageset/Contents.json
+✓ 复制: 4._游戏界面背景.png -> game_background_qstyle.imageset/
+✓ 创建: game_background_qstyle.imageset/Contents.json
+✓ 复制: 5._登录页背景.png -> login_background_qstyle.imageset/
+✓ 创建: login_background_qstyle.imageset/Contents.json
+✓ 复制: 6._设置页背景.png -> settings_background_qstyle.imageset/
+✓ 创建: settings_background_qstyle.imageset/Contents.json
+✓ 复制: 7._成就页背景.png -> achievement_background_qstyle.imageset/
+✓ 创建: achievement_background_qstyle.imageset/Contents.json
+✓ 复制: 8._关卡选择页背景.png -> level_select_background_qstyle.imageset/
+✓ 创建: level_select_background_qstyle.imageset/Contents.json
+✓ 复制: 9._游戏结束页背景.png -> game_over_background_qstyle.imageset/
+✓ 创建: game_over_background_qstyle.imageset/Contents.json
+✓ 复制: 10._主要按钮样式.png -> primary_button_qstyle.imageset/
+✓ 创建: primary_button_qstyle.imageset/Contents.json
+✓ 复制: 11._次要按钮样式.png -> secondary_button_qstyle.imageset/
+✓ 创建: secondary_button_qstyle.imageset/Contents.json
+✓ 复制: 12._Q版数字精灵角色.png -> number_sprite_qstyle.imageset/
+✓ 创建: number_sprite_qstyle.imageset/Contents.json
+✓ 复制: 13._Q版星星装饰.png -> star_decoration_qstyle.imageset/
+✓ 创建: star_decoration_qstyle.imageset/Contents.json
+✓ 复制: 14._Q版星球装饰.png -> planet_decoration_qstyle.imageset/
+✓ 创建: planet_decoration_qstyle.imageset/Contents.json
+✓ 复制: 15._Q版数学符号装饰.png -> math_symbol_decoration_qstyle.imageset/
+✓ 创建: math_symbol_decoration_qstyle.imageset/Contents.json
+✓ 复制: 16._Q版勋章样式.png -> badge_style_qstyle.imageset/
+✓ 创建: badge_style_qstyle.imageset/Contents.json
+✓ 复制: 17._Q版进度条样式.png -> progress_bar_qstyle.imageset/
+✓ 创建: progress_bar_qstyle.imageset/Contents.json
+✓ 复制: 18._Q版弹窗背景.png -> popup_background_qstyle.imageset/
+✓ 创建: popup_background_qstyle.imageset/Contents.json
+✓ 复制: 19._Q版关卡按钮样式.png -> level_button_qstyle.imageset/
+✓ 创建: level_button_qstyle.imageset/Contents.json
+✓ 复制: 20._Q版答案选项按钮样式.png -> answer_button_qstyle.imageset/
+✓ 创建: answer_button_qstyle.imageset/Contents.json
+✓ 复制: 21._Q版正确答案反馈.png -> correct_feedback_qstyle.imageset/
+✓ 创建: correct_feedback_qstyle.imageset/Contents.json
+✓ 复制: 22._Q版错误答案反馈.png -> incorrect_feedback_qstyle.imageset/
+✓ 创建: incorrect_feedback_qstyle.imageset/Contents.json
+✓ 复制: 23._Q版计时器样式.png -> timer_qstyle.imageset/
+✓ 创建: timer_qstyle.imageset/Contents.json
+✓ 复制: 24._Q版成就解锁弹窗.png -> achievement_unlock_popup_qstyle.imageset/
+✓ 创建: achievement_unlock_popup_qstyle.imageset/Contents.json
+✓ 复制: 25._Q版引导页.png -> guide_screen_qstyle.imageset/
+✓ 创建: guide_screen_qstyle.imageset/Contents.json
+
+============================================================
+Q版风格UI图片添加完成
+成功: 25/25
+失败: 0/25
+日志文件: /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/q_style_ui_assets_log.txt
+Assets目录: /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Resources/Assets.xcassets
+============================================================
+============================================================
+开始添加Q版风格UI图片到Assets.xcassets
+============================================================
+✓ 复制: 1._APP图标.png -> app_icon_qstyle.imageset/
+✓ 创建: app_icon_qstyle.imageset/Contents.json
+✓ 复制: 2._启动页.png -> launch_screen_qstyle.imageset/
+✓ 创建: launch_screen_qstyle.imageset/Contents.json
+✓ 复制: 3._首页背景.png -> home_background_qstyle.imageset/
+✓ 创建: home_background_qstyle.imageset/Contents.json
+✓ 复制: 4._游戏界面背景.png -> game_background_qstyle.imageset/
+✓ 创建: game_background_qstyle.imageset/Contents.json
+✓ 复制: 5._登录页背景.png -> login_background_qstyle.imageset/
+✓ 创建: login_background_qstyle.imageset/Contents.json
+✓ 复制: 6._设置页背景.png -> settings_background_qstyle.imageset/
+✓ 创建: settings_background_qstyle.imageset/Contents.json
+✓ 复制: 7._成就页背景.png -> achievement_background_qstyle.imageset/
+✓ 创建: achievement_background_qstyle.imageset/Contents.json
+✓ 复制: 8._关卡选择页背景.png -> level_select_background_qstyle.imageset/
+✓ 创建: level_select_background_qstyle.imageset/Contents.json
+✓ 复制: 9._游戏结束页背景.png -> game_over_background_qstyle.imageset/
+✓ 创建: game_over_background_qstyle.imageset/Contents.json
+✓ 复制: 10._主要按钮样式.png -> primary_button_qstyle.imageset/
+✓ 创建: primary_button_qstyle.imageset/Contents.json
+✓ 复制: 11._次要按钮样式.png -> secondary_button_qstyle.imageset/
+✓ 创建: secondary_button_qstyle.imageset/Contents.json
+✓ 复制: 12._Q版数字精灵角色.png -> number_sprite_qstyle.imageset/
+✓ 创建: number_sprite_qstyle.imageset/Contents.json
+✓ 复制: 13._Q版星星装饰.png -> star_decoration_qstyle.imageset/
+✓ 创建: star_decoration_qstyle.imageset/Contents.json
+✓ 复制: 14._Q版星球装饰.png -> planet_decoration_qstyle.imageset/
+✓ 创建: planet_decoration_qstyle.imageset/Contents.json
+✓ 复制: 15._Q版数学符号装饰.png -> math_symbol_decoration_qstyle.imageset/
+✓ 创建: math_symbol_decoration_qstyle.imageset/Contents.json
+✓ 复制: 16._Q版勋章样式.png -> badge_style_qstyle.imageset/
+✓ 创建: badge_style_qstyle.imageset/Contents.json
+✓ 复制: 17._Q版进度条样式.png -> progress_bar_qstyle.imageset/
+✓ 创建: progress_bar_qstyle.imageset/Contents.json
+✓ 复制: 18._Q版弹窗背景.png -> popup_background_qstyle.imageset/
+✓ 创建: popup_background_qstyle.imageset/Contents.json
+✓ 复制: 19._Q版关卡按钮样式.png -> level_button_qstyle.imageset/
+✓ 创建: level_button_qstyle.imageset/Contents.json
+✓ 复制: 20._Q版答案选项按钮样式.png -> answer_button_qstyle.imageset/
+✓ 创建: answer_button_qstyle.imageset/Contents.json
+✓ 复制: 21._Q版正确答案反馈.png -> correct_feedback_qstyle.imageset/
+✓ 创建: correct_feedback_qstyle.imageset/Contents.json
+✓ 复制: 22._Q版错误答案反馈.png -> incorrect_feedback_qstyle.imageset/
+✓ 创建: incorrect_feedback_qstyle.imageset/Contents.json
+✓ 复制: 23._Q版计时器样式.png -> timer_qstyle.imageset/
+✓ 创建: timer_qstyle.imageset/Contents.json
+✓ 复制: 24._Q版成就解锁弹窗.png -> achievement_unlock_popup_qstyle.imageset/
+✓ 创建: achievement_unlock_popup_qstyle.imageset/Contents.json
+✓ 复制: 25._Q版引导页.png -> guide_screen_qstyle.imageset/
+✓ 创建: guide_screen_qstyle.imageset/Contents.json
+
+============================================================
+Q版风格UI图片添加完成
+成功: 25/25
+失败: 0/25
+日志文件: /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/q_style_ui_assets_log.txt
+Assets目录: /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Resources/Assets.xcassets
+============================================================
+============================================================
+开始添加Q版风格UI图片到Assets.xcassets
+============================================================
+✓ 复制: 1._APP图标.png -> app_icon_qstyle.imageset/
+✓ 创建: app_icon_qstyle.imageset/Contents.json
+✓ 复制: 2._启动页.png -> launch_screen_qstyle.imageset/
+✓ 创建: launch_screen_qstyle.imageset/Contents.json
+✓ 复制: 3._首页背景.png -> home_background_qstyle.imageset/
+✓ 创建: home_background_qstyle.imageset/Contents.json
+✓ 复制: 4._游戏界面背景.png -> game_background_qstyle.imageset/
+✓ 创建: game_background_qstyle.imageset/Contents.json
+✓ 复制: 5._登录页背景.png -> login_background_qstyle.imageset/
+✓ 创建: login_background_qstyle.imageset/Contents.json
+✓ 复制: 6._设置页背景.png -> settings_background_qstyle.imageset/
+✓ 创建: settings_background_qstyle.imageset/Contents.json
+✓ 复制: 7._成就页背景.png -> achievement_background_qstyle.imageset/
+✓ 创建: achievement_background_qstyle.imageset/Contents.json
+✓ 复制: 8._关卡选择页背景.png -> level_select_background_qstyle.imageset/
+✓ 创建: level_select_background_qstyle.imageset/Contents.json
+✓ 复制: 9._游戏结束页背景.png -> game_over_background_qstyle.imageset/
+✓ 创建: game_over_background_qstyle.imageset/Contents.json
+✓ 复制: 10._主要按钮样式.png -> primary_button_qstyle.imageset/
+✓ 创建: primary_button_qstyle.imageset/Contents.json
+✓ 复制: 11._次要按钮样式.png -> secondary_button_qstyle.imageset/
+✓ 创建: secondary_button_qstyle.imageset/Contents.json
+✓ 复制: 12._Q版数字精灵角色.png -> number_sprite_qstyle.imageset/
+✓ 创建: number_sprite_qstyle.imageset/Contents.json
+✓ 复制: 13._Q版星星装饰.png -> star_decoration_qstyle.imageset/
+✓ 创建: star_decoration_qstyle.imageset/Contents.json
+✓ 复制: 14._Q版星球装饰.png -> planet_decoration_qstyle.imageset/
+✓ 创建: planet_decoration_qstyle.imageset/Contents.json
+✓ 复制: 15._Q版数学符号装饰.png -> math_symbol_decoration_qstyle.imageset/
+✓ 创建: math_symbol_decoration_qstyle.imageset/Contents.json
+✓ 复制: 16._Q版勋章样式.png -> badge_style_qstyle.imageset/
+✓ 创建: badge_style_qstyle.imageset/Contents.json
+✓ 复制: 17._Q版进度条样式.png -> progress_bar_qstyle.imageset/
+✓ 创建: progress_bar_qstyle.imageset/Contents.json
+✓ 复制: 18._Q版弹窗背景.png -> popup_background_qstyle.imageset/
+✓ 创建: popup_background_qstyle.imageset/Contents.json
+✓ 复制: 19._Q版关卡按钮样式.png -> level_button_qstyle.imageset/
+✓ 创建: level_button_qstyle.imageset/Contents.json
+✓ 复制: 20._Q版答案选项按钮样式.png -> answer_button_qstyle.imageset/
+✓ 创建: answer_button_qstyle.imageset/Contents.json
+✓ 复制: 21._Q版正确答案反馈.png -> correct_feedback_qstyle.imageset/
+✓ 创建: correct_feedback_qstyle.imageset/Contents.json
+✓ 复制: 22._Q版错误答案反馈.png -> incorrect_feedback_qstyle.imageset/
+✓ 创建: incorrect_feedback_qstyle.imageset/Contents.json
+✓ 复制: 23._Q版计时器样式.png -> timer_qstyle.imageset/
+✓ 创建: timer_qstyle.imageset/Contents.json
+✓ 复制: 24._Q版成就解锁弹窗.png -> achievement_unlock_popup_qstyle.imageset/
+✓ 创建: achievement_unlock_popup_qstyle.imageset/Contents.json
+✓ 复制: 25._Q版引导页.png -> guide_screen_qstyle.imageset/
+✓ 创建: guide_screen_qstyle.imageset/Contents.json
+
+============================================================
+Q版风格UI图片添加完成
+成功: 25/25
+失败: 0/25
+日志文件: /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/q_style_ui_assets_log.txt
+Assets目录: /Users/yanzhe/workspace/Mathaxy/MathaxyAI/MathaxyAI-iOS/Mathaxy/Resources/Assets.xcassets
+============================================================

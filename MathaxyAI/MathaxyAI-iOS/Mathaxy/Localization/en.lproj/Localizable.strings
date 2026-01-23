@@ -55,6 +55,7 @@
 "correct_count" = "Correct: %d";
 "error_count" = "Errors: %d";
 "total_time" = "Total Time: %@";
+"time_spent" = "Time Spent: ";
 "accuracy" = "Accuracy: %.0f%%";
 "earned_badge" = "Earned Badge";
 "correct_answers" = "Correct Answers";
@@ -141,6 +142,11 @@
 "failed" = "Failed";
 "close" = "Close";
 "done" = "Done";
+
+// MARK: - Game Exit
+"exit_game" = "Exit Game";
+"exit_warning" = "You will lose your current progress";
+"exit" = "Exit";
 
 // MARK: - Game Suggestions
 "retry_current_level" = "Try this level again to improve your score!";

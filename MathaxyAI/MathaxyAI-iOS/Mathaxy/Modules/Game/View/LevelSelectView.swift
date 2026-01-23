@@ -4,6 +4,7 @@
 //
 //  关卡选择视图
 //  显示可用关卡和用户进度
+//  Q版化：使用 QBackground + QLevelButton + QSecondaryButton
 //
 
 import SwiftUI
@@ -28,40 +29,40 @@ struct LevelSelectView: View {
     @State private var hideStatusBar = false
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.spaceBlue.ignoresSafeArea(.all)
+            // Q版背景容器：使用 levelSelect 背景图
+            QBackground(pageType: .levelSelect) {
                 VStack(spacing: 0) {
+                    // 页面标题：使用 Q版字体 token
                     Text(LocalizedKeys.levelSelect.localized)
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(Color.starlightYellow)
-                        .padding(.top, 20)
+                        .font(QFont.titlePage)
+                        .foregroundColor(QColor.text.onDarkPrimary)
+                        .padding(.top, QSpace.l)
+                    
                     ScrollView {
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: QSpace.m) {
                             ForEach(1...GameConstants.totalLevels, id: \.self) { level in
-                                LevelButtonView(
-                                    level: level,
-                                    isCompleted: viewModel.userProfile.completedLevels.contains(level),
-                                    isCurrentLevel: viewModel.userProfile.currentLevel == level,
-                                    isUnlocked: level == 1 || viewModel.userProfile.completedLevels.contains(level - 1)
-                                ) {
-                                    selectedLevel = level
-                                }
+                                // 使用 QLevelButton 组件，状态映射到 QLevelButton.LevelState
+                                QLevelButton(
+                                    levelNumber: level,
+                                    state: mapLevelState(level),
+                                    onTap: {
+                                        selectedLevel = level
+                                    }
+                                )
                             }
                         }
-                        .padding(20)
+                        .padding(QSpace.pagePadding)
                     }
+                    
                     Spacer()
-                    Button(action: { dismiss() }) {
-                        Text(LocalizedKeys.back.localized)
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(Color.cometWhite)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
-                            .background(Color.stardustPurple)
-                            .cornerRadius(8)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
+                    
+                    // 返回按钮：使用 QSecondaryButton 组件
+                    QSecondaryButton(
+                        title: LocalizedKeys.back.localized,
+                        action: { dismiss() }
+                    )
+                    .padding(.horizontal, QSpace.pagePadding)
+                    .padding(.bottom, QSpace.l)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
@@ -80,48 +81,25 @@ struct LevelSelectView: View {
             }
         }
     }
-}
-
-// MARK: - 关卡按钮视图
-private struct LevelButtonView: View {
-    let level: Int
-    let isCompleted: Bool
-    let isCurrentLevel: Bool
-    let isUnlocked: Bool
-    let action: () -> Void
     
-    var body: some View {
-        Button(action: {
-            if isUnlocked {
-                SoundService.shared.playButtonClickSound()
-                action()
-            } else {
-                SoundService.shared.playErrorSound()
-            }
-        }) {
-            VStack {
-                if isUnlocked {
-                    Text("\(level)")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(isCompleted ? Color.starlightYellow : Color.cometWhite)
-                    
-                    if isCompleted {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(Color.starlightYellow)
-                    }
-                } else {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(Color.cometWhite.opacity(0.5))
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(20)
-            .background(isCurrentLevel ? Color.stardustPurple : Color.spaceBlue.opacity(0.7))
-            .border(isCurrentLevel ? Color.starlightYellow : Color.cometWhite, width: 2)
-            .cornerRadius(8)
+    // MARK: - 状态映射：将业务状态映射到 QLevelButton.LevelState
+    /// 将关卡的业务状态（完成/当前/锁定）映射到 Q 版组件的状态
+    /// - Parameter level: 关卡编号
+    /// - Returns: QLevelButton.LevelState
+    private func mapLevelState(_ level: Int) -> QLevelButton.LevelState {
+        let isCompleted = viewModel.userProfile.completedLevels.contains(level)
+        let isCurrentLevel = viewModel.userProfile.currentLevel == level
+        let isUnlocked = level == 1 || viewModel.userProfile.completedLevels.contains(level - 1)
+        
+        if isCompleted {
+            return .completed
+        } else if isCurrentLevel {
+            return .current
+        } else if isUnlocked {
+            return .current // 未解锁但可玩的关卡视为当前状态
+        } else {
+            return .locked
         }
-        .disabled(!isUnlocked)
     }
 }
 

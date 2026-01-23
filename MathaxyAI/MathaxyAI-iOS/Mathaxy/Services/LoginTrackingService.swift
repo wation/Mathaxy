@@ -16,12 +16,18 @@ class LoginTrackingService: ObservableObject {
     
     // MARK: - 连续登录天数
     @Published var consecutiveDays: Int = 0
-    
+
     // MARK: - 是否已获得坚持小达人勋章
     @Published var hasEarnedBadge: Bool = false
-    
+
     // MARK: - 最后登录日期
     private var lastLoginDate: Date?
+
+    // MARK: - 登录次数（测试兼容）
+    private var loginCount: Int = 0
+
+    // MARK: - 登录历史记录（测试兼容）
+    private var loginHistory: [Date] = []
     
     private init() {
         loadLoginRecord()
@@ -32,18 +38,27 @@ class LoginTrackingService: ObservableObject {
         static let lastLoginDate = "lastLoginDate"
         static let consecutiveDays = "consecutiveDays"
         static let hasEarnedBadge = "hasEarnedBadge"
+        static let loginCount = "loginCount"
+        static let loginHistory = "loginHistory"
     }
-    
+
     // MARK: - 加载登录记录
     private func loadLoginRecord() {
         if let lastLoginTimestamp = UserDefaults.standard.object(forKey: Keys.lastLoginDate) as? TimeInterval {
             lastLoginDate = Date(timeIntervalSince1970: lastLoginTimestamp)
         }
-        
+
         consecutiveDays = UserDefaults.standard.integer(forKey: Keys.consecutiveDays)
         hasEarnedBadge = UserDefaults.standard.bool(forKey: Keys.hasEarnedBadge)
+        loginCount = UserDefaults.standard.integer(forKey: Keys.loginCount)
+
+        // 加载登录历史
+        if let historyData = UserDefaults.standard.data(forKey: Keys.loginHistory),
+           let history = try? JSONDecoder().decode([Date].self, from: historyData) {
+            loginHistory = history
+        }
     }
-    
+
     // MARK: - 保存登录记录
     private func saveLoginRecord() {
         if let lastLoginDate = lastLoginDate {
@@ -51,6 +66,12 @@ class LoginTrackingService: ObservableObject {
         }
         UserDefaults.standard.set(consecutiveDays, forKey: Keys.consecutiveDays)
         UserDefaults.standard.set(hasEarnedBadge, forKey: Keys.hasEarnedBadge)
+        UserDefaults.standard.set(loginCount, forKey: Keys.loginCount)
+
+        // 保存登录历史
+        if let historyData = try? JSONEncoder().encode(loginHistory) {
+            UserDefaults.standard.set(historyData, forKey: Keys.loginHistory)
+        }
     }
     
     // MARK: - 更新登录记录
@@ -106,6 +127,8 @@ class LoginTrackingService: ObservableObject {
         lastLoginDate = nil
         consecutiveDays = 0
         hasEarnedBadge = false
+        loginCount = 0
+        loginHistory.removeAll()
         saveLoginRecord()
     }
     
@@ -162,13 +185,78 @@ class LoginTrackingService: ObservableObject {
         if hasEarnedBadge {
             return LocalizedKeys.consecutiveLogin.localized
         }
-        
+
         let remainingDays = getRemainingDays()
         if remainingDays > 0 {
             return LocalizedKeys.consecutiveDays.localized(arguments: consecutiveDays, GameConstants.consecutiveLoginDays)
         } else {
             return LocalizedKeys.keepGoing.localized
         }
+    }
+
+    // MARK: - 测试兼容方法（用于单元测试）
+
+    /// 记录登录（测试兼容）
+    func recordLogin() {
+        loginCount += 1
+        updateLoginRecord()
+        // 添加到历史记录
+        loginHistory.append(Date())
+        // 限制历史记录为30天
+        if loginHistory.count > 30 {
+            loginHistory.removeFirst()
+        }
+    }
+
+    /// 记录指定时间的登录（测试兼容）
+    func recordLogin(at date: Date) {
+        lastLoginDate = date
+        loginCount += 1
+        updateLoginRecord()
+        // 添加到历史记录
+        loginHistory.append(date)
+        // 限制历史记录为30天
+        if loginHistory.count > 30 {
+            loginHistory.removeFirst()
+        }
+    }
+
+    /// 获取登录次数（测试兼容）
+    func getLoginCount() -> Int {
+        return loginCount
+    }
+
+    /// 获取连续登录天数（测试兼容）
+    func getConsecutiveDays() -> Int {
+        return consecutiveDays
+    }
+
+    /// 获取最后登录时间（测试兼容）
+    func getLastLoginTime() -> Date? {
+        return lastLoginDate
+    }
+
+    /// 检查是否已获得7天连续登录奖励（测试兼容）
+    func hasEarnedSevenDayReward() -> Bool {
+        return hasEarnedBadge
+    }
+
+    /// 标记7天连续登录奖励已领取（测试兼容）
+    func markSevenDayRewardClaimed() {
+        hasEarnedBadge = false
+        saveLoginRecord()
+    }
+
+    /// 获取登录历史（测试兼容）
+    func getLoginHistory() -> [Date] {
+        return loginHistory
+    }
+
+    /// 重置登录数据（测试兼容）
+    func resetLoginData() {
+        resetLoginRecord()
+        loginCount = 0
+        loginHistory.removeAll()
     }
 }
 

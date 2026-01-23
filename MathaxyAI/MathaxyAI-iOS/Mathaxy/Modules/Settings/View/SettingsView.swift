@@ -4,6 +4,7 @@
 //
 //  设置视图
 //  管理应用设置和偏好
+//  Q版化改造：使用 QBackground、QListRow、QPopupContainer 等 Q 版组件
 //
 
 import SwiftUI
@@ -25,114 +26,87 @@ struct SettingsView: View {
     
     // MARK: - Body
     var body: some View {
-        NavigationView {
-            ZStack {
-                // 背景
-                Color.spaceBlue
-                    .ignoresSafeArea()
+        // 使用 Q 版背景容器
+        QBackground(pageType: .settings) {
+            VStack(spacing: 0) {
+                // 标题栏
+                headerView
                 
-                // 内容
-                VStack {
-                    HStack {
-                        Text(LocalizedKeys.settings.localized)
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(Color.starlightYellow)
-                        
-                        Spacer()
-                        
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color.cometWhite)
+                // 设置列表
+                ScrollView {
+                    VStack(spacing: QSpace.m) {
+                        // 声音设置
+                        QListRowToggle(
+                            icon: "speaker.wave.2.fill",
+                            title: "Sound Effects",
+                            subtitle: "Enable sound effects",
+                            isOn: $viewModel.soundEnabled
+                        )
+                        .onChange(of: viewModel.soundEnabled) { _, _ in
+                            viewModel.toggleSound()
                         }
-                    }
-                    .padding(20)
-                    
-                    // 设置列表
-                    ScrollView {
-                        VStack(spacing: 15) {
-                            // 声音设置
-                            SettingToggleView(
-                                icon: "speaker.wave.2.fill",
-                                title: "Sound Effects",
-                                isOn: .constant(true)
-                            )
-                            
-                            Divider()
-                                .background(Color.cometWhite.opacity(0.2))
-                            
-                            // 账号切换
-                            Button(action: { showAccountList = true }) {
-                                SettingRowView(
-                                    icon: "person.crop.circle",
-                                    title: "账号切换",
-                                    value: ""
-                                ) {}
-                            }
-                            
-                            Divider()
-                                .background(Color.cometWhite.opacity(0.2))
-                            
-                            // 重置数据
-                            Button(action: { showResetAlert = true }) {
-                                SettingRowView(
-                                    icon: "arrow.clockwise",
-                                    title: "Reset Data",
-                                    value: ""
-                                ) {}
-                            }
+
+                        // 音乐设置
+                        QListRowToggle(
+                            icon: "music.note",
+                            title: "Music",
+                            subtitle: "Enable background music",
+                            isOn: $viewModel.musicEnabled
+                        )
+                        .onChange(of: viewModel.musicEnabled) { _, _ in
+                            viewModel.toggleMusic()
                         }
-                        .padding(20)
+
+                        // 震动反馈设置
+                        QListRowToggle(
+                            icon: "iphone.radiowaves.left.and.right",
+                            title: "Haptic Feedback",
+                            subtitle: "Enable vibration feedback",
+                            isOn: $viewModel.vibrationEnabled
+                        )
+                        .onChange(of: viewModel.vibrationEnabled) { _, _ in
+                            viewModel.toggleVibration()
+                        }
+                        
+                        // 分隔线
+                        Divider()
+                            .background(Color.white.opacity(0.2))
+                            .padding(.vertical, QSpace.s)
+                        
+                        // 账号切换
+                        QListRow(
+                            icon: "person.crop.circle",
+                            title: "账号切换",
+                            subtitle: "Switch to another account",
+                            trailing: {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(QColor.text.onDarkSecondary)
+                            },
+                            action: { showAccountList = true }
+                        )
+                        
+                        // 重置数据
+                        QListRow(
+                            icon: "arrow.clockwise",
+                            title: "Reset Data",
+                            subtitle: "Clear all data and reset settings",
+                            trailing: {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(QColor.text.onDarkSecondary)
+                            },
+                            action: { showResetAlert = true }
+                        )
                     }
-                    
-                    Spacer()
+                    .padding(.top, QSpace.l)
                 }
+                
+                Spacer()
             }
         }
         .overlay {
-            // 重置数据确认弹出框
+            // 重置数据确认弹窗
             if showResetAlert {
-                ZStack {
-                    Color.black.opacity(0.5).ignoresSafeArea()
-                    VStack(spacing: 24) {
-                        Text("Reset Data")
-                            .font(.system(size: 22, weight: .bold))
-                            .foregroundColor(Color.starlightYellow)
-                            .padding(.top, 24)
-                        Text("Are you sure you want to reset all data?")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.cometWhite.opacity(0.8))
-                            .padding(.horizontal, 24)
-                        HStack(spacing: 20) {
-                            Button(action: { showResetAlert = false }) {
-                                Text("Cancel")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(Color.starlightYellow)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.stardustPurple.opacity(0.7)))
-                            }
-                            Button(action: { 
-                                viewModel.resetAllData()
-                                showResetAlert = false
-                            }) {
-                                Text("Reset")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.alertRed))
-                            }
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 24)
-                    }
-                    .background(RoundedRectangle(cornerRadius: 20).fill(Color.galaxyGradient))
-                    .padding(.horizontal, 32)
-                    .scaleEffect(showResetAlert ? 1 : 0.8)
-                    .opacity(showResetAlert ? 1 : 0)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: showResetAlert)
-                }
+                resetAlertPopup
             }
         }
         .fullScreenCover(isPresented: $showAccountList) {
@@ -144,67 +118,47 @@ struct SettingsView: View {
                 dismiss()
             })
         }
-
     }
-}
-
-// MARK: - 设置行视图
-private struct SettingRowView: View {
-    let icon: String
-    let title: String
-    let value: String
-    let action: () -> Void
     
-    var body: some View {
-        HStack(spacing: 15) {
-            Image(systemName: icon)
-                .font(.system(size: 18))
-                .foregroundColor(Color.starlightYellow)
-                .frame(width: 30)
+    // MARK: - 标题栏视图
+    private var headerView: some View {
+        HStack {
+            Text(LocalizedKeys.settings.localized)
+                .font(QFont.titlePage)
+                .foregroundColor(QColor.text.onDarkPrimary)
             
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color.cometWhite)
-                
-                if !value.isEmpty {
-                    Text(value)
-                        .font(.system(size: 12))
-                        .foregroundColor(Color.cometWhite.opacity(0.7))
-                }
+            Spacer()
+            
+            // 关闭按钮
+            Button(action: { dismiss() }) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 28))
+                    .foregroundColor(QColor.text.onDarkPrimary)
             }
-            
-            Spacer()
-            
-            Image(systemName: "chevron.right")
-                .foregroundColor(Color.cometWhite.opacity(0.5))
         }
-        .onTapGesture(perform: action)
+        .padding(.top, QSpace.l)
+        .padding(.bottom, QSpace.m)
     }
-}
-
-// MARK: - 设置切换视图
-private struct SettingToggleView: View {
-    let icon: String
-    let title: String
-    @Binding var isOn: Bool
     
-    var body: some View {
-        HStack(spacing: 15) {
-            Image(systemName: icon)
-                .font(.system(size: 18))
-                .foregroundColor(Color.starlightYellow)
-                .frame(width: 30)
-            
-            Text(title)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(Color.cometWhite)
-            
-            Spacer()
-            
-            Toggle("", isOn: $isOn)
-                .tint(Color.starlightYellow)
-        }
+    // MARK: - 重置数据确认弹窗
+    private var resetAlertPopup: some View {
+        QPopupContainer(
+            title: "Reset Data",
+            content: {
+                Text("Are you sure you want to reset all data?")
+                    .font(QFont.body)
+                    .multilineTextAlignment(.center)
+            },
+            primaryButtonTitle: "Reset",
+            secondaryButtonTitle: "Cancel",
+            onPrimary: {
+                viewModel.resetAllData()
+                showResetAlert = false
+            },
+            onSecondary: {
+                showResetAlert = false
+            }
+        )
     }
 }
 

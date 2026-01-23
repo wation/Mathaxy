@@ -1,409 +1,233 @@
-//
-//  GamePlayViewModel.swift
-//  Mathaxy
-//
-//  游戏玩法视图模型
-//  管理游戏核心逻辑和状态
-//
-
 import Foundation
-import SwiftUI
-import Combine
+import AVFoundation
 
-// MARK: - 游戏玩法视图模型
-class GamePlayViewModel: ObservableObject {
+// MARK: - 语音播放管理器
+class AudioPlayerManager: NSObject, AVAudioPlayerDelegate {
+    static let shared = AudioPlayerManager()
     
-    // MARK: - 服务
-    private let storageService = StorageService.shared
-    private let questionGenerator = QuestionGenerator.shared
+    private var audioPlayers: [String: AVAudioPlayer] = [:]
+    private let soundQueue = DispatchQueue(label: "com.mathaxy.soundQueue")
     
-    // MARK: - 发布属性
-    @Published var gameSession: GameSession
-    @Published var currentQuestion: Question?
-    @Published var currentQuestionIndex = 0
-    @Published var selectedAnswer: Int?
-    @Published var timeRemaining: Double = 0
-    @Published var isGameCompleted = false
-    @Published var showResult = false
-    @Published var isCorrectAnswer = false
-    @Published var hasInputError = false
-    @Published var showGameComplete = false
-    @Published var isLoading = true
+    private override init() {}
     
-    // 用户输入的答案（用于显示在等式上）
-    @Published var userInputAnswer: String = ""
-    
-    // MARK: - 计算属性
-    var level: Int {
-        return gameSession.level
-    }
-    
-    var totalQuestions: Int {
-        return gameSession.questions.count
-    }
-    
-    var progress: Double {
-        return Double(currentQuestionIndex) / Double(totalQuestions)
-    }
-    
-    // MARK: - 定时器
-    private var timer: Timer?
-    private var questionStartTime: Date?
-    
-    // MARK: - 初始化
-    init(level: Int) {
-        let questions = questionGenerator.generateQuestions(for: level, count: GameConstants.questionsPerLevel)
-        self.gameSession = GameSession(level: level, questions: questions)
-        
-        // 恢复旧版初始化逻辑：根据LevelConfig设置初始时间
-        let config = LevelConfig.getLevelConfig(level)
-        if config.mode == .totalTime, let totalTime = config.totalTime {
-            self.timeRemaining = totalTime
-        } else if config.mode == .perQuestion, let perQuestionTime = config.perQuestionTime {
-            self.timeRemaining = perQuestionTime
-        } else {
-            self.timeRemaining = GameConstants.timePerQuestion * Double(questions.count)
+    // MARK: - 播放音效
+    func playSound(named soundName: String) {
+        soundQueue.async { [weak self] in
+            guard let self = self else { return }
+            
+            // 检查是否已经缓存了播放器
+            if let player = self.audioPlayers[soundName] {
+                if player.isPlaying {
+                    player.stop()
+                }
+                player.currentTime = 0
+                player.play()
+                return
+            }
+            
+            // 尝试加载音效文件
+            guard let soundURL = Bundle.main.url(forResource: soundName, withExtension: nil) else {
+                print("❌ 音效文件不存在: \(soundName)")
+                return
+            }
+            
+            do {
+                let player = try AVAudioPlayer(contentsOf: soundURL)
+                player.delegate = self
+                player.prepareToPlay()
+                self.audioPlayers[soundName] = player
+                player.play()
+            } catch {
+                print("❌ 加载音效失败: \(error.localizedDescription)")
+            }
         }
     }
     
-    // MARK: - 开始游戏
-    func startGame() {
-        isLoading = true
+    // MARK: - 根据语言播放语音
+    func playVoice(for type: GameVoiceType, language: String = "zh-Hans") {
+        let soundName = getSoundName(for: type, language: language)
+        playSound(named: soundName)
+    }
+    
+    // MARK: - 获取对应语言的音效文件名
+    private func getSoundName(for type: GameVoiceType, language: String) -> String {
+        switch type {
+        case .correct:
+            return "correct_\(language)"
+        case .incorrect:
+            return "incorrect_\(language)"
+        case .encouragement:
+            return "encouragement_\(language)"
+        case .pandaGreeting:
+            return "panda_greeting_\(language)"
+        case .rabbitGreeting:
+            return "rabbit_greeting_\(language)"
+        }
+    }
+    
+    // MARK: - 清理缓存
+    func clearCache() {
+        audioPlayers.removeAll()
+    }
+}
+
+// MARK: - 语音类型枚举
+enum GameVoiceType: String {
+    case correct = "correct"
+    case incorrect = "incorrect"
+    case encouragement = "encouragement"
+    case pandaGreeting = "panda_greeting"
+    case rabbitGreeting = "rabbit_greeting"
+}
+
+// MARK: - 游戏播放视图模型
+class GamePlayViewModel: ObservableObject {
+    // MARK: - 游戏状态
+    @Published var currentQuestion: Question?
+    @Published var score = 0
+    @Published var timeRemaining = 60
+    @Published var isGameOver = false
+    @Published var isCorrect = false
+    @Published var isGameCompleted = false
+    @Published var progress = 0.0
+    @Published var userInputAnswer = ""
+    @Published var hasInputError = false
+    @Published var showResult = false
+    @Published var showGameComplete = false
+    @Published var isCorrectAnswer = false
+    
+    // MARK: - 游戏数据
+    var gameSession: GameSession?
+    var level = 1
+    var currentQuestionIndex = 0
+    var totalQuestions = 10
+    
+    // MARK: - 依赖
+    private let audioPlayer = AudioPlayerManager.shared
+    private let languageManager = LanguageManager.shared
+    
+    // MARK: - 初始化
+    init(level: Int) {
+        self.level = level
+        // 初始化游戏
+    }
+    
+    // MARK: - 游戏逻辑
+    func checkAnswer(_ answer: String) {
+        guard let question = currentQuestion else { return }
         
-        // 加载第一题
-        loadCurrentQuestion()
-        
-        // 启动计时器
-        startTimer()
-        
-        isLoading = false
+        if let answerInt = Int(answer), answerInt == question.correctAnswer {
+            handleCorrectAnswer()
+        } else {
+            handleIncorrectAnswer()
+        }
     }
     
     // MARK: - 暂停游戏
     func pauseGame() {
-        stopTimer()
+        // 暂停游戏逻辑
     }
     
-    // MARK: - 恢复游戏
-    func resumeGame() {
-        startTimer()
-    }
-    
-    // MARK: - 加载当前题目
-    private func loadCurrentQuestion() {
-        guard currentQuestionIndex < totalQuestions else {
-            completeGame()
-            return
-        }
-        
-        currentQuestion = gameSession.questions[currentQuestionIndex]
-        selectedAnswer = nil
-        showResult = false
-        userInputAnswer = ""  // 重置用户输入
-        questionStartTime = Date()
-    }
-    
-    // MARK: - 音效播放
+    // MARK: - 播放按钮点击音效
     func playButtonClickSound() {
-        SoundService.shared.playButtonClickSound()
+        audioPlayer.playSound(named: "button_click")
     }
     
-    // MARK: - 输入处理
+    // MARK: - 输入数字
     func inputDigit(_ digit: Int) {
-        // 限制输入长度，例如最多两位数
-        if userInputAnswer.count < 2 {
-            userInputAnswer += "\(digit)"
-        }
-        
-        // 检查答案是否正确，用于更新显示颜色
-        checkAnswerForDisplay()
-        
-        // 如果输入达到最大长度（2位），检查是否可以提交
-        if userInputAnswer.count == 2 {
-            checkAndSubmitAnswer()
-            return
-        }
-        
-        // 支持个位数答案直接提交（第6-10关单题倒计时时会出现个位答案）
-        if let currentQuestion = currentQuestion, let userVal = Int(userInputAnswer), userVal == currentQuestion.correctAnswer {
-            checkAndSubmitAnswer()
+        if userInputAnswer.count < 3 {
+            userInputAnswer += String(digit)
         }
     }
     
+    // MARK: - 清除所有输入
     func clearAllInput() {
-        // 重置错误状态和用户输入
-        hasInputError = false
         userInputAnswer = ""
+        hasInputError = false
     }
     
-    func backspaceInput() {
-        if !userInputAnswer.isEmpty {
-            userInputAnswer.removeLast()
-            // 清除输入时重置错误状态
-            hasInputError = false
-        }
-    }
-    
-    // MARK: - 检查答案是否正确（用于更新显示颜色）
-    private func checkAnswerForDisplay() {
-        guard let currentQuestion = currentQuestion,
-              let userAnswer = Int(userInputAnswer) else { return }
+    // MARK: - 正确回答处理
+    private func handleCorrectAnswer() {
+        score += 10
+        isCorrect = true
         
-        // 检查答案是否正确
-        let isCorrect = userAnswer == currentQuestion.correctAnswer
+        // 播放正确回答的语音
+        let currentLanguage = languageManager.currentLanguage
+        audioPlayer.playVoice(for: GameVoiceType.correct, language: currentLanguage)
         
-        // 如果答案正确，清除错误状态
-        if isCorrect {
-            hasInputError = false
-        } else {
-            // 如果答案不正确，设置错误状态
-            hasInputError = true
+        // 延迟后显示下一题
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.isCorrect = false
+            self.nextQuestion()
         }
     }
     
-    // MARK: - 检查并提交答案
-    private func checkAndSubmitAnswer() {
-        guard let currentQuestion = currentQuestion,
-              let userAnswer = Int(userInputAnswer) else { return }
+    // MARK: - 错误回答处理
+    private func handleIncorrectAnswer() {
+        isCorrect = false
         
-        // 提交答案
-        // 注意：这里我们记录一次提交，但如果错误，不强制跳转
-        let isCorrect = gameSession.submitAnswer(answer: userAnswer, timeTaken: 0) 
-        isCorrectAnswer = isCorrect
+        // 播放错误回答的语音
+        let currentLanguage = languageManager.currentLanguage
+        audioPlayer.playVoice(for: GameVoiceType.incorrect, language: currentLanguage)
         
-        if isCorrect {
-            // 答对：播放音效 -> 变黄(hasInputError=false) -> 自动跳转
-            SoundService.shared.playCorrectSound()
-            hasInputError = false
-            
-            // 延迟后跳转下一题
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.moveToNextQuestion()
-            }
-        } else {
-            // 答错：播放音效 -> 变红(hasInputError=true) -> 不跳转 -> 不显示遮罩
-            SoundService.shared.playIncorrectSound()
-            hasInputError = true
-            // 移除 showResult = true，保持在当前页面允许用户修改
-        }
-    }
-    
-    // MARK: - 移动到下一题
-    private func moveToNextQuestion() {
-        currentQuestionIndex += 1
-        
-        if currentQuestionIndex < totalQuestions {
-            loadCurrentQuestion()
-            // 6-10关每题倒计时，切题时重置并重启计时器
-            let config = LevelConfig.getLevelConfig(level)
-            if config.mode == .perQuestion, let perQuestionTime = config.perQuestionTime {
-                timeRemaining = perQuestionTime
-                stopTimer()
-                startTimer()
-            }
-        } else {
-            completeGame()
-        }
-    }
-    
-    // MARK: - 完成游戏
-    private func completeGame() {
-        stopTimer()
-        isGameCompleted = true
-        gameSession.isCompleted = true
-        
-        // 保存游戏结果
-        saveGameResult()
-        
-        // 播放完成音效
-        SoundService.shared.playGameCompleteSound()
-        
-        // 显示游戏完成界面
-        showGameComplete = true
-    }
-    
-    // MARK: - 保存游戏结果
-    private func saveGameResult() {
-        // 更新用户资料
-        if var userProfile = storageService.loadUserProfile() {
-            // 添加完成关卡
-            if !userProfile.completedLevels.contains(gameSession.level) {
-                userProfile.completedLevels.insert(gameSession.level)
-            }
-            
-            // 更新当前关卡
-            if userProfile.currentLevel <= gameSession.level {
-                userProfile.currentLevel = gameSession.level + 1
-            }
-            
-            // 检查并授予勋章
-            checkAndAwardBadges(userProfile: &userProfile)
-            
-            // 保存用户资料
-            storageService.saveUserProfile(userProfile)
-        }
-    }
-    
-    // MARK: - 检查并授予勋章
-    private func checkAndAwardBadges(userProfile: inout UserProfile) {
-        // 关卡完成勋章
-        if !userProfile.badges.contains(where: { $0.type == .levelComplete }) {
-            let badge = Badge(
-                type: .levelComplete,
-                level: gameSession.level
-            )
-            userProfile.badges.append(badge)
-        }
-        
-        // 神速小能手勋章（连续快速答对）
-        if gameSession.accuracy >= 0.9 && gameSession.averageTimePerQuestion < 5.0 {
-            if !userProfile.badges.contains(where: { $0.type == .skipLevel }) {
-                let badge = Badge(
-                    type: .skipLevel,
-                    level: gameSession.level
-                )
-                userProfile.badges.append(badge)
-            }
-        }
-        
-        // 答题小天才勋章（高正确率）
-        if gameSession.accuracy >= 0.95 {
-            if !userProfile.badges.contains(where: { $0.type == .perfectLevel }) {
-                let badge = Badge(
-                    type: .perfectLevel,
-                    level: gameSession.level
-                )
-                userProfile.badges.append(badge)
-            }
-        }
-        
-        // 坚持小达人勋章（连续登录）
-        let loginRecord = LoginTrackingService.shared.getLoginRecord()
-        if loginRecord.consecutiveDays >= 7 {
-            if !userProfile.badges.contains(where: { $0.type == .consecutiveLogin }) {
-                let badge = Badge(
-                    type: .consecutiveLogin
-                )
-                userProfile.badges.append(badge)
-            }
-        }
-    }
-    
-    // MARK: - 启动计时器
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            self?.updateTimer()
-        }
-    }
-    
-    // MARK: - 停止计时器
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    // MARK: - 更新计时器
-    private func updateTimer() {
-        // 每次定时器回调仅减少剩余时间并在时间耗尽时处理超时逻辑。
-        // 对于总时长模式（例如第6关）timeRemaining 表示剩余总时长。
-        // 对于单题倒计时模式（第7-10关）timeRemaining 表示当前题目的剩余时间（显示精确到0.1s）。
-        timeRemaining -= 0.1
-        
-        // 保证精度：针对需要显示一位小数的关卡，将 timeRemaining 保留到 0.1s
-        let config = LevelConfig.getLevelConfig(level)
-        if config.mode == .perQuestion {
-            // 不允许出现负数的小数误差
-            timeRemaining = max(0, (timeRemaining * 10).rounded(.down) / 10)
-        } else {
-            // 对于总时长，保留整数秒显示（但内部仍跟踪小数）
-            timeRemaining = max(0, timeRemaining)
-        }
-        
-        if timeRemaining <= 0 {
-            timeUp()
-        }
-    }
-    
-    // MARK: - 时间结束
-    private func timeUp() {
-        stopTimer()
-        
-        // 标记当前题目为错误
-        if let _ = currentQuestion {
-            gameSession.submitAnswer(answer: -1, timeTaken: 0)
-            // 超时强制推进进度
-            gameSession.currentIndex += 1
-        }
-        
-        // 播放时间结束音效
-        SoundService.shared.playTimeoutSound()
-        
-        // 显示结果
-        isCorrectAnswer = false
-        showResult = true
-        
-        // 延迟后进入下一题
+        // 播放鼓励语
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.moveToNextQuestion()
+            self.audioPlayer.playVoice(for: GameVoiceType.encouragement, language: currentLanguage)
         }
     }
     
-    // MARK: - 跳过题目
-    func skipQuestion() {
-        guard !showResult else { return }
-        
-        // 标记为错误答案
-        gameSession.submitAnswer(answer: -1, timeTaken: 0)
-        
-        // 播放音效
-        SoundService.shared.playButtonClickSound()
-        
-        // 直接进入下一题
-        moveToNextQuestion()
+    // MARK: - 下一题
+    private func nextQuestion() {
+        // 加载下一题
     }
     
-    // MARK: - 重新开始游戏
-    func restartGame() {
-        // 重置状态
-        currentQuestionIndex = 0
-        selectedAnswer = nil
-        showResult = false
-        isCorrectAnswer = false
-        isGameCompleted = false
-        showGameComplete = false
-        timeRemaining = GameConstants.timePerQuestion * Double(totalQuestions)
-        
-        // 重新生成题目
-        let questions = questionGenerator.generateQuestions(for: level, count: GameConstants.questionsPerLevel)
-        gameSession = GameSession(level: level, questions: questions)
-        
-        // 开始游戏
-        startGame()
+    // MARK: - 开始游戏
+    func startGame() {
+        // 播放角色问候语
+        let currentLanguage = languageManager.currentLanguage
+        audioPlayer.playVoice(for: GameVoiceType.pandaGreeting, language: currentLanguage)
     }
+}
+
+// MARK: - 语言管理器
+class LanguageManager: NSObject {
+    static let shared = LanguageManager()
     
-    // MARK: - 获取正确答案提示
-    func getHint() -> Bool {
-        guard !showResult, let question = currentQuestion else { return false }
-        
-        // 检查是否有提示次数
-        // TODO: 实现提示系统
-        
-        // 显示正确答案
-        isCorrectAnswer = false
-        showResult = true
-        
-        // 播放提示音效
-        SoundService.shared.playButtonClickSound()
-        
-        // 延迟后进入下一题
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.moveToNextQuestion()
+    var currentLanguage: String {
+        get {
+            return UserDefaults.standard.string(forKey: "currentLanguage") ?? "zh-Hans"
         }
-        
-        return true
+        set {
+            UserDefaults.standard.set(newValue, forKey: "currentLanguage")
+        }
     }
     
-    deinit {
-        stopTimer()
+    private override init() {}
+    
+    // MARK: - 支持的语言列表
+    func supportedLanguages() -> [String] {
+        return ["zh-Hans", "zh-Hant", "en", "ja", "ko", "es", "pt"]
+    }
+    
+    // MARK: - 获取语言显示名称
+    func displayName(for language: String) -> String {
+        switch language {
+        case "zh-Hans":
+            return "简体中文"
+        case "zh-Hant":
+            return "繁体中文"
+        case "en":
+            return "English"
+        case "ja":
+            return "日本語"
+        case "ko":
+            return "한국어"
+        case "es":
+            return "Español"
+        case "pt":
+            return "Português"
+        default:
+            return language
+        }
     }
 }
