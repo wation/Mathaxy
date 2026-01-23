@@ -120,60 +120,62 @@ struct QBackCircleButton: View {
 }
 
 // MARK: - 蛇形路径布局参数
-struct QLevelMapLayout {
-    /// 每行节点数（建议 4 或 5，根据屏幕宽度可动态选择）
-    let columns: Int
+    struct QLevelMapLayout {
+        /// 每行节点数（建议 4 或 5，根据屏幕宽度可动态选择）
+        let columns: Int
 
-    /// 节点视觉尺寸（pt）
-    let nodeSize: CGFloat
+        /// 节点视觉尺寸（pt）
+        let nodeSize: CGFloat
 
-    /// 节点命中区域（pt，>= nodeSize）
-    let hitSize: CGFloat
+        /// 节点命中区域（pt，>= nodeSize）
+        let hitSize: CGFloat
 
-    /// 横向边距
-    let horizontalPadding: CGFloat
+        /// 横向边距
+        let horizontalPadding: CGFloat
 
-    /// 顶部内容边距（留给标题与装饰）
-    let topPadding: CGFloat
+        /// 顶部内容边距（留给标题与装饰）
+        let topPadding: CGFloat
 
-    /// 行间距
-    let dy: CGFloat
+        /// 行间距
+        let dy: CGFloat
 
-    /// 列间距（由宽度计算，也可给默认）
-    let dx: CGFloat
+        /// 列间距（由宽度计算，也可给默认）
+        let dx: CGFloat
 
-    /// 曲线鼓起程度
-    let curveBend: CGFloat
+        /// 曲线鼓起程度
+        let curveBend: CGFloat
 
-    /// 轻微抖动范围（使路径不死板）
-    let jitterX: CGFloat
-    let jitterY: CGFloat
+        /// 轻微抖动范围（使路径不死板）
+        let jitterX: CGFloat
+        let jitterY: CGFloat
 
-    static func `default`(for width: CGFloat) -> QLevelMapLayout {
-        // 小屏用 4 列，大屏可 5 列
-        let columns = width < 380 ? 4 : 5
-        let nodeSize: CGFloat = 92
-        let hitSize: CGFloat = 104
-        let horizontalPadding: CGFloat = QSpace.pagePadding
-        let topPadding: CGFloat = 12
-        let dy: CGFloat = 140
-        let usableWidth = max(0, width - horizontalPadding * 2)
-        let dx = columns <= 1 ? usableWidth : (usableWidth / CGFloat(columns - 1))
+        static func `default`(for width: CGFloat) -> QLevelMapLayout {
+            // 小屏用 4 列，大屏可 5 列
+            let columns = width < 380 ? 4 : 5
+            let nodeSize: CGFloat = 92
+            let hitSize: CGFloat = 104
+            let horizontalPadding: CGFloat = QSpace.pagePadding
+            let topPadding: CGFloat = 12
+            // 修正：将垂直间距从 160 缩小到 100，满足“高度差小于一个身位”的需求
+            // nodeSize = 92, dy = 100 意味着视觉间隙约为 8pt，非常紧凑且不重叠
+            let dy: CGFloat = 100 
+            let usableWidth = max(0, width - horizontalPadding * 2)
+            let dx = columns <= 1 ? usableWidth : (usableWidth / CGFloat(columns - 1))
 
-        return QLevelMapLayout(
-            columns: columns,
-            nodeSize: nodeSize,
-            hitSize: hitSize,
-            horizontalPadding: horizontalPadding,
-            topPadding: topPadding,
-            dy: dy,
-            dx: dx,
-            curveBend: min(50, dx * 0.35),
-            jitterX: 10,
-            jitterY: 6
-        )
+            return QLevelMapLayout(
+                columns: columns,
+                nodeSize: nodeSize,
+                hitSize: hitSize,
+                horizontalPadding: horizontalPadding,
+                topPadding: topPadding,
+                dy: dy,
+                dx: dx,
+                curveBend: min(50, dx * 0.35),
+                jitterX: 0, // 禁用抖动
+                jitterY: 0  // 禁用抖动
+            )
+        }
     }
-}
 
 // MARK: - 关卡节点状态
 enum QLevelNodeState {
@@ -214,16 +216,19 @@ struct QLevelPathMap: View {
     var body: some View {
         GeometryReader { proxy in
             let layout = QLevelMapLayout.default(for: proxy.size.width)
+            // 预先计算所有节点的坐标，确保连线和节点位置绝对一致
+            let points = nodes.map { node in
+                qPoint(for: node.level, width: proxy.size.width, layout: layout)
+            }
+            
             ScrollView(.vertical, showsIndicators: false) {
                 ZStack(alignment: .topLeading) {
-                    // 连接线层
-                    QLevelConnectorLayer(nodes: nodes, layout: layout)
+                    // 连接线层（传入预计算的坐标点）
+                    QLevelConnectorLayer(nodes: nodes, points: points)
                         .padding(.top, layout.topPadding)
 
                     // 节点层
-                    ForEach(nodes) { node in
-                        let point = qPoint(for: node.level, width: proxy.size.width, layout: layout)
-
+                    ForEach(Array(zip(nodes, points)), id: \.0.id) { node, point in
                         QLevelNode2_5D(level: node.level, state: node.state) {
                             onTapLevel(node.level)
                         }
@@ -242,8 +247,9 @@ struct QLevelPathMap: View {
     }
 
     private func qContentHeight(total: Int, layout: QLevelMapLayout) -> CGFloat {
-        let rows = Int(ceil(Double(total) / Double(layout.columns)))
-        return layout.topPadding + CGFloat(max(1, rows)) * layout.dy + 60
+        // 修正：按照 qPoint 的垂直布局逻辑计算高度
+        // 每个节点占据一行（layout.dy），加上顶部和底部边距
+        return layout.topPadding + CGFloat(total) * layout.dy + 120
     }
 
     /// 将关卡序号映射到左-中-右-中-左...蛇形坐标，保证第一关左上，第二关中，第三关右，第四关中，第五关左...
@@ -256,13 +262,14 @@ struct QLevelPathMap: View {
         let xPos = positions[posIndex]
         let usableWidth = width - layout.horizontalPadding * 2
         let centerX = layout.horizontalPadding + usableWidth * xPos
-        // 垂直方向：每两关高度差不超过一个关卡高度
+        // 垂直方向：每两关高度差为 layout.dy
         // 纵向：每一关都比上一关略低，形成阶梯感
-        let y = layout.topPadding + CGFloat(index) * layout.hitSize * 0.85 + layout.hitSize / 2
-        // 轻微抖动，避免死板
-        let jx = CGFloat(((level * 37) % 21) - 10) / 10.0 * layout.jitterX
-        let jy = CGFloat(((level * 53) % 13) - 6) / 6.0 * layout.jitterY
-        return CGPoint(x: centerX + jx, y: y + jy)
+        // 修正：使用 layout.dy 替代之前的 hardcoded layout.hitSize * 0.85，确保间距足够且可控
+        let y = layout.topPadding + CGFloat(index) * layout.dy + layout.hitSize / 2
+        
+        // 移除随机抖动逻辑，确保坐标绝对准确且连线平滑
+        // 抖动会导致预计算的点与视觉预期的路径产生微小偏差，在连线时显得不够整齐
+        return CGPoint(x: centerX, y: y)
     }
 }
 
@@ -270,27 +277,22 @@ struct QLevelPathMap: View {
 struct QLevelConnectorLayer: View {
 
     let nodes: [QLevelNodeViewData]
-    let layout: QLevelMapLayout
+    let points: [CGPoint] // 接收预计算的坐标点
 
     var body: some View {
         Canvas { context, size in
-            guard nodes.count >= 2 else { return }
-
-            // 预计算点位
-            var points: [CGPoint] = []
-            points.reserveCapacity(nodes.count)
-
-            for node in nodes {
-                let p = qPoint(for: node.level, width: size.width, layout: layout)
-                points.append(p)
-                // Debug: 输出每个点坐标，便于排查连线缺失问题
-                // print("Level \(node.level): (\(p.x), \(p.y))")
-            }
+            guard nodes.count >= 2, nodes.count == points.count else { return }
 
             // 逐段绘制（i -> i+1）
             for i in 0..<(points.count - 1) {
-                let p0 = points[i]
-                let p1 = points[i + 1]
+                // 调整锚点：考虑到 2.5D 节点的视觉重心
+                // 起点(p0)：上一关节点的底部
+                let rawP0 = points[i]
+                let p0 = CGPoint(x: rawP0.x, y: rawP0.y + 20) 
+                
+                // 终点(p1)：下一关节点的顶部
+                let rawP1 = points[i + 1]
+                let p1 = CGPoint(x: rawP1.x, y: rawP1.y - 30)
 
                 // 当前段状态：若下一关已完成/可达，则高亮，否则灰
                 let segmentState = qSegmentState(from: nodes[i], to: nodes[i + 1])
@@ -298,24 +300,27 @@ struct QLevelConnectorLayer: View {
                 var path = Path()
                 path.move(to: p0)
 
-                let mid = CGPoint(x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2)
-                // 连线弧度优化：每段用起点和终点的x差决定弯曲方向和幅度
-                let dx = p1.x - p0.x
-                let dy = p1.y - p0.y
-                let curveStrength: CGFloat = 0.35 // 弧度强度
-                let cp = CGPoint(
-                    x: (p0.x + p1.x) / 2 + curveStrength * dy * (dx > 0 ? 1 : -1),
-                    y: (p0.y + p1.y) / 2 - curveStrength * abs(dx)
-                )
-                path.addQuadCurve(to: p1, control: cp)
-
+                // 连线弧度优化：使用三次贝塞尔曲线实现平滑的S形连接
+                // 起点和终点的垂直中点
+                let midY = (p0.y + p1.y) / 2
+                
+                // 控制点1：起点下方，保持垂直出射
+                // 关键修正：控制点的Y坐标应向“下”延伸（即 > p0.y），以形成向下的初始弧度
+                let cp1 = CGPoint(x: p0.x, y: p0.y + (p1.y - p0.y) * 0.5)
+                
+                // 控制点2：终点上方，保持垂直入射
+                // 关键修正：控制点的Y坐标应向“上”延伸（即 < p1.y），以形成垂直进入的弧度
+                let cp2 = CGPoint(x: p1.x, y: p1.y - (p1.y - p0.y) * 0.5)
+                
+                path.addCurve(to: p1, control1: cp1, control2: cp2)
+                
                 // 外发光
                 context.stroke(
                     path,
                     with: .color(segmentState.glowColor),
                     style: StrokeStyle(lineWidth: 14, lineCap: .round, lineJoin: .round)
                 )
-
+                
                 // 内核
                 context.stroke(
                     path,
@@ -351,26 +356,30 @@ struct QLevelConnectorLayer: View {
                 glowColor: QColor.brand.accent.opacity(0.18)
             )
         case .locked:
+            // 浅色背景下，锁定状态使用深灰色半透明
             return SegmentVisual(
-                strokeColor: Color.white.opacity(0.22),
-                glowColor: Color.white.opacity(0.06)
+                strokeColor: Color.black.opacity(0.15),
+                glowColor: Color.black.opacity(0.05)
             )
         }
     }
 
     private func qPoint(for level: Int, width: CGFloat, layout: QLevelMapLayout) -> CGPoint {
+        // level 从 1 开始
         let index = max(0, level - 1)
-        let c0 = index % layout.columns
-        let r = index / layout.columns
-        let c = r.isMultiple(of: 2) ? c0 : (layout.columns - 1 - c0)
-
-        let baseX = layout.horizontalPadding + CGFloat(c) * layout.dx
-        let baseY = layout.topPadding + CGFloat(r) * layout.dy + layout.hitSize / 2
-
+        // 水平方向：左-中-右-中-左... 循环
+        let positions: [CGFloat] = [0.18, 0.5, 0.82, 0.5] // 左、中、右、中
+        let posIndex = index % 4
+        let xPos = positions[posIndex]
+        let usableWidth = width - layout.horizontalPadding * 2
+        let centerX = layout.horizontalPadding + usableWidth * xPos
+        // 垂直方向：每两关高度差不超过一个关卡高度
+        // 纵向：每一关都比上一关略低，形成阶梯感
+        let y = layout.topPadding + CGFloat(index) * layout.hitSize * 0.85 + layout.hitSize / 2
+        // 轻微抖动，避免死板
         let jx = CGFloat(((level * 37) % 21) - 10) / 10.0 * layout.jitterX
         let jy = CGFloat(((level * 53) % 13) - 6) / 6.0 * layout.jitterY
-
-        return CGPoint(x: baseX + jx, y: baseY + jy)
+        return CGPoint(x: centerX + jx, y: y + jy)
     }
 }
 
