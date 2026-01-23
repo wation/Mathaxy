@@ -105,31 +105,31 @@ enum QColor {
 
 // MARK: - QFont（字体 Token）
 /// Q版字体规范
-/// 字体以"语义"命名，数值参考现有规范；QStyle 不要求更换字体家族
+/// 字体以"语义"命名，数值参考现有规范；QStyle 使用圆润字体设计
 enum QFont {
     /// 页面主标题、关键结果（如通关）
-    static let displayHero = Font.system(size: 36, weight: .bold)
+    static let displayHero = Font.system(size: 36, weight: .bold, design: .rounded)
     /// 页面标题（设置/成就/关卡选择）
-    static let titlePage = Font.system(size: 28, weight: .bold)
+    static let titlePage = Font.system(size: 28, weight: .bold, design: .rounded)
     /// 用户昵称（更卡通的圆润风格）
     static let nickname = Font.system(size: 30, weight: .heavy, design: .rounded)
     /// 弹窗标题、卡片标题
-    static let titleSection = Font.system(size: 22, weight: .bold)
+    static let titleSection = Font.system(size: 22, weight: .bold, design: .rounded)
     /// 正文
-    static let body = Font.system(size: 18, weight: .regular)
+    static let body = Font.system(size: 18, weight: .regular, design: .rounded)
     /// 按钮文字（主/次）
-    static let bodyEmphasis = Font.system(size: 18, weight: .semibold)
+    static let bodyEmphasis = Font.system(size: 24, weight: .semibold, design: .rounded)
     /// 辅助说明、版本号
-    static let caption = Font.system(size: 12, weight: .medium)
+    static let caption = Font.system(size: 12, weight: .medium, design: .rounded)
     
     // MARK: - 游戏专用字体
     enum game {
         /// GamePlay 题目数字
-        static let questionNumber = Font.system(size: 56, weight: .bold)
+        static let questionNumber = Font.system(size: 56, weight: .bold, design: .rounded)
         /// + / = 运算符
-        static let mathOperator = Font.system(size: 42, weight: .bold)
+        static let mathOperator = Font.system(size: 42, weight: .bold, design: .rounded)
         /// 顶部计时器数字（叠在 timer 图上）
-        static let timer = Font.system(size: 24, weight: .bold)
+        static let timer = Font.system(size: 24, weight: .bold, design: .rounded)
     }
 }
 

@@ -148,7 +148,7 @@ struct QButtonStyle: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .font(QFont.bodyEmphasis)
+            .font(Font.system(size: 28, weight: .bold, design: .rounded))
             .foregroundColor(textColor)
             .frame(maxWidth: .infinity)
             .frame(height: buttonHeight)
@@ -496,6 +496,249 @@ struct QLevelButton: View {
         .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
             isPressed = pressing
         }, perform: {})
+    }
+}
+
+// MARK: - QLevelDetailPopup（关卡详情弹窗）
+/// Q版关卡详情弹窗组件
+/// 用于显示关卡详情和开始挑战按钮
+struct QLevelDetailPopup: View {
+    let level: Int
+    let config: LevelConfig
+    let onStart: () -> Void
+    let onClose: () -> Void
+    
+    var body: some View {
+        ZStack {
+            // 半透明背景
+            Color.black.opacity(0.5)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    onClose()
+                }
+            
+            // 弹窗容器
+            VStack(spacing: QSpace.l) {
+                // 弹窗标题
+                Text("关卡 \(level)")
+                    .font(QFont.titlePage)
+                    .foregroundColor(QColor.text.onDarkPrimary)
+                
+                // 关卡描述
+                Text(config.description)
+                    .font(QFont.body)
+                    .foregroundColor(QColor.text.onDarkSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, QSpace.m)
+                
+                // 关卡模式图标和信息
+                HStack(spacing: QSpace.xl) {
+                    VStack {
+                        Image(systemName: config.mode == .totalTime ? "clock.fill" : "timer.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(QColor.brand.accent)
+                        Text(config.mode == .totalTime ? "总时长" : "单题计时")
+                            .font(QFont.caption)
+                            .foregroundColor(QColor.text.onDarkSecondary)
+                    }
+                    
+                    VStack {
+                        Image(systemName: "questionmark.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(QColor.brand.accent)
+                        Text("\(GameConstants.questionsPerLevel)题")
+                            .font(QFont.body)
+                            .foregroundColor(QColor.text.onDarkSecondary)
+                    }
+                    
+                    VStack {
+                        Image(systemName: "bolt.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(QColor.brand.accent)
+                        Text(config.mode == .totalTime ? "\(Int(config.timeLimit))秒" : "\(Int(config.timeLimit))秒/题")
+                            .font(QFont.body)
+                            .foregroundColor(QColor.text.onDarkSecondary)
+                    }
+                }
+                .padding(.vertical, QSpace.l)
+                
+                // 按钮区域
+                VStack(spacing: QSpace.m) {
+                    // 开始挑战按钮
+                    Button(action: onStart) {
+                        Text("开始挑战")
+                            .font(QFont.bodyEmphasis)
+                            .foregroundColor(QColor.text.onDarkPrimary)
+                            .padding(.vertical, QSpace.m)
+                            .padding(.horizontal, QSpace.xl)
+                            .background(QColor.brand.accent)
+                            .cornerRadius(QRadius.button)
+                            .shadow(color: QShadow.elevation2.color, radius: QShadow.elevation2.radius, x: QShadow.elevation2.x, y: QShadow.elevation2.y)
+                    }
+                    
+                    // 取消按钮
+                    Button(action: onClose) {
+                        Text("取消")
+                            .font(QFont.bodyEmphasis)
+                            .foregroundColor(QColor.text.onDarkPrimary)
+                            .padding(.vertical, QSpace.m)
+                            .padding(.horizontal, QSpace.xl)
+                    }
+                }
+            }
+            .padding(QSpace.xl)
+            .background(Image(QAsset.component.popupBg).resizable().aspectRatio(contentMode: .fit))
+            .frame(maxWidth: 320)
+        }
+    }
+}
+
+// MARK: - QLevelPath（路径式关卡容器）
+/// Q版路径式关卡容器组件
+/// 用于实现垂直滚动的路径式关卡选择
+struct QLevelPath: View {
+    let totalLevels: Int
+    let currentLevel: Int
+    let completedLevels: Set<Int>
+    let onLevelTap: (Int) -> Void
+    
+    var body: some View {
+        ScrollView(
+            .vertical,
+            showsIndicators: true,
+            content: {
+                VStack(spacing: 0, content: {
+                    ForEach(1...totalLevels, id: \.self) { level in
+                        QLevelNode(
+                            levelNumber: level,
+                            state: getLevelState(level),
+                            hasNext: level < totalLevels,
+                            onTap: { onLevelTap(level) }
+                        )
+                    }
+                })
+                .padding(.vertical, QSpace.m)
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+        )
+        .frame(maxHeight: .infinity)
+    }
+    
+    private func getLevelState(_ level: Int) -> QLevelNode.LevelState {
+        if completedLevels.contains(level) {
+            return .completed
+        } else if level == currentLevel || completedLevels.contains(level - 1) {
+            return .current
+        } else {
+            return .locked
+        }
+    }
+}
+
+// MARK: - QLevelNode（关卡节点）
+/// Q版关卡节点组件
+/// 用于路径式关卡选择页面
+/// 包含关卡编号、主题图标、完成状态和连接线
+struct QLevelNode: View {
+    enum LevelState {
+        case completed
+        case current
+        case locked
+    }
+    
+    let levelNumber: Int
+    let state: LevelState
+    let hasNext: Bool
+    let onTap: () -> Void
+    
+    @State private var isPressed = false
+    
+    init(levelNumber: Int, state: LevelState = .locked, hasNext: Bool = true, onTap: @escaping () -> Void) {
+        self.levelNumber = levelNumber
+        self.state = state
+        self.hasNext = hasNext
+        self.onTap = onTap
+    }
+    
+    // 根据关卡模式获取主题图标
+    private var themeIcon: String {
+        if levelNumber <= 5 {
+            return "clock.fill" // 总时长模式
+        } else {
+            return "timer.fill" // 单题倒计时模式
+        }
+    }
+    
+    var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: QSpace.m) {
+                // 关卡节点
+                ZStack {
+                    // 节点背景
+                    Circle()
+                        .fill(getBackgroundColor())
+                        .frame(width: 100, height: 100)
+                        .shadow(color: QShadow.elevation2.color, radius: QShadow.elevation2.radius, x: QShadow.elevation2.x, y: QShadow.elevation2.y)
+                    
+                    // 关卡数字
+                    Text("\(levelNumber)")
+                        .font(QFont.displayHero)
+                        .foregroundColor(getTextColor())
+                    
+                    // 主题图标
+                    Image(systemName: themeIcon)
+                        .font(.title)
+                        .foregroundColor(getTextColor())
+                        .offset(y: 50)
+                    
+                    // 完成状态图标
+                    if state == .completed {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title)
+                            .foregroundColor(QColor.state.success)
+                            .offset(x: 35, y: -35)
+                    }
+                    
+                    // 锁定状态图标
+                    if state == .locked {
+                        Image(systemName: "lock.fill")
+                            .font(.title2)
+                            .foregroundColor(QColor.text.onDarkSecondary)
+                    }
+                }
+                .scaleEffect(isPressed ? 0.96 : 1.0)
+                .opacity(state == .locked ? 0.7 : 1.0)
+                
+                // 连接线（仅当前节点有下一个节点时显示）
+                if hasNext {
+                    Rectangle()
+                        .fill(state == .locked ? Color.gray.opacity(0.5) : QColor.brand.accent)
+                        .frame(width: 6, height: 70)
+                }
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .disabled(state == .locked)
+        .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
+            isPressed = pressing
+        }, perform: {})
+    }
+    
+    // 根据状态获取背景色
+    private func getBackgroundColor() -> Color {
+        switch state {
+        case .current:
+            return QColor.brand.accent
+        case .completed:
+            return QColor.state.success
+        case .locked:
+            return Color.gray.opacity(0.7)
+        }
+    }
+    
+    // 根据背景色获取文字颜色
+    private func getTextColor() -> Color {
+        return Color.white
     }
 }
 

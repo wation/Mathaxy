@@ -125,13 +125,18 @@ struct HomeView: View {
                     // Q版星星装饰作为角色背景
                     Image(QAsset.decoration.star)
                         .resizable()
-                        .frame(width: QSize.avatar, height: QSize.avatar)
+                        .frame(width: QSize.avatar * 1.5, height: QSize.avatar * 1.5)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.purple, lineWidth: 4)
+                        )
 
                     // 使用Q版数字精灵
                     Image(QAsset.character.numberSprite)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 80, height: 80)
+                        .frame(width: 120, height: 120)
                 }
             } else {
                 // 未解锁角色 - 显示锁定状态
@@ -139,19 +144,31 @@ struct HomeView: View {
                     // Q版星星装饰作为背景
                     Image(QAsset.decoration.star)
                         .resizable()
-                        .frame(width: QSize.avatar, height: QSize.avatar)
+                        .frame(width: QSize.avatar * 1.5, height: QSize.avatar * 1.5)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.purple, lineWidth: 4)
+                        )
                     
                     // 锁定图标
                     Image(systemName: "lock.fill")
-                        .font(.system(size: 40))
+                        .font(.system(size: 60))
                         .foregroundColor(QColor.brand.accent.opacity(0.5))
                 }
             }
             
-            // 昵称 - 使用 Q版标题字体
+            // 昵称 - 使用 Q版标题字体，添加紫色边框
             Text(userProfile.nickname)
-                .font(QFont.nickname)
-                .foregroundColor(QColor.text.onDarkPrimary)
+                .font(Font.system(size: 32, weight: .heavy, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: Color.purple.opacity(0.3), radius: 3)
+                .overlay(
+                    Text(userProfile.nickname)
+                        .font(Font.system(size: 32, weight: .heavy, design: .rounded))
+                        .foregroundColor(.white)
+                        .shadow(color: Color.purple, radius: 2)
+                )
         }
         .padding(.top, 40)
     }
@@ -168,15 +185,29 @@ struct HomeView: View {
     // MARK: - 关卡进度视图（Q版风格）
     private var levelProgressView: some View {
         VStack(spacing: QSpace.s) {
-            // 当前关卡标签 - 使用 Q 版正文字体
+            // 当前关卡标签 - 使用 Q 版卡通字体，白色文字+紫色边框
             Text(LocalizedKeys.currentLevel.localized)
-                .font(QFont.body)
-                .foregroundColor(QColor.text.onDarkSecondary)
+                .font(Font.system(size: 32, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: Color.purple.opacity(0.3), radius: 4)
+                .overlay(
+                    Text(LocalizedKeys.currentLevel.localized)
+                        .font(Font.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                        .shadow(color: Color.purple, radius: 2)
+                )
             
-            // 关卡进度数字 - 使用 Q 版大号字体，品牌色强调
+            // 关卡进度数字 - 使用 Q 版卡通字体，白色文字+紫色边框
             Text(viewModel.getCurrentLevelProgress())
-                .font(QFont.displayHero)
-                .foregroundColor(QColor.brand.accent)
+                .font(Font.system(size: 52, weight: .heavy, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: Color.purple.opacity(0.4), radius: 5)
+                .overlay(
+                    Text(viewModel.getCurrentLevelProgress())
+                        .font(Font.system(size: 52, weight: .heavy, design: .rounded))
+                        .foregroundColor(.white)
+                        .shadow(color: Color.purple, radius: 3)
+                )
         }
         .padding(.top, QSpace.xl)
     }
@@ -184,24 +215,31 @@ struct HomeView: View {
     // MARK: - 底部导航视图（Q版风格）
     private var bottomNavigationView: some View {
         HStack(spacing: QSpace.xl) {
-            // 只显示勋章数量 - 使用Q版勋章样式底图
+            // 只显示勋章数量 - 使用Q版勋章样式底图，放大1倍
             VStack(spacing: QSpace.xs) {
                 ZStack {
-                    // Q版勋章样式底图
+                    // Q版勋章样式底图，放大1倍
                     Image(QAsset.component.badgeStyle)
                         .resizable()
-                        .frame(width: 60, height: 60)
+                        .frame(width: 120, height: 120)
                     
-                    // 勋章数量 - 使用 Q 版强调字体
+                    // 勋章数量 - 使用 Q 版强调字体，放大1倍
                     Text("\(viewModel.getTotalBadgeCount())")
-                        .font(QFont.bodyEmphasis)
+                        .font(Font.system(size: 36, weight: .semibold, design: .rounded))
                         .foregroundColor(.white)
                 }
                 
-                // 勋章标签 - 使用 Q 版强调字体
+                // 勋章标签 - 使用 Q 版卡通字体，白色文字+紫色边框
                 Text(LocalizedKeys.badges.localized)
-                    .font(QFont.bodyEmphasis)
-                    .foregroundColor(QColor.text.onDarkSecondary)
+                    .font(Font.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .shadow(color: Color.purple.opacity(0.3), radius: 3)
+                    .overlay(
+                        Text(LocalizedKeys.badges.localized)
+                            .font(Font.system(size: 28, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .shadow(color: Color.purple, radius: 2)
+                    )
             }
         }
         .padding(.horizontal, QSpace.l)
