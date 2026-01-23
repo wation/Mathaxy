@@ -77,10 +77,8 @@ struct HomeView: View {
     
     // MARK: - 顶部导航视图（Q版风格）
     private var topNavigationView: some View {
-        HStack {
-            Spacer()
-            
-            // 设置按钮 - 使用Q版星星装饰底
+        HStack(spacing: 24) {
+            // 设置按钮 - 使用Q版星星装饰底（放大2倍 + 横向居中）
             Button(action: {
                 viewModel.showSettingsView()
             }) {
@@ -88,18 +86,16 @@ struct HomeView: View {
                     // Q版星星装饰作为按钮底座
                     Image(QAsset.decoration.star)
                         .resizable()
-                        .frame(width: 30, height: 30)
+                        .frame(width: 60, height: 60)
                     
                     // 设置图标
                     Image(systemName: "gearshape.fill")
-                        .font(.title2)
+                        .font(.system(size: 44, weight: .bold))
                         .foregroundColor(QColor.brand.accent)
                 }
             }
-            .padding(.trailing, 20)
-            .padding(.top, 20)
             
-            // 成就按钮 - 使用Q版星星装饰底
+            // 成就按钮 - 使用Q版星星装饰底（放大2倍 + 横向居中）
             Button(action: {
                 viewModel.showAchievementView()
             }) {
@@ -107,17 +103,17 @@ struct HomeView: View {
                     // Q版星星装饰作为按钮底座
                     Image(QAsset.decoration.star)
                         .resizable()
-                        .frame(width: 30, height: 30)
+                        .frame(width: 60, height: 60)
                     
                     // 成就图标
                     Image(systemName: "medal.fill")
-                        .font(.title2)
+                        .font(.system(size: 44, weight: .bold))
                         .foregroundColor(QColor.brand.accent)
                 }
             }
-            .padding(.trailing, 20)
-            .padding(.top, 20)
         }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.top, 20)
     }
     
     // MARK: - 卡通角色视图（Q版风格）
@@ -154,7 +150,7 @@ struct HomeView: View {
             
             // 昵称 - 使用 Q版标题字体
             Text(userProfile.nickname)
-                .font(QFont.titlePage)
+                .font(QFont.nickname)
                 .foregroundColor(QColor.text.onDarkPrimary)
         }
         .padding(.top, 40)

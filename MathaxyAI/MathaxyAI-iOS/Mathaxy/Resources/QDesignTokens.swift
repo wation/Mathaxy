@@ -111,6 +111,8 @@ enum QFont {
     static let displayHero = Font.system(size: 36, weight: .bold)
     /// 页面标题（设置/成就/关卡选择）
     static let titlePage = Font.system(size: 28, weight: .bold)
+    /// 用户昵称（更卡通的圆润风格）
+    static let nickname = Font.system(size: 30, weight: .heavy, design: .rounded)
     /// 弹窗标题、卡片标题
     static let titleSection = Font.system(size: 22, weight: .bold)
     /// 正文

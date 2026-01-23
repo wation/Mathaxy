@@ -186,7 +186,9 @@ struct QButtonStyle: ViewModifier {
         case .primary:
             Image(QAsset.button.primary)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .scaledToFit()
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
         case .secondary:
             Image(QAsset.button.secondary)
                 .resizable()
