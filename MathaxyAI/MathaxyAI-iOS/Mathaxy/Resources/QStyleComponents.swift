@@ -33,12 +33,8 @@ struct QBackground<Content: View>: View {
     
     var body: some View {
         ZStack {
-            // 背景图（全屏填充）
-            Image(backgroundAssetName)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
-            
+            // Q版渐变+装饰背景（星球、星星、数学符号）
+            QLevelSelectQBackground()
             // 内容层
             content
                 .padding(.horizontal, QSpace.pagePadding)
@@ -560,38 +556,58 @@ struct QLevelDetailPopup: View {
                             .foregroundColor(QColor.text.onDarkSecondary)
                     }
                 }
-                .padding(.vertical, QSpace.l)
                 
                 // 按钮区域
-                VStack(spacing: QSpace.m) {
-                    // 开始挑战按钮
-                    Button(action: onStart) {
-                        Text("开始挑战")
-                            .font(QFont.bodyEmphasis)
-                            .foregroundColor(QColor.text.onDarkPrimary)
-                            .padding(.vertical, QSpace.m)
-                            .padding(.horizontal, QSpace.xl)
-                            .background(QColor.brand.accent)
-                            .cornerRadius(QRadius.button)
-                            .shadow(color: QShadow.elevation2.color, radius: QShadow.elevation2.radius, x: QShadow.elevation2.x, y: QShadow.elevation2.y)
-                    }
-                    
-                    // 取消按钮
-                    Button(action: onClose) {
-                        Text("取消")
-                            .font(QFont.bodyEmphasis)
-                            .foregroundColor(QColor.text.onDarkPrimary)
-                            .padding(.vertical, QSpace.m)
-                            .padding(.horizontal, QSpace.xl)
-                    }
+                VStack(spacing: QSpace.s) {
+                    QPrimaryButton(title: "开始挑战", action: onStart)
+                    QSecondaryButton(title: "关闭", action: onClose)
                 }
             }
-            .padding(QSpace.xl)
-            .background(Image(QAsset.component.popupBg).resizable().aspectRatio(contentMode: .fit))
-            .frame(maxWidth: 320)
+            .padding(QSpace.l)
+            .frame(width: QSize.popupWidth)
+            .modifier(QCardStyle(radius: QRadius.popup))
         }
     }
 }
+
+// MARK: - QLevelSelectQBackground（Q版关卡选择页专用背景）
+struct QLevelSelectQBackground: View {
+    var body: some View {
+        ZStack {
+            // 柔和Q版渐变底色
+            LinearGradient(
+                gradient: Gradient(colors: [Color(hex: 0xF7E7FF), Color(hex: 0xD0F1FF), Color(hex: 0xFDF6E3)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .opacity(0.98)
+            // Q版星球
+            Image(QAsset.decoration.planet)
+                .resizable()
+                .frame(width: 180, height: 180)
+                .opacity(0.18)
+                .offset(x: -80, y: -220)
+            // Q版星星
+            Image(QAsset.decoration.star)
+                .resizable()
+                .frame(width: 80, height: 80)
+                .opacity(0.13)
+                .offset(x: 120, y: -120)
+            Image(QAsset.decoration.star)
+                .resizable()
+                .frame(width: 48, height: 48)
+                .opacity(0.10)
+                .offset(x: -100, y: 180)
+            // Q版数学符号
+            Image(QAsset.decoration.mathSymbol)
+                .resizable()
+                .frame(width: 90, height: 90)
+                .opacity(0.10)
+                .offset(x: 100, y: 200)
+        }
+    }
+}
+// 清理多余的重复代码和顶层表达式，防止 SwiftUI 作用域和声明冲突
 
 // MARK: - QLevelPath（路径式关卡容器）
 /// Q版路径式关卡容器组件
