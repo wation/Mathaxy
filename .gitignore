@@ -74,6 +74,11 @@ fastlane/test_output
 build/
 DerivedData/
 
+# 忽略敏感和文档文件
+*.md
+*.py
+*.env
+
 # IDE
 .idea/
 .vscode/
